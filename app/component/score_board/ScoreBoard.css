@@ -1,0 +1,3 @@
+.score_board{
+    filter: drop-shadow(5px 5px 10px #bebebe)  drop-shadow(-5px -5px 10px #ffffff);
+}

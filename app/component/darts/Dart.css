@@ -1,0 +1,30 @@
+.dart {
+    filter: drop-shadow(-5px 5px rgba(0,0,0,0.2));
+    stroke: rgb(53, 53, 53);
+    stroke-width: 1px;
+}
+.flight {
+    fill: #f2c219;
+
+
+}
+
+.shaft {
+    fill: #963708;
+}
+
+.tip {
+    fill: #817f78;
+
+}
+
+.barrel {
+    fill: #f2c219;
+
+}
+
+
+
+
+
+

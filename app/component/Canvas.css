@@ -1,0 +1,22 @@
+.bull {
+    fill: green;
+    stroke: #747373;
+    stroke-width: 1px;
+}
+
+.back{
+    fill: black;
+    stroke: #747373;
+    stroke-width: 1px;
+}
+
+
+
+
+.bulls_eye{
+    fill: red;
+    stroke: #747373;
+    stroke-width: 1px;
+}
+
+

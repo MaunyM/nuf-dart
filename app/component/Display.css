@@ -1,0 +1,13 @@
+.display_panel {
+    filter: drop-shadow(5px 5px 10px #bebebe)  drop-shadow(-5px -5px 10px #ffffff);
+}
+
+.display .text {
+    font-family: 'm6x11plus';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 52px;
+    fill: white;
+    filter: drop-shadow(2px 2px rgba(0,0,0,0.5));
+    text-anchor:middle
+}

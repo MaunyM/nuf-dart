@@ -1,0 +1,13 @@
+.panel {
+    filter: drop-shadow(2px 2px rgba(0,0,0,0.3));
+}
+
+.text {
+    font-family: 'm6x11plus';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 36px;
+    fill: white;
+    filter: drop-shadow(2px 2px rgba(0,0,0,0.3));
+    text-anchor:middle
+}
