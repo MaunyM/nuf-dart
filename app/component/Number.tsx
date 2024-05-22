@@ -1,15 +1,16 @@
-'use client'
+"use client";
 
 import React from "react";
-import './Number.css'; 
+import "./Number.css";
 
 type NumberProps = {
-      value: number
-  }; 
+  value: number;
+};
 
-
-export default function NumberComponent(props:NumberProps){
+export default function NumberComponent(props: NumberProps) {
   return (
-    <foreignObject x="-30" y="-30" width="60" height="60"><p className="test">{props.value}</p></foreignObject>
+    <foreignObject x="-30" y="-30" width="60" height="60">
+      <p className="test">{props.value}</p>
+    </foreignObject>
   );
 }

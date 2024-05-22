@@ -1,24 +1,22 @@
-'use client'
+"use client";
 
-import React, { useEffect, useRef, useState } from 'react'
-import './Waiting.css'; 
-import { Game, Game_State } from '../Type/Game';
-import { AnimatePresence, motion } from 'framer-motion';
-import { CricketScore } from '../Type/Cricket';
+import React, { useEffect, useRef, useState } from "react";
+import "./Waiting.css";
+import { Game, Game_State } from "../Type/Game";
+import { AnimatePresence, motion } from "framer-motion";
+import { CricketScore } from "../Type/Cricket";
 
 type WaitingProps = {
-  game:Game<CricketScore>
-}
+  game: Game<CricketScore>;
+};
 
-export default function WaitingComponent(props:WaitingProps ){
-  const [game, setGame] = useState(props.game)
+export default function WaitingComponent(props: WaitingProps) {
+  const [game, setGame] = useState(props.game);
   useEffect(() => {
     setGame(props.game);
   }, [props.game]);
   return (
     <g onClick={() => game.ready()}>
-
-
       <AnimatePresence>
         {game.status === Game_State.WAITING_NEXT_PLAYER && (
           <motion.g

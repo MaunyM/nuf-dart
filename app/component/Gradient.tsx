@@ -1,11 +1,10 @@
-
 import React from "react";
 import { Color } from "../Type/Math";
 
 type GradientProps = {
-  name: string
-  color: Color
-}; 
+  name: string;
+  color: Color;
+};
 
 export default function GradientComponent(props: GradientProps) {
   return (
@@ -17,8 +16,18 @@ export default function GradientComponent(props: GradientProps) {
       y2="0%"
       gradientTransform="rotate(65)"
     >
-      <stop offset="30%" stopColor={`hsl(${props.color.h},${props.color.s}%,${props.color.l}%)`} stopOpacity="0.8" />
-      <stop offset="100%" stopColor={`hsl(${props.color.h},${props.color.s}%,${props.color.l+10}%)`} stopOpacity="0.9" />
+      <stop
+        offset="30%"
+        stopColor={`hsl(${props.color.h},${props.color.s}%,${props.color.l}%)`}
+        stopOpacity="0.8"
+      />
+      <stop
+        offset="100%"
+        stopColor={`hsl(${props.color.h},${props.color.s}%,${
+          props.color.l + 10
+        }%)`}
+        stopOpacity="0.9"
+      />
     </linearGradient>
   );
 }

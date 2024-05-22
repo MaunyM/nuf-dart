@@ -1,19 +1,19 @@
 .value {
-    font:  35px sans-serif;
-    fill: white;
+  font: 35px sans-serif;
+  fill: white;
 
-    filter: drop-shadow();
-    text-anchor:middle
+  filter: drop-shadow();
+  text-anchor: middle;
 }
 
 .test {
-    -webkit-text-stroke:1px #747373  ;
-    text-shadow:1px 1px #3e3d3d ;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    font:  35px sans-serif;
-    display:flex;
-    justify-content:center;
-    color: white;
+  -webkit-text-stroke: 1px #747373;
+  text-shadow: 1px 1px #3e3d3d;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  font: 35px sans-serif;
+  display: flex;
+  justify-content: center;
+  color: white;
 }

@@ -1,4 +1,3 @@
-
 import React from "react";
 import GradientComponent from "./Gradient";
 import { Joueur } from "../Type/Game";
@@ -6,12 +5,18 @@ import { CricketScore } from "../Type/Cricket";
 
 type DefProps = {
   players: Joueur<CricketScore>[];
-}; 
+};
 
-export default function DefsComponent(props:DefProps){
+export default function DefsComponent(props: DefProps) {
   return (
     <>
-     {props.players.map((player, index) => (<GradientComponent key={index} name={`grad-${player.nom}`} color={player.color}/>))}
+      {props.players.map((player, index) => (
+        <GradientComponent
+          key={index}
+          name={`grad-${player.nom}`}
+          color={player.color}
+        />
+      ))}
       <radialGradient id="red_black">
         <stop offset="10%" stopColor="black" />
         <stop offset="95%" stopColor="white" />
@@ -32,4 +37,4 @@ export default function DefsComponent(props:DefProps){
       <circle id="back" cx="0" cy="0" r="225" className="back" />
     </>
   );
-  }
+}

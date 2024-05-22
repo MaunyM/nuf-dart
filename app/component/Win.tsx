@@ -1,17 +1,17 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from "react";
-import './Waiting.css'; 
-import { Game, Game_State } from '../Type/Game';
-import { AnimatePresence, motion } from 'framer-motion';
-import { CricketScore } from '../Type/Cricket';
+import "./Waiting.css";
+import { Game, Game_State } from "../Type/Game";
+import { AnimatePresence, motion } from "framer-motion";
+import { CricketScore } from "../Type/Cricket";
 
 type WaitingProps = {
-  game:Game<CricketScore>
-}
+  game: Game<CricketScore>;
+};
 
-export default function WinComponent(props:WaitingProps ){
-  const [game, setGame] = useState(props.game)
+export default function WinComponent(props: WaitingProps) {
+  const [game, setGame] = useState(props.game);
   useEffect(() => {
     setGame(props.game);
   }, [props.game]);
