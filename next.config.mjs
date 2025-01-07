@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
     webpack: (config, options) => {
         // silencing warnings until https://github.com/vercel/next.js/issues/33693 is resolved
