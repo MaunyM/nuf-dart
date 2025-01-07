@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import React, { useEffect, useState } from "react";
-import SectionComponent from "./Section";
-import { Game, Ring } from "../Type/Game";
+import React, {  useEffect, useState } from "react";
+import SectionComponent from './Section';
+import { Game, Ring } from '../Type/Game';
 import NumberComponent from "./Number";
-import "./Canvas.css";
+import './Canvas.css';
 import WaitingComponent from "./Waiting";
 import DisplayComponent from "./Display";
 import ScoreBoardComponent from "./score_board/ScoreBoard";
@@ -13,21 +13,19 @@ import DartsComponent from "./darts/Darts";
 import WinComponent from "./Win";
 import { CricketScore } from "../Type/Cricket";
 import useSound from "use-sound";
-import plopSfx from "/public/664624__luis0413__plop-bonk-sound.mp3";
+import plopSfx from '/public/664624__luis0413__plop-bonk-sound.mp3'
 import CricketSectionComponent from "./cricket/CricketSection";
 import { isCricketSection } from "../service/cricketService";
 
 type CanvasProps = {
   game: Game<CricketScore>;
-};
+}; 
 
-export default function Canvas(props: CanvasProps) {
-  const [game, setGame] = useState<Game<CricketScore>>(props.game);
-  const [play] = useSound(plopSfx);
+export default function Canvas(props:CanvasProps){
+    const [game, setGame] = useState<Game<CricketScore>>(props.game)
+    const [play] = useSound(plopSfx);
 
-  useEffect(() => {
-    setGame(props.game);
-  }, [props.game]);
+    useEffect(() => {setGame(props.game)}, [props.game])
 
   return (
     <svg
@@ -42,13 +40,13 @@ export default function Canvas(props: CanvasProps) {
       <g transform={`translate(900,0)`}>
         <ScoreBoardComponent players={game.players}></ScoreBoardComponent>
       </g>
-      <g transform={`translate(70,650)`}>
+      <g transform={`translate(70,730)`}>
         {game.current_player && <DartsComponent player={game.current_player} />}
       </g>
       <g transform={`translate(110,48)`}>
         <DisplayComponent game={game}></DisplayComponent>
       </g>
-      <g transform={`translate(431,361) scale(1.5 1.5)`}>
+      <g transform={`translate(410,400) scale(1.7 1.7)`}>
         <use xlinkHref="#back" />
         <circle
           id="back"
@@ -62,18 +60,19 @@ export default function Canvas(props: CanvasProps) {
           <g key={index} className={index % 2 ? "odd" : "even"}>
             <g transform={`rotate(${18 * index})`}>
               {isCricketSection(value) && (
-                <CricketSectionComponent></CricketSectionComponent>
+                <CricketSectionComponent players={game.players} value={value}></CricketSectionComponent>
               )}
               <SectionComponent
                 tapHandler={game.tapHandler.bind(game)}
                 value={value}
               ></SectionComponent>
             </g>
-            <g
-              transform={`translate(${
+           <g
+            suppressHydrationWarning={true}
+             transform={`translate(${
                 +Math.cos((Math.PI / 10) * index) * 195
-              } ${Math.sin((Math.PI / 10) * index) * 195}) `}
-            >
+              } ${Math.sin((Math.PI / 10) * index) * 195}) `} >
+            
               <NumberComponent value={value}></NumberComponent>
             </g>
           </g>
@@ -100,3 +99,4 @@ export default function Canvas(props: CanvasProps) {
     </svg>
   );
 }
+

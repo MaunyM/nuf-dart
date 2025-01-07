@@ -19,6 +19,11 @@ function topScorer(currentPlayer: JoueurCricket, players: JoueurCricket[]):boole
   return players.every(player => player.score.score < currentPlayer.score.score);
 }
 
+export function isOpen(currentPlayer: JoueurCricket, value: number):boolean {
+  const marks = currentPlayer.score.marks;
+  return marks[value] === 3;
+}
+
 function allOpen(currentPlayer: JoueurCricket):boolean {
   const marks = currentPlayer.score.marks;
   return Object.keys(marks).every((key) => marks[+key] === 3);

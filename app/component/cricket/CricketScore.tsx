@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { Coord } from '../../Type/Math';
 import './Cricket.css';
-import { motion } from 'framer-motion';
+import { motion } from "motion/react";
 import { CRICKET_ZONES, CricketScore } from '@/app/Type/Cricket';
 
 type ScoreBoardProps = {
