@@ -1,6 +1,8 @@
 import useSWR, { Fetcher } from "swr";
 import { Joueur, JoueurCricket, Score } from "../Type/Game";
 
+const base_api = process.env.NEXT_PUBLIC_API
+
 export function getIndexFromPlayers<T extends Score>( current_player: Joueur<T>, players: Joueur<T>[]) {
     return players.findIndex(
         (player) => player.nom === current_player?.nom
@@ -18,7 +20,7 @@ export function getIndexFromPlayers<T extends Score>( current_player: Joueur<T>,
 }
 
 export function usePlayers () {
-  const { data, error, isLoading } = useSWR<JoueurCricket[]>(`https://api.dart.larus.fr/dart`, fetcher)
+  const { data, error, isLoading } = useSWR<JoueurCricket[]>(`${base_api}/players`, fetcher)
  
   return {
     players: data,

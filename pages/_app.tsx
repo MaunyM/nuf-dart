@@ -11,7 +11,7 @@ import { AuthProvider } from "react-oidc-context";
 const cognitoAuthConfig = {
   authority: "https://cognito-idp.eu-west-3.amazonaws.com/eu-west-3_hdaUJXlME",
   client_id: "1cusrvvn01cc7dq61lk8g7mr1a",
-  redirect_uri: "http://localhost:3000",
+  redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI,
   response_type: "code",
   lang:"fr",
   scope: "aws.cognito.signin.user.admin email openid profile",

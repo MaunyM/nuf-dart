@@ -7,8 +7,6 @@ import { useAuth } from "react-oidc-context";
 export default function Page() {
   const auth = useAuth();
     return <div>
-      <button onClick={() => auth.signinRedirect()}>Sign in</button>
-        <h1>Hello, Next.js!</h1>
-        <Link href="/game">Go</Link>
+     Login
         </div>
   }
