@@ -2,9 +2,9 @@
 
 import React from 'react'
 import './Dart.css'; 
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence,motion } from "motion/react";
 import DartComponent from './Dart';
-import { Joueur, Score } from '@/app/Type/Game';
+import { Joueur } from '@/app/Type/Game';
 import { CricketScore } from '@/app/Type/Cricket';
 
 type DartsProps = {

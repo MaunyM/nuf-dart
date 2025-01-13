@@ -1,10 +1,9 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Coord } from '../../Type/Math';
 import './ScoreBoard.css'
 import { Joueur } from '../../Type/Game';
-import ScoreComponent from './PlayerScore';
 import PlayerScoreComponent from './PlayerScore';
 import { CricketScore } from '@/app/Type/Cricket';
 

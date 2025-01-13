@@ -1,13 +1,25 @@
-'use client'
-import { useEffect, useState } from "react";
-import Canvas from "./component/Canvas";
-import { Game, Game_State, Ring, Section } from "./Type/Game";
-import { CRICKET_ZONES, CricketScore } from "./Type/Cricket";
-import { getIndexFromPlayers } from "./service/gameService";
-import { isWon } from "./service/cricketService";
+import type { AppProps } from 'next/app'
+import { Inter } from "next/font/google";
+import "@/app/globals.css";
+import { Game, Game_State } from "../app/Type/Game";
+import { CRICKET_ZONES, CricketScore } from "../app/Type/Cricket";
+import { getIndexFromPlayers } from "../app/service/gameService";
+import { isWon } from "../app/service/cricketService";
+import { useEffect, useState } from 'react';
+import { AuthProvider } from "react-oidc-context";
 
-export default function Home() {
+const cognitoAuthConfig = {
+  authority: "https://cognito-idp.eu-west-3.amazonaws.com/eu-west-3_hdaUJXlME",
+  client_id: "1cusrvvn01cc7dq61lk8g7mr1a",
+  redirect_uri: "http://localhost:3000",
+  response_type: "code",
+  lang:"fr",
+  scope: "aws.cognito.signin.user.admin email openid profile",
+};
 
+const inter = Inter({ subsets: ["latin"] });
+ 
+export default function App({ Component, pageProps }: AppProps) {
   const initGame: Game<CricketScore> = {
     status: Game_State.UNSTARTED,
     dart_count: 3,
@@ -17,6 +29,7 @@ export default function Home() {
 
     players: [
       {
+        id: 1,
         nom: "Matthieu",
         color: {h:205.9, s:99.1, l:45.3},
         score: new CricketScore(
@@ -27,6 +40,7 @@ export default function Home() {
         ),
       },
       {
+        id:2,
         nom: "Célia",
         color: {h:38.8, s:100, l:45},
         score: new CricketScore(
@@ -37,6 +51,7 @@ export default function Home() {
         ),
       },
       {
+        id:3,
         nom: "Patate",
         color: {h:145.4, s:94.8, l:30.3},
         score: new CricketScore(
@@ -176,7 +191,8 @@ export default function Home() {
 
   const [game, setGame] = useState(initGame)
   useEffect(()=>{ if (game.status===Game_State.UNSTARTED) game.startGame()},[game])
-  return (
-    <Canvas game={game}></Canvas>
-  );
+
+  return <AuthProvider {...cognitoAuthConfig}>
+    <Component className={inter.className} {...pageProps} game={game}/>
+    </AuthProvider>
 }

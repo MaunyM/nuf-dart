@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Waiting.css";
 import { Game, Game_State } from "../Type/Game";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence,motion } from "motion/react";
 import { CricketScore } from "../Type/Cricket";
 
 type WaitingProps = {

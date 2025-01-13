@@ -23,6 +23,7 @@ export const mults: Record<Ring, number> = {
 };
 
 export enum Game_State {
+  CHOOSE_PLAYER,
   UNSTARTED,
   THROWING,
   WAITING_NEXT_PLAYER,
@@ -34,6 +35,7 @@ export type Score = {
 };
 
 export type Joueur<T extends Score> = {
+  id:number,
   score: T;
   nom: string;
   dart_count?: number;

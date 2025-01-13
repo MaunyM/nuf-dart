@@ -1,27 +1,26 @@
+.part1, .part2, .part3, .part4{
+    /* stroke: #747373; */
+    stroke: rgb(192, 192, 192);
+    stroke-width: 1px;
+}
+
 .odd .part1,
 .odd .part3 {
-  fill: rgba(255, 0, 0, 0.9);
-  stroke: #747373;
-  stroke-width: 2px;
+  fill: rgba(231, 50, 45, 0.9);
+
 }
 
 .even .part1,
 .even .part3 {
-  fill: rgba(0, 128, 0, 0.9);
-  stroke: #747373;
-  stroke-width: 2px;
+  fill: rgba(16, 147, 56, 0.9);
 }
 
 .even .part2,
 .even .part4 {
-  fill: rgba(255, 255, 255, 0.9);
-  stroke: #747373;
-  stroke-width: 2px;
+  fill: rgba(253, 229, 186, 0.9);
 }
 
 .odd .part2,
 .odd .part4 {
-  fill: rgba(0, 0, 0, 0.9);
-  stroke: #747373;
-  stroke-width: 2px;
+  fill: rgba(18, 18, 18, 0.9);
 }

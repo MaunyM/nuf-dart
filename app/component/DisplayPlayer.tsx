@@ -1,22 +1,22 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import "./Display.css";
-import { Game } from "../Type/Game";
-import { AnimatePresence, motion } from "framer-motion";
-import { CricketScore } from "../Type/Cricket";
+import "./DisplayPlayer.css";
+import { Game } from "@/app/Type/Game";
+import { AnimatePresence,motion } from "motion/react";
+import { CricketScore } from "@/app/Type/Cricket";
 
 type DisplayProps = {
   game: Game<CricketScore>;
 };
 
-export default function DisplayComponent(props: DisplayProps) {
+export default function DisplayPlayerComponent(props: DisplayProps) {
   const [game, setGame] = useState(props.game);
   useEffect(() => {
     setGame(props.game);
   }, [props.game]);
   return (
-    <g onClick={() => game.ready()} className="display">
+    <g className="display">
       <g transform="translate(-100,-32)">
         <rect
           fill={`url(#grad-${game.current_player?.nom})`}

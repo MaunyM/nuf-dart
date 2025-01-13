@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Coord } from '../../Type/Math';
 import './PlayerScore.css'
 import { Joueur } from '../../Type/Game';

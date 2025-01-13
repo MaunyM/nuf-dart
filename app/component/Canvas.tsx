@@ -6,7 +6,7 @@ import { Game, Ring } from '../Type/Game';
 import NumberComponent from "./Number";
 import './Canvas.css';
 import WaitingComponent from "./Waiting";
-import DisplayComponent from "./Display";
+import DisplayComponent from "./DisplayPlayer";
 import ScoreBoardComponent from "./score_board/ScoreBoard";
 import DefsComponent from "./Defs";
 import DartsComponent from "./darts/Darts";
