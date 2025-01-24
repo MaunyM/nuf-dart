@@ -1,12 +1,12 @@
 import type { AppProps } from 'next/app'
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
-import { Game, Game_State } from "../app/Type/Game";
-import { CRICKET_ZONES, CricketScore } from "../app/Type/Cricket";
-import { getIndexFromPlayers } from "../app/service/gameService";
-import { isWon } from "../app/service/cricketService";
-import { useEffect, useState } from 'react';
 import { AuthProvider } from "react-oidc-context";
+import { getIndexFromPlayers } from '@/app/service/gameService';
+import { Game, Game_State, Joueur, JoueurCricket } from '@/app/Type/Game';
+import { useState } from 'react';
+import { CricketScore } from '@/app/Type/Cricket';
+import { isWon } from '@/app/service/cricketService';
 
 const cognitoAuthConfig = {
   authority: "https://cognito-idp.eu-west-3.amazonaws.com/eu-west-3_hdaUJXlME",
@@ -20,6 +20,7 @@ const cognitoAuthConfig = {
 const inter = Inter({ subsets: ["latin"] });
  
 export default function App({ Component, pageProps }: AppProps) {
+
   const initGame: Game<CricketScore> = {
     status: Game_State.UNSTARTED,
     dart_count: 3,
@@ -27,41 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
       6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5, 20, 1, 18, 4, 13,
     ],
 
-    players: [
-      {
-        id: 1,
-        nom: "Matthieu",
-        color: {h:205.9, s:99.1, l:45.3},
-        score: new CricketScore(
-          CRICKET_ZONES.reduce<Record<number, number>>(
-            (acc, current) => ({ ...acc, [current]: 0 }),
-            {}
-          )
-        ),
-      },
-      {
-        id:2,
-        nom: "Célia",
-        color: {h:38.8, s:100, l:45},
-        score: new CricketScore(
-          CRICKET_ZONES.reduce<Record<number, number>>(
-            (acc, current) => ({ ...acc, [current]: 0 }),
-            {}
-          )
-        ),
-      },
-      {
-        id:3,
-        nom: "Patate",
-        color: {h:145.4, s:94.8, l:30.3},
-        score: new CricketScore(
-          CRICKET_ZONES.reduce<Record<number, number>>(
-            (acc, current) => ({ ...acc, [current]: 0 }),
-            {}
-          )
-        ),
-      },
-    ],
+    players: [],
     sections: {
       1: {
         value: 1,
@@ -144,6 +111,10 @@ export default function App({ Component, pageProps }: AppProps) {
         status: true,
       },
     },
+    addPlayers: function(players : JoueurCricket[]) {
+      this.players = players
+      setGame({ ...this });
+    },
     tapHandler: function (value, ring) {
       if (this.current_player && this.current_player.dart_count) {
         this.current_player = {
@@ -154,10 +125,10 @@ export default function App({ Component, pageProps }: AppProps) {
         if (this.current_player.dart_count === 0) {
           this.status = Game_State.WAITING_NEXT_PLAYER;
         }
-        if(isWon(this.current_player, this.players)) {
+        if (isWon(this.current_player, this.players)) {
           this.status = Game_State.WON;
         }
-        const index = getIndexFromPlayers(this.current_player, this.players)
+        const index = getIndexFromPlayers(this.current_player, this.players);
         this.players[index] = this.current_player;
         setGame({ ...this });
       }
@@ -171,14 +142,14 @@ export default function App({ Component, pageProps }: AppProps) {
     },
     ready: function () {
       if (this.current_player) {
-        const index = getIndexFromPlayers(this.current_player, this.players)
+        const index = getIndexFromPlayers(this.current_player, this.players);
         this.players[index] = this.current_player;
 
         if (this.next_player) {
           this.current_player = this.next_player;
           this.current_player.dart_count = this.dart_count;
 
-          const index = getIndexFromPlayers(this.current_player, this.players)
+          const index = getIndexFromPlayers(this.current_player, this.players);
           const new_index = index + 1 >= this.players.length ? 0 : index + 1;
           this.next_player = this.players[new_index];
           this.status = Game_State.THROWING;
@@ -188,9 +159,7 @@ export default function App({ Component, pageProps }: AppProps) {
       }
     },
   };
-
-  const [game, setGame] = useState(initGame)
-  useEffect(()=>{ if (game.status===Game_State.UNSTARTED) game.startGame()},[game])
+  const [game, setGame] = useState(initGame);
 
   return <AuthProvider {...cognitoAuthConfig}>
     <Component className={inter.className} {...pageProps} game={game}/>

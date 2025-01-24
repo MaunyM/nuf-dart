@@ -9,6 +9,14 @@ export function getIndexFromPlayers<T extends Score>( current_player: Joueur<T>,
       );
 }
 
+export function addPlayer<T extends Score>(players:Joueur<T>[], player: Joueur<T>) {
+  return [...players, player]
+}
+
+export function removePlayer<T extends Score>(players:Joueur<T>[], player: Joueur<T>) {
+  return [...players.filter(p => player.id !== p.id)]
+}
+
  async function fetcher<JSON = any>(
   input: RequestInfo
 ): Promise<JSON> {

@@ -51,6 +51,7 @@ export type Game<T extends Score>= {
   current_player?: Joueur<T>;
   status: Game_State;
   dart_count: number;
+  addPlayers(players :Joueur<T>[]):void;
   tapHandler(value: number, ring: Ring): void;
   startGame(): void;
   ready(): void;

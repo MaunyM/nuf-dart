@@ -21,7 +21,7 @@ type CanvasProps = {
   game: Game<CricketScore>;
 }; 
 
-export default function Canvas(props:CanvasProps){
+export default function GameCanvas(props:CanvasProps){
     const [game, setGame] = useState<Game<CricketScore>>(props.game)
     const [play] = useSound(plopSfx);
 
@@ -44,7 +44,7 @@ export default function Canvas(props:CanvasProps){
         {game.current_player && <DartsComponent player={game.current_player} />}
       </g>
       <g transform={`translate(110,48)`}>
-        <DisplayComponent game={game}></DisplayComponent>
+      {game.current_player && <DisplayComponent player={game.current_player}></DisplayComponent>}
       </g>
       <g transform={`translate(410,400) scale(1.7 1.7)`}>
         <use xlinkHref="#back" />

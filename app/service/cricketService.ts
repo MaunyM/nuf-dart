@@ -1,5 +1,5 @@
-import { CRICKET_ZONES, CricketScore } from "../Type/Cricket";
-import { JoueurCricket, Ring, mults } from "../Type/Game";
+import { CRICKET_ZONES, CricketScore, Marks } from "../Type/Cricket";
+import { Joueur, JoueurCricket, Ring, Score, mults } from "../Type/Game";
 
 export function Score_dart(current_score: CricketScore, value: number, ring: Ring):CricketScore {
     if (!CRICKET_ZONES.includes(value)) return current_score;
@@ -31,4 +31,12 @@ function allOpen(currentPlayer: JoueurCricket):boolean {
 
 export function isWon(currentPlayer: JoueurCricket, players: JoueurCricket[]) {
   return topScorer(currentPlayer, players) && allOpen(currentPlayer);
+}
+
+function resetScore(): Marks {
+  return CRICKET_ZONES.reduce((previous, value) => { return {...previous, [value] : 0}}, {})
+}
+
+export function toCricketPlayer<T extends Score>(player : Joueur<T>)  {
+  return {...player, score: new CricketScore(resetScore())}
 }

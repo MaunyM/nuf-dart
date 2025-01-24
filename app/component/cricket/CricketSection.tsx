@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import PartComponent from '../Part';
 import './Cricket.css';
 import { JoueurCricket } from '@/app/Type/Game';
@@ -16,7 +16,7 @@ type SectionProps = {
  const sectionAngle = (2 * Math.PI) / 20
 
 export default function CricketSectionComponent(props: SectionProps) {
-
+  const [playerCount] = useState(props.players.length)
   return (
     <g className='CricketSection'>
 
@@ -26,16 +26,16 @@ export default function CricketSectionComponent(props: SectionProps) {
         <PartComponent
           r1={r0}
           r2={r1}
-          angle={sectionAngle / 3}
-          shift={(index*sectionAngle) /3}
+          angle={sectionAngle / playerCount}
+          shift={(index*sectionAngle) /playerCount}
         ></PartComponent>
       </g>
        <g fill={`url(#grad-${player.nom}`}>
         <PartComponent
           r1={r0}
           r2={r1}
-          angle={sectionAngle / 3}
-          shift={(index*sectionAngle) /3}
+          angle={sectionAngle / playerCount}
+          shift={(index*sectionAngle) /playerCount}
         ></PartComponent>
       </g></g>:<g key={index}/>)}
     </g>

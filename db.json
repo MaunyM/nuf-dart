@@ -1,6 +1,36 @@
 {
     "players": [
-      { "id": "1", "title": "a title", "views": 100 },
-      { "id": "2", "title": "another title", "views": 200 }
+        {
+            "id": 1,
+            "nom": "Matthieu",
+            "color": {"h":205.9, "s":99.1, "l":45.3}
+          },
+          {
+            "id":2,
+            "nom": "Célia",
+            "color": {"h":54, "s":99, "l":45}
+
+          },
+          {
+            "id":3,
+            "nom": "Jean",
+            "color": {"h":145.4, "s":99, "l":30.3}
+          },
+          {
+            "id":4,
+            "nom": "Hélène",
+            "color": {"h":10, "s":99, "l":45}
+          },
+          {
+            "id":5,
+            "nom": "Régine",
+            "color": {"h":296, "s":99, "l":45}
+          }
+          ,
+          {
+            "id":6,
+            "nom": "Dom",
+            "color": {"h":38.8, "s":99, "l":45}
+          }
     ]
   }

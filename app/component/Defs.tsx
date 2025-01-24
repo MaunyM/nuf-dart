@@ -27,7 +27,7 @@ export default function DefsComponent(props: DefProps) {
           stdDeviation={5}
           result="blurred"
         ></feGaussianBlur>
-        <feMerge>
+        <feMerge>ƒ
           <feMergeNode in="blurred" />
           <feMergeNode in="blurred" />
         </feMerge>
