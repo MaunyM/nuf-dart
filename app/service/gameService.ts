@@ -1,5 +1,6 @@
 import useSWR, { Fetcher } from "swr";
 import { Joueur, JoueurCricket, Score } from "../Type/Game";
+import { AuthContextProps } from "react-oidc-context";
 
 const base_api = process.env.NEXT_PUBLIC_API
 
@@ -17,18 +18,19 @@ export function removePlayer<T extends Score>(players:Joueur<T>[], player: Joueu
   return [...players.filter(p => player.id !== p.id)]
 }
 
- async function fetcher<JSON = any>(
+  const authFetcher = (token:string="") =>  async function  fetcher<JSON = any>(
   input: RequestInfo
 ): Promise<JSON> {
   const res = await fetch(input, {headers :{
     "content-type": "application/json",
     accept: "application/json",
+    Authorization: token
   }})
   return res.json()
 }
 
-export function usePlayers () {
-  const { data, error, isLoading } = useSWR<JoueurCricket[]>(`${base_api}/players`, fetcher)
+export function usePlayers (auth:AuthContextProps) {
+  const { data, error, isLoading } = useSWR<JoueurCricket[]>(`${base_api}/players`, authFetcher(auth.user?.id_token))
  
   return {
     players: data,

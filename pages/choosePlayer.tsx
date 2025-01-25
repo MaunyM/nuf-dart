@@ -19,7 +19,7 @@ type GameProps = {
 export default function Page( props:GameProps) {
   const router = useRouter();
   const auth = useAuth();
-  const { players, isLoading } = usePlayers();
+  const { players, isLoading } = usePlayers(auth);
   const [available, setAvailable] = useState<JoueurCricket[]>([]);
   const [selected, setSelected] = useState<JoueurCricket[]>([]);
   useEffect(() => {
