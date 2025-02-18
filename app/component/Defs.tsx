@@ -1,16 +1,15 @@
 import React from "react";
 import GradientComponent from "./Gradient";
 import { Joueur } from "../Type/Game";
-import { CricketScore } from "../Type/Cricket";
 
 type DefProps = {
-  players: Joueur<CricketScore>[];
+  players: Joueur[];
 };
 
 export default function DefsComponent(props: DefProps) {
   return (
     <>
-      {props.players.map((player, index) => (
+      {props.players && props.players.map((player, index) => (
         <GradientComponent
           key={index}
           name={`grad-${player.nom}`}

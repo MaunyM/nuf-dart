@@ -2,12 +2,12 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import "./Waiting.css";
-import { Game, Game_State } from "../Type/Game";
+import { Game, Game_State, Game_Type } from "../Type/Game";
 import { AnimatePresence,motion } from "motion/react";
-import { CricketScore } from "../Type/Cricket";
 
 type WaitingProps = {
-  game: Game<CricketScore>;
+  game: Game<Game_Type.CRICKET>;
+  ready: () => void;
 };
 
 export default function WaitingComponent(props: WaitingProps) {
@@ -16,7 +16,7 @@ export default function WaitingComponent(props: WaitingProps) {
     setGame(props.game);
   }, [props.game]);
   return (
-    <g onClick={() => game.ready()}>
+    <g onClick={() => props.ready()}>
       <AnimatePresence>
         {game.status === Game_State.WAITING_NEXT_PLAYER && (
           <motion.g
@@ -29,7 +29,7 @@ export default function WaitingComponent(props: WaitingProps) {
             }}
           >
             <rect
-              fill={`url(#grad-${props.game.next_player?.nom})`}
+              fill={`url(#grad-${props.game.current_player?.nom})`}
               className="panel"
               x="-100"
               y="-40"
@@ -39,7 +39,7 @@ export default function WaitingComponent(props: WaitingProps) {
               ry="15"
             />
             <text className="text" dominantBaseline="middle">
-              {game.next_player?.nom}
+              {game.current_player?.nom}
             </text>
           </motion.g>
         )}

@@ -5,18 +5,16 @@ import './Dart.css';
 import { AnimatePresence,motion } from "motion/react";
 import DartComponent from './Dart';
 import { Joueur } from '@/app/Type/Game';
-import { CricketScore } from '@/app/Type/Cricket';
 
 type DartsProps = {
-  player: Joueur<CricketScore>
+  dart_count: number
 }
 
 export default function DartsComponent(props:DartsProps){
   return (
     <g>
       <rect
-        fill={`url(#grad-${props.player.nom})`}
-        className="dispaly_panel"
+        className="dispaly_panel dart_panel"
         x="-60"
         y="0"
         width="130"
@@ -25,7 +23,7 @@ export default function DartsComponent(props:DartsProps){
         ry="10"
       />
       <AnimatePresence>
-        {[...Array(props.player?.dart_count)].map((e, i) => (
+        {[...Array(props.dart_count)].map((e, i) => (
           <motion.g
             key={i}
             initial={{ opacity: 0 }}

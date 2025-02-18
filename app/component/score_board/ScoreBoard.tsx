@@ -1,14 +1,12 @@
 'use client'
 
 import React from 'react'
-import { Coord } from '../../Type/Math';
 import './ScoreBoard.css'
-import { Joueur } from '../../Type/Game';
+import { Game_Type, Joueur, Score } from '../../Type/Game';
 import PlayerScoreComponent from './PlayerScore';
-import { CricketScore } from '@/app/Type/Cricket';
 
 type ScoreBoardProps = {
-  players: Joueur<CricketScore>[];
+  scores: Score<Game_Type.CRICKET>[];
 }; 
 
 
@@ -21,9 +19,9 @@ export default function ScoreBoardComponent(props:ScoreBoardProps){
   return (
     <g transform="translate(0,50)">
 
-      {props.players.map((player, index) => (    
+      {props.scores.map((score, index) => (    
         <g key={index} transform={`translate(${170* getColumn(index)},${387 * getLine(index)})`}>
-          <PlayerScoreComponent key={index} player={player}></PlayerScoreComponent>
+          <PlayerScoreComponent key={index} score={score}></PlayerScoreComponent>
         </g>
       ))}
     </g>

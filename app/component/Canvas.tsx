@@ -2,7 +2,7 @@
 
 import React, {  useEffect, useState } from "react";
 import SectionComponent from './Section';
-import { Game, Ring } from '../Type/Game';
+import { Game, Game_State, Game_Type, Ring, sectionsOrder } from '../Type/Game';
 import NumberComponent from "./Number";
 import './Canvas.css';
 import WaitingComponent from "./Waiting";
@@ -11,19 +11,21 @@ import ScoreBoardComponent from "./score_board/ScoreBoard";
 import DefsComponent from "./Defs";
 import DartsComponent from "./darts/Darts";
 import WinComponent from "./Win";
-import { CricketScore } from "../Type/Cricket";
-import useSound from "use-sound";
-import plopSfx from '/public/664624__luis0413__plop-bonk-sound.mp3'
 import CricketSectionComponent from "./cricket/CricketSection";
 import { isCricketSection } from "../service/cricketService";
+import { CricketScore } from "../Type/Cricket";
+import TextComponent from "./TextButton";
 
 type CanvasProps = {
-  game: Game<CricketScore>;
+  game: Game<Game_Type.CRICKET>;
+  tapHandler(value:number, ring:Ring): Game<Game_Type.CRICKET>
+  ready: () => void;
+  undo: () => void;
+  miss: () => void;
 }; 
 
 export default function GameCanvas(props:CanvasProps){
-    const [game, setGame] = useState<Game<CricketScore>>(props.game)
-    const [play] = useSound(plopSfx);
+    const [game, setGame] = useState<Game<Game_Type.CRICKET>>(props.game)
 
     useEffect(() => {setGame(props.game)}, [props.game])
 
@@ -38,13 +40,19 @@ export default function GameCanvas(props:CanvasProps){
         <DefsComponent players={game.players} />
       </defs>
       <g transform={`translate(900,0)`}>
-        <ScoreBoardComponent players={game.players}></ScoreBoardComponent>
+        <ScoreBoardComponent scores={game.scores}></ScoreBoardComponent>
+      </g>
+      <g transform={`translate(710,18)`}>
+        {game.current_player && <DartsComponent dart_count={game.dart_count} />}
+      </g>
+      <g transform={`translate(710,730)`}>
+      <TextComponent undo={props.undo} text="Annuler"></TextComponent>
       </g>
       <g transform={`translate(70,730)`}>
-        {game.current_player && <DartsComponent player={game.current_player} />}
+      <TextComponent undo={props.miss} text="Miss"></TextComponent>
       </g>
       <g transform={`translate(110,48)`}>
-      {game.current_player && <DisplayComponent player={game.current_player}></DisplayComponent>}
+      {game.current_player && game.status == Game_State.THROWING && <DisplayComponent player={game.current_player}></DisplayComponent>}
       </g>
       <g transform={`translate(410,400) scale(1.7 1.7)`}>
         <use xlinkHref="#back" />
@@ -56,45 +64,45 @@ export default function GameCanvas(props:CanvasProps){
           className="under"
           fill="url(#red_black)"
         />
-        {game.sectionsOrder.map((value: number, index: number) => (
+        {sectionsOrder.map((value: number, index: number) => (
           <g key={index} className={index % 2 ? "odd" : "even"}>
-            <g transform={`rotate(${18 * index})`}>
-              {isCricketSection(value) && (
-                <CricketSectionComponent players={game.players} value={value}></CricketSectionComponent>
-              )}
-              <SectionComponent
-                tapHandler={game.tapHandler.bind(game)}
-                value={value}
-              ></SectionComponent>
-            </g>
+
            <g
             suppressHydrationWarning={true}
              transform={`translate(${
-                +Math.cos((Math.PI / 10) * index) * 195
-              } ${Math.sin((Math.PI / 10) * index) * 195}) `} >
+                +Math.cos((Math.PI / (sectionsOrder.length/2)) * index) * 195
+              } ${Math.sin((Math.PI / (sectionsOrder.length/2)) * index) * 195}) `} >
             
               <NumberComponent value={value}></NumberComponent>
+            </g>
+            <g transform={`rotate(${360/sectionsOrder.length * index})`}>
+              {isCricketSection(value) && (
+                <CricketSectionComponent scores={game.scores as CricketScore[]} value={value}></CricketSectionComponent>
+              )}
+              <SectionComponent
+                tapHandler={props.tapHandler}
+                value={value}
+              ></SectionComponent>
             </g>
           </g>
         ))}
         <circle cx="0" cy="0" r="7" className="bulls_eye" />
         <use
           xlinkHref="#bull"
-          onClick={() => {
-            play();
-            game.tapHandler(25, Ring.BULL);
+          onClick={async () =>  {
+            await props.tapHandler(25, Ring.BULL);
           }}
         />
         <use
           xlinkHref="#bulls_eye"
           onClick={() => {
-            play();
-            game.tapHandler(25, Ring.DOUBLE);
+            props.tapHandler(25, Ring.DOUBLE);
           }}
         />
 
-        <WaitingComponent game={game} />
-        <WinComponent game={game} />
+        <WaitingComponent game={game} ready={props.ready}/>
+
+        <WinComponent game={game} ready={props.ready}/>
       </g>
     </svg>
   );

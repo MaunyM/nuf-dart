@@ -2,21 +2,24 @@
 
 import React, { useEffect, useState } from "react";
 import "./Waiting.css";
-import { Game, Game_State } from "../Type/Game";
+import { Game, Game_State, Game_Type } from "../Type/Game";
 import { AnimatePresence,motion } from "motion/react";
 import { CricketScore } from "../Type/Cricket";
+import { useRouter } from "next/router";
 
 type WaitingProps = {
-  game: Game<CricketScore>;
+  game: Game<Game_Type.CRICKET>;
+  ready: () => void;
 };
 
 export default function WinComponent(props: WaitingProps) {
   const [game, setGame] = useState(props.game);
+  const router = useRouter();
   useEffect(() => {
     setGame(props.game);
   }, [props.game]);
   return (
-    <g onClick={() => game.ready()}>
+    <g onClick={() => router.push("/")}>
       <AnimatePresence>
         {game.status === Game_State.WON && (
           <motion.g

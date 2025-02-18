@@ -2,11 +2,11 @@
 
 import React from "react";
 import "./DisplayPlayer.css";
-import { JoueurCricket } from "@/app/Type/Game";
 import { AnimatePresence,motion } from "motion/react";
+import { Joueur } from "../Type/Game";
 
 type DisplayProps = {
-  player:JoueurCricket;
+  player:Joueur;
 };
 
 export default function DisplayPlayerComponent(props: DisplayProps) {

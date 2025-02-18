@@ -1,10 +1,13 @@
-import { CricketScore } from "./Cricket";
+
 import { Color } from "./Math";
 
-export type Section = {
-  value: number;
-  status: boolean;
-};
+export const sectionsOrder= [
+  6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5, 20, 1, 18, 4, 13,
+];
+
+export enum Game_Type {
+  CRICKET
+}
 
 export enum Ring {
   TRIPLE,
@@ -27,33 +30,35 @@ export enum Game_State {
   UNSTARTED,
   THROWING,
   WAITING_NEXT_PLAYER,
-  WON
+  WON,
 }
 
-export type Score = {
-  add: (value: number, ring: Ring) => Score;
+export type Score<T extends Game_Type> = {
+  joueur: Joueur
 };
 
-export type Joueur<T extends Score> = {
+export type Joueur= {
   id:number,
-  score: T;
   nom: string;
-  dart_count?: number;
   color: Color;
 };
 
-export type JoueurCricket = Joueur<CricketScore>
+export enum Game_Event {
+  DART_HIT,
+}
 
-export type Game<T extends Score>= {
-  sectionsOrder: number[];
-  sections: Record<number, Section>;
-  players: Joueur<T>[];
-  current_player?: Joueur<T>;
+export type DartThrow = {
+  player: Joueur;
+  value: number;
+  ring: Ring;
+  date: Date;
+};
+
+export type Game<T extends Game_Type> = {
+  throws: DartThrow[]
+  current_player?: Joueur;
   status: Game_State;
   dart_count: number;
-  addPlayers(players :Joueur<T>[]):void;
-  tapHandler(value: number, ring: Ring): void;
-  startGame(): void;
-  ready(): void;
-  next_player?: Joueur<T>;
+  scores:Score<T>[];
+  players:Joueur[];
 };

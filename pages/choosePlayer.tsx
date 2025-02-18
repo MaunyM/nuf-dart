@@ -1,27 +1,25 @@
 import DefsComponent from "@/app/component/Defs";
 import DisplayPlayerComponent from "@/app/component/DisplayPlayer";
 import { addPlayer, removePlayer, usePlayers } from "@/app/service/gameService";
-import { Game, JoueurCricket } from "@/app/Type/Game";
+import { Game, Game_Type, Joueur } from "@/app/Type/Game";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import "./choosePlayer.css"
-import { CricketScore } from "@/app/Type/Cricket";
-import { toCricketPlayer } from "@/app/service/cricketService";
 
 const getColumn = (index:number) => ~~(index/2)
 const getLine = (index:number) => index%2
 
 type GameProps = {
-  game: Game<CricketScore>
+  addPlayers(joueur:Joueur[]): Game<Game_Type.CRICKET>
 };
 
 export default function Page( props:GameProps) {
   const router = useRouter();
   const auth = useAuth();
   const { players, isLoading } = usePlayers(auth);
-  const [available, setAvailable] = useState<JoueurCricket[]>([]);
-  const [selected, setSelected] = useState<JoueurCricket[]>([]);
+  const [available, setAvailable] = useState<Joueur[]>([]);
+  const [selected, setSelected] = useState<Joueur[]>([]);
   useEffect(() => {
     if(players) setAvailable(players);
   }, [players]);
@@ -85,7 +83,7 @@ export default function Page( props:GameProps) {
             </g>
           </g>
           </g>
-          <g transform="translate(60,400)" onClick={() => {props.game.addPlayers(selected.map(toCricketPlayer)); router.push("/game")}}>
+          <g transform="translate(60,400)" onClick={() => {props.addPlayers(selected); router.push("/game")}}>
         <rect
           className="display_panel go"
           x="0"

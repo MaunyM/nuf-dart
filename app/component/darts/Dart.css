@@ -5,8 +5,10 @@
 }
 .flight {
     fill: #f2c219;
+}
 
-
+.dispaly_panel.dart_panel {
+    fill: #dedede;
 }
 
 .shaft {
