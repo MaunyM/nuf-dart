@@ -20,7 +20,7 @@ type ScoreBoardProps = {
  const start:(r:number) => Coord = (r:number) => ({ x :cos_start * r, y: sin_start * r})
  const end:(r:number) => Coord = (r:number) => ({ x :cos_end * r, y: sin_end * r})
 
-export default function ScoreComponent(props:ScoreBoardProps){
+export default function CricketScoreComponent(props:ScoreBoardProps){
 
 
   return (

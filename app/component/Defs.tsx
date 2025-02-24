@@ -31,8 +31,8 @@ export default function DefsComponent(props: DefProps) {
           <feMergeNode in="blurred" />
         </feMerge>
       </filter>
-      <circle id="bull" cx="0" cy="0" r="16" className="bull" />
-      <circle id="bulls_eye" cx="0" cy="0" r="7" className="bulls_eye" />
+      <circle id="bull" cx="0" cy="0" r="32" className="bull" />
+      <circle id="bulls_eye" cx="0" cy="0" r="16" className="bulls_eye" />
       <circle id="back" cx="0" cy="0" r="225" className="back" />
     </>
   );

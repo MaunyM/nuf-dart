@@ -6,7 +6,9 @@ export const sectionsOrder= [
 ];
 
 export enum Game_Type {
-  CRICKET
+  CRICKET,
+  _501,
+  MONSTER
 }
 
 export enum Ring {
@@ -33,8 +35,9 @@ export enum Game_State {
   WON,
 }
 
-export type Score<T extends Game_Type> = {
+export type Score = {
   joueur: Joueur
+  type: Game_Type
 };
 
 export type Joueur= {
@@ -47,18 +50,20 @@ export enum Game_Event {
   DART_HIT,
 }
 
-export type DartThrow = {
+export type DartThrowMapper = (dart: DartThrow) => DartThrow;
+
+export interface DartThrow {
   player: Joueur;
   value: number;
   ring: Ring;
   date: Date;
 };
 
-export type Game<T extends Game_Type> = {
+export type Game = {
   throws: DartThrow[]
   current_player?: Joueur;
   status: Game_State;
   dart_count: number;
-  scores:Score<T>[];
+  scores:Score[];
   players:Joueur[];
 };

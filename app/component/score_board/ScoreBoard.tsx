@@ -2,11 +2,11 @@
 
 import React from 'react'
 import './ScoreBoard.css'
-import { Game_Type, Joueur, Score } from '../../Type/Game';
+import { Joueur, Score } from '../../Type/Game';
 import PlayerScoreComponent from './PlayerScore';
 
 type ScoreBoardProps = {
-  scores: Score<Game_Type.CRICKET>[];
+  scores: Score[];
 }; 
 
 

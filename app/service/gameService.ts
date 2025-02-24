@@ -1,7 +1,6 @@
 import useSWR from "swr";
-import { Game, Game_Type, Joueur, Score } from "../Type/Game";
+import { Game, Joueur, Score } from "../Type/Game";
 import { AuthContextProps } from "react-oidc-context";
-import { S } from "vitest/dist/chunks/config.BRtC-JeT.js";
 
 const base_api = process.env.NEXT_PUBLIC_API;
 
@@ -11,13 +10,17 @@ export function getIndexFromPlayers(current_player: Joueur, players: Joueur[]) {
   return players.findIndex((player) => player.nom === current_player?.nom);
 }
 
-export function getIndexFromScores<T extends Game_Type>(current_score: Score<T>, scores: Score<T>[]) {
+export function getIndexFromScores(current_score: Score, scores: Score[]) {
   return scores.findIndex((score) => score.joueur.id === current_score?.joueur.id);
 }
 
-export function getScoreFromPlayer<T extends Game_Type>(player: Joueur, scores: Score<T>[]):Score<T>|undefined {
+export function getScoreFromPlayer(
+  scores: Score[],
+  player: Joueur
+): Score | undefined {
   return scores.find((score) => score.joueur.id === player.id);
 }
+
 
 export function updatePlayers(current_player: Joueur, players: Joueur[]) {
   const index = getIndexFromPlayers(current_player, players);
@@ -25,8 +28,8 @@ export function updatePlayers(current_player: Joueur, players: Joueur[]) {
   return [...players];
 }
 
-export function updatePlayerScore<T extends Game_Type>(current_score: Score<T>, scores: Score<T>[]) {
-  const index = getIndexFromScores<T>(current_score, scores);
+export function updatePlayerScore(current_score: Score, scores: Score[]) {
+  const index = getIndexFromScores(current_score, scores);
   scores[index] = current_score;
   return [...scores];
 }
@@ -51,10 +54,10 @@ const authFetcher = (token: string = "") =>
     return res.json();
   };
 
-export function addPlayers<T extends Game_Type>(
+export function addPlayers(
   players: Joueur[],
-  game: Game<T>
-): Game<T> {
+  game: Game
+): Game {
   return { ...game, players: [ ...players ]};
 }
 

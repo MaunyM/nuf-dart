@@ -1,1 +1,2 @@
 assombrire quand la zone est fermée
+agrandire les zones des cliques

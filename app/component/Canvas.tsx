@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import React, {  useEffect, useState } from "react";
-import SectionComponent from './Section';
-import { Game, Game_State, Game_Type, Ring, sectionsOrder } from '../Type/Game';
+import React, { useEffect, useState } from "react";
+import SectionComponent from "./Section";
+import { Game, Game_State, Game_Type, Ring, sectionsOrder } from "../Type/Game";
 import NumberComponent from "./Number";
-import './Canvas.css';
+import "./Canvas.css";
 import WaitingComponent from "./Waiting";
 import DisplayComponent from "./DisplayPlayer";
 import ScoreBoardComponent from "./score_board/ScoreBoard";
@@ -15,19 +15,24 @@ import CricketSectionComponent from "./cricket/CricketSection";
 import { isCricketSection } from "../service/cricketService";
 import { CricketScore } from "../Type/Cricket";
 import TextComponent from "./TextButton";
+import { V } from "vitest/dist/chunks/reporters.0x019-V2.js";
+import { findJoueurForAttack } from "../service/monsterService";
+import { MonsterScore } from "../Type/Monster";
 
 type CanvasProps = {
-  game: Game<Game_Type.CRICKET>;
-  tapHandler(value:number, ring:Ring): Game<Game_Type.CRICKET>
+  game: Game;
+  tapHandler(value: number, ring: Ring): Promise<void>;
   ready: () => void;
   undo: () => void;
   miss: () => void;
-}; 
+};
 
-export default function GameCanvas(props:CanvasProps){
-    const [game, setGame] = useState<Game<Game_Type.CRICKET>>(props.game)
+export default function GameCanvas(props: CanvasProps) {
+  const [game, setGame] = useState<Game>(props.game);
 
-    useEffect(() => {setGame(props.game)}, [props.game])
+  useEffect(() => {
+    setGame(props.game);
+  }, [props.game]);
 
   return (
     <svg
@@ -46,13 +51,15 @@ export default function GameCanvas(props:CanvasProps){
         {game.current_player && <DartsComponent dart_count={game.dart_count} />}
       </g>
       <g transform={`translate(710,730)`}>
-      <TextComponent undo={props.undo} text="Annuler"></TextComponent>
+        <TextComponent undo={props.undo} text="Annuler"></TextComponent>
       </g>
       <g transform={`translate(70,730)`}>
-      <TextComponent undo={props.miss} text="Miss"></TextComponent>
+        <TextComponent undo={props.miss} text="Miss"></TextComponent>
       </g>
       <g transform={`translate(110,48)`}>
-      {game.current_player && game.status == Game_State.THROWING && <DisplayComponent player={game.current_player}></DisplayComponent>}
+        {game.current_player && game.status == Game_State.THROWING && (
+          <DisplayComponent player={game.current_player}></DisplayComponent>
+        )}
       </g>
       <g transform={`translate(410,400) scale(1.7 1.7)`}>
         <use xlinkHref="#back" />
@@ -66,22 +73,27 @@ export default function GameCanvas(props:CanvasProps){
         />
         {sectionsOrder.map((value: number, index: number) => (
           <g key={index} className={index % 2 ? "odd" : "even"}>
-
-           <g
-            suppressHydrationWarning={true}
-             transform={`translate(${
-                +Math.cos((Math.PI / (sectionsOrder.length/2)) * index) * 195
-              } ${Math.sin((Math.PI / (sectionsOrder.length/2)) * index) * 195}) `} >
-            
+            <g
+              suppressHydrationWarning={true}
+              transform={`translate(${
+                +Math.cos((Math.PI / (sectionsOrder.length / 2)) * index) * 195
+              } ${
+                Math.sin((Math.PI / (sectionsOrder.length / 2)) * index) * 195
+              }) `}
+            >
               <NumberComponent value={value}></NumberComponent>
             </g>
-            <g transform={`rotate(${360/sectionsOrder.length * index})`}>
+            <g transform={`rotate(${(360 / sectionsOrder.length) * index})`}>
               {isCricketSection(value) && (
-                <CricketSectionComponent scores={game.scores as CricketScore[]} value={value}></CricketSectionComponent>
+                <CricketSectionComponent
+                  scores={game.scores as CricketScore[]}
+                  value={value}
+                ></CricketSectionComponent>
               )}
               <SectionComponent
                 tapHandler={props.tapHandler}
                 value={value}
+                joueur={game.scores[0] && game.scores[0].type === Game_Type.MONSTER ? findJoueurForAttack(game.scores as MonsterScore[], value) : undefined}
               ></SectionComponent>
             </g>
           </g>
@@ -89,7 +101,7 @@ export default function GameCanvas(props:CanvasProps){
         <circle cx="0" cy="0" r="7" className="bulls_eye" />
         <use
           xlinkHref="#bull"
-          onClick={async () =>  {
+          onClick={async () => {
             await props.tapHandler(25, Ring.BULL);
           }}
         />
@@ -100,11 +112,10 @@ export default function GameCanvas(props:CanvasProps){
           }}
         />
 
-        <WaitingComponent game={game} ready={props.ready}/>
+        <WaitingComponent game={game} ready={props.ready} />
 
-        <WinComponent game={game} ready={props.ready}/>
+        <WinComponent game={game} ready={props.ready} />
       </g>
     </svg>
   );
 }
-

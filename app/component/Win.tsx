@@ -8,7 +8,7 @@ import { CricketScore } from "../Type/Cricket";
 import { useRouter } from "next/router";
 
 type WaitingProps = {
-  game: Game<Game_Type.CRICKET>;
+  game: Game;
   ready: () => void;
 };
 

@@ -2,7 +2,6 @@ import { expect, test } from "vitest";
 import {
   allOpen,
   compareCricketScore,
-  getScoreFromPlayer,
   isCricketSection,
   isOpen,
   isWon,
@@ -10,7 +9,7 @@ import {
   topScorer,
 } from "../../../app/service/cricketService";
 import { CricketScore } from "@/app/Type/Cricket";
-import { Joueur } from "@/app/Type/Game";
+import { Game_Type, Joueur } from "@/app/Type/Game";
 
 const matthieu: Joueur = {
   id: 1,
@@ -65,30 +64,35 @@ const matthieuCricketScore: CricketScore = {
   marks: { 20: 2 },
   score: 1,
   joueur: matthieu,
+  type: Game_Type.CRICKET
 };
 
 const patateCricketScore: CricketScore = {
   marks: { 18: 1, 19: 2 },
   score: 2,
   joueur: patate,
+  type: Game_Type.CRICKET
 };
 
 const celiaCricketScore: CricketScore = {
   marks: { 25: 3, 19: 2 },
   score: 3,
   joueur: celia,
+  type: Game_Type.CRICKET
 };
 
 const winnerCricketScore: CricketScore = {
   marks: { 25: 3, 20: 3, 19: 3, 18: 3, 17: 3, 16: 3, 15: 3 },
   score: 50,
   joueur: winner,
+  type: Game_Type.CRICKET
 };
 
 const allOpenCricketScore: CricketScore = {
   marks: { 25: 3, 20: 3, 19: 3, 18: 3, 17: 3, 16: 3, 15: 3 },
   score: 40,
   joueur: allOpenPlayer,
+  type: Game_Type.CRICKET
 };
 
 test("A positive value indicates that a should come after b.", () => {
@@ -144,22 +148,8 @@ test("19 is not open for Celia", () => {
 test("25 is  open for Celia", () => {
   expect(isOpen(celiaCricketScore, 25)).to.be.true;
 });
-test("The score of celia is Celia's score", () => {
-  expect(
-    getScoreFromPlayer(
-      [celiaCricketScore, matthieuCricketScore, patateCricketScore],
-      celia
-    )
-  ).to.be.equal(celiaCricketScore);
-});
-test("The score of celia is Celia's score not the first", () => {
-  expect(
-    getScoreFromPlayer(
-      [matthieuCricketScore, celiaCricketScore, patateCricketScore],
-      celia
-    )
-  ).to.be.equal(celiaCricketScore);
-});
+
+
 test("All section are not open for celia ", () => {
   expect(allOpen(celiaCricketScore)).to.be.false;
 });

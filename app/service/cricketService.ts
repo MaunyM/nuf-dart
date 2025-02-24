@@ -3,55 +3,17 @@ import {
   DartThrow,
   Game,
   Game_State,
-  Game_Type,
   Joueur,
   mults,
 } from "../Type/Game";
-import { updatePlayerScore } from "./gameService";
+import { dartCountReduce, firstPlayerReduce, gameStatusReduce, playerReduce, throwReduce } from "./commonReduce";
+import { getScoreFromPlayer, updatePlayerScore } from "./gameService";
 
-function cricketThrowReduce(
-  dartThrow: DartThrow,
-  game: Game<Game_Type.CRICKET>
-): Game<Game_Type.CRICKET> {
-  const throws = [...game.throws, dartThrow];
-  return { ...game, throws };
-}
-
-function playerReduce(
-  dartThrow: DartThrow,
-  game: Game<Game_Type.CRICKET>
-): Game<Game_Type.CRICKET> {
-  if (Game_State.WON !== game.status) {
-    let playerIndex = Math.floor(game.throws.length / 3) % game.players.length;
-    const current_player = game.players[playerIndex];
-    return { ...game, current_player };
-  } else {
-    return { ...game };
-  }
-}
-
-function dartCountReduce(
-  dartThrow: DartThrow,
-  game: Game<Game_Type.CRICKET>
-): Game<Game_Type.CRICKET> {
-  const dart_count = game.dart_count - 1;
-  return { ...game, dart_count: dart_count == 0 ? 3 : dart_count };
-}
-
-function gameStatusReduce(
-  dartThrow: DartThrow,
-  game: Game<Game_Type.CRICKET>
-): Game<Game_Type.CRICKET> {
-  if (game.dart_count == 3) {
-    return { ...game, status: Game_State.WAITING_NEXT_PLAYER };
-  }
-  return { ...game, status: Game_State.THROWING };
-}
 
 function winReduce(
   dartThrow: DartThrow,
-  game: Game<Game_Type.CRICKET>
-): Game<Game_Type.CRICKET> {
+  game: Game
+): Game {
   const won = isWon(
     game.current_player as Joueur,
     game.scores as CricketScore[]
@@ -62,27 +24,17 @@ function winReduce(
   return { ...game };
 }
 
-function firstPlayerReduce(
-  dartThrow: DartThrow,
-  game: Game<Game_Type.CRICKET>
-): Game<Game_Type.CRICKET> {
-  if (!game.current_player) {
-    return { ...game, current_player: game.players[0] };
-  }
-  return game;
-}
-
 export function cricketScoreReduce(
   dartThrow: DartThrow,
-  game: Game<Game_Type.CRICKET>
-): Game<Game_Type.CRICKET> {
+  game: Game
+): Game {
   let newGame = game;
   for (let i = 0; i < mults[dartThrow.ring]; i++) {
     if (game.current_player) {
       const current_score = getScoreFromPlayer(
         game.scores as CricketScore[],
         game.current_player
-      );
+      ) as CricketScore;
       if (current_score) {
         if (isOpen(current_score, dartThrow.value)) {
           if (
@@ -104,10 +56,10 @@ export function cricketScoreReduce(
 }
 
 export function cricketReduce(
-  game: Game<Game_Type.CRICKET>,
+  game: Game,
   dartThrow: DartThrow
-): Game<Game_Type.CRICKET> {
-  let updatedGame = cricketThrowReduce(dartThrow, game);
+): Game {
+  let updatedGame = throwReduce(dartThrow, game);
   updatedGame = firstPlayerReduce(dartThrow, updatedGame);
   updatedGame = cricketScoreReduce(dartThrow, updatedGame);
   updatedGame = dartCountReduce(dartThrow, updatedGame);
@@ -138,13 +90,6 @@ export function isOpen(score: CricketScore, value: number): boolean {
   return marks[value] === 3;
 }
 
-export function getScoreFromPlayer(
-  scores: CricketScore[],
-  player: Joueur
-): CricketScore | undefined {
-  return scores.find((score) => score.joueur.id === player.id);
-}
-
 export function startingMarks(): Marks {
   return CRICKET_ZONES.reduce((acc, value) => {
     acc[value] = 0;
@@ -169,6 +114,6 @@ export function isWon(currentPlayer: Joueur, scores: CricketScore[]) {
   const score: CricketScore | undefined = getScoreFromPlayer(
     scores,
     currentPlayer
-  );
+  ) as CricketScore;
   return score && topScorer(scores).id == currentPlayer.id && allOpen(score);
 }

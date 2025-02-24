@@ -21,7 +21,7 @@ export default function CricketSectionComponent(props: SectionProps) {
   return (
     <g className="CricketSection">
       {props.scores.map((score, index) =>
-        isOpen(score, props.value) ? (
+        score.type === Game_Type.CRICKET && isOpen(score, props.value) ? (
           <g key={index}>
             <g className="back">
               <PartComponent

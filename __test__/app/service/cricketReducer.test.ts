@@ -3,15 +3,12 @@ import { cricketReduce, isOpenForEveryone } from "../../../app/service/cricketSe
 import {
   DartThrow,
   Game,
-  Game_Event,
   Game_State,
   Game_Type,
-  GameObserver,
   Joueur,
 } from "@/app/Type/Game";
-import { defaultCricketGame } from "@/app/service/defaultGame";
+import { defaultGame } from "@/app/service/defaultGame";
 import { CricketScore } from "@/app/Type/Cricket";
-import { exec } from "child_process";
 
 const matthieu: Joueur = {
   id: 1,
@@ -79,7 +76,7 @@ const players = [matthieu, patate, celia];
 const TwoPlayers = [matthieu, celia];
 
 test("Throw must be added to the game's throws", () => {
-  const game = { ...defaultCricketGame, players, status: Game_State.THROWING };
+  const game = { ...defaultGame, players, status: Game_State.THROWING };
   const throws = [throw20];
   const updatedGame = throws.reduce(cricketReduce, game);
   expect(updatedGame.throws.length).toBe(1);
@@ -87,7 +84,7 @@ test("Throw must be added to the game's throws", () => {
 });
 
 test("Two Throw must be added to the game's throws", () => {
-  const game = { ...defaultCricketGame, players, status: Game_State.THROWING };
+  const game = { ...defaultGame, players, status: Game_State.THROWING };
   const throws = [throw20, throw12];
   const updatedGame = throws.reduce(cricketReduce, game);
   expect(updatedGame.throws.length).toBe(2);
@@ -96,28 +93,28 @@ test("Two Throw must be added to the game's throws", () => {
 });
 
 test("First player is Matthieu", () => {
-  const game = { ...defaultCricketGame, players, status: Game_State.THROWING };
+  const game = { ...defaultGame, players, status: Game_State.THROWING };
   const throws = [throw20];
   const updatedGame = throws.reduce(cricketReduce, game);
   expect(updatedGame.current_player).toBe(matthieu);
 });
 
 test("First player is again Matthieu", () => {
-  const game = { ...defaultCricketGame, players, status: Game_State.THROWING };
+  const game = { ...defaultGame, players, status: Game_State.THROWING };
   const throws = [throw20, throw12];
   const updatedGame = throws.reduce(cricketReduce, game);
   expect(updatedGame.current_player).toBe(matthieu);
 });
 
 test("Second player is Patate", () => {
-  const game = { ...defaultCricketGame, players, status: Game_State.THROWING };
+  const game = { ...defaultGame, players, status: Game_State.THROWING };
   const throws = [throw20, throw20, throw20];
   const updatedGame = throws.reduce(cricketReduce, game);
   expect(updatedGame.current_player).toBe(patate);
 });
 
 test("Third player is Celia", () => {
-  const game = { ...defaultCricketGame, players, status: Game_State.THROWING };
+  const game = { ...defaultGame, players, status: Game_State.THROWING };
   const throws = [
     throw20,
     throw20,
@@ -132,7 +129,7 @@ test("Third player is Celia", () => {
 });
 
 test("5th player is Patate", () => {
-  const game = { ...defaultCricketGame, players, status: Game_State.THROWING };
+  const game = { ...defaultGame, players, status: Game_State.THROWING };
   const throws = [
     throw20,
     throw20,
@@ -152,7 +149,7 @@ test("5th player is Patate", () => {
 });
 
 test("5th player is Patate", () => {
-  const game = { ...defaultCricketGame, players, status: Game_State.THROWING };
+  const game = { ...defaultGame, players, status: Game_State.THROWING };
   const throws = [
     throw20,
     throw20,
@@ -173,14 +170,14 @@ test("5th player is Patate", () => {
 });
 
 test("Matthieu have 3 dart left", () => {
-  const game = { ...defaultCricketGame, players, current_player: matthieu };
+  const game = { ...defaultGame, players, current_player: matthieu };
   expect(game.players[0].nom).toBe("Matthieu");
   expect(game.dart_count).toBe(3);
 });
 
 test("Matthieu have 2 dart left", () => {
   const game = {
-    ...defaultCricketGame,
+    ...defaultGame,
     players,
     current_player: matthieu,
     status: Game_State.THROWING,
@@ -193,7 +190,7 @@ test("Matthieu have 2 dart left", () => {
 
 test("celia have 3 dart left", () => {
   const game = {
-    ...defaultCricketGame,
+    ...defaultGame,
     players: TwoPlayers,
     current_player: matthieu,
     status: Game_State.THROWING,
@@ -206,7 +203,7 @@ test("celia have 3 dart left", () => {
 
 test("new turn matthieu have 3 dart left", () => {
   const game = {
-    ...defaultCricketGame,
+    ...defaultGame,
     players: TwoPlayers,
     current_player: matthieu,
   };
@@ -218,7 +215,7 @@ test("new turn matthieu have 3 dart left", () => {
 
 test("new turn celia have 3 dart left", () => {
   const game = {
-    ...defaultCricketGame,
+    ...defaultGame,
     players: TwoPlayers,
     current_player: matthieu,
     status: Game_State.THROWING,
@@ -241,7 +238,7 @@ test("new turn celia have 3 dart left", () => {
 
 test("Two 20 marks for matthieu", () => {
   const game = {
-    ...defaultCricketGame,
+    ...defaultGame,
     players: TwoPlayers,
     current_player: matthieu,
     status: Game_State.THROWING,
@@ -256,7 +253,7 @@ test("Two 20 marks for matthieu", () => {
 
 test("Second player keep throwing", () => {
   const game = {
-    ...defaultCricketGame,
+    ...defaultGame,
     players: TwoPlayers,
     current_player: matthieu,
     status: Game_State.THROWING,
@@ -273,7 +270,7 @@ test("Second player keep throwing", () => {
 
 test("Matthieu can't score", () => {
   const game = {
-    ...defaultCricketGame,
+    ...defaultGame,
     players: TwoPlayers,
     current_player: matthieu,
     status: Game_State.THROWING,
@@ -302,6 +299,7 @@ test("All open", () => {
         "20": 3,
         "25": 0,
       },
+      type: Game_Type.CRICKET,
       score: 20,
       joueur: {
         id: 1,
@@ -323,6 +321,7 @@ test("All open", () => {
         "20": 3,
         "25": 0,
       },
+      type: Game_Type.CRICKET,
       score: 0,
       joueur: {
         id: 2,
@@ -340,7 +339,7 @@ test("All open", () => {
 
 
 test("prod missing current player", () => {
-  const game : Game<Game_Type.CRICKET> = {
+  const game : Game = {
     status: 2,
     throws: [],
     scores: [
@@ -355,6 +354,7 @@ test("prod missing current player", () => {
           "25": 0,
         },
         score: 0,
+        type: Game_Type.CRICKET,
         joueur: {
           id: 1,
           nom: "Matthieu",
@@ -375,6 +375,7 @@ test("prod missing current player", () => {
           20: 0,
           25: 0,
         },
+        type: Game_Type.CRICKET,
         score: 0,
         joueur: {
           id: 2,

@@ -4,11 +4,13 @@ import React from 'react'
 import { Coord } from '../../Type/Math';
 import './PlayerScore.css'
 import { Game_Type, Score } from '../../Type/Game';
-import ScoreComponent from '../cricket/CricketScore';
+import CricketScoreComponent from '../cricket/CricketScore';
 import { CricketScore } from '@/app/Type/Cricket';
+import { _501Score } from '@/app/Type/501';
+import Score501Component from '../501/501Score';
 
-type ScoreBoardProps<T extends Game_Type> = {
-  score:Score<T>
+type ScoreBoardProps= {
+  score:Score
   }; 
 
  const angle = Math.PI/10
@@ -21,7 +23,7 @@ type ScoreBoardProps<T extends Game_Type> = {
  const start:(r:number) => Coord = (r:number) => ({ x :cos_start * r, y: sin_start * r})
  const end:(r:number) => Coord = (r:number) => ({ x :cos_end * r, y: sin_end * r})
 
-export default function PlayerScoreComponent(props:ScoreBoardProps<Game_Type.CRICKET>){
+export default function PlayerScoreComponent(props:ScoreBoardProps){
 
 
   return (
@@ -46,7 +48,8 @@ export default function PlayerScoreComponent(props:ScoreBoardProps<Game_Type.CRI
     dominantBaseline="middle"
     className="text">{}</text>
         <g transform="translate(50,80)">
-            <ScoreComponent score={props.score as CricketScore}></ScoreComponent>
+            {props.score.type === Game_Type.CRICKET && <CricketScoreComponent score={props.score as CricketScore}></CricketScoreComponent>}
+            {props.score.type === Game_Type._501 && <Score501Component score={props.score as _501Score}></Score501Component>}
         </g>
       </g>
     </g>

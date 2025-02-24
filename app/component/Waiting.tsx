@@ -6,7 +6,7 @@ import { Game, Game_State, Game_Type } from "../Type/Game";
 import { AnimatePresence,motion } from "motion/react";
 
 type WaitingProps = {
-  game: Game<Game_Type.CRICKET>;
+  game: Game;
   ready: () => void;
 };
 

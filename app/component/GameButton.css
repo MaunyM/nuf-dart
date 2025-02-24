@@ -1,0 +1,20 @@
+.gameButton .panel {
+    filter: drop-shadow(2px 2px rgba(0, 0, 0, 0.3));
+  }
+
+  .gameButton  .dispaly_panel {
+    filter: drop-shadow(5px 5px 10px #bebebe)  drop-shadow(-5px -5px 10px #ffffff);
+    fill: #e7322de6;
+}
+  
+.gameButton .text {
+    font-family: "m6x11plus";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 42px;
+    fill: white;
+    filter: drop-shadow(2px 2px rgba(0, 0, 0, 0.3));
+    text-anchor: middle;
+    vertical-align: baseline;
+  }
+  
