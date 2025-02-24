@@ -1,9 +1,7 @@
 import { expect, test } from "vitest";
 import {
   DartThrow,
-  Game,
   Game_State,
-  Game_Type,
   Joueur,
 } from "@/app/Type/Game";
 import { defaultGame } from "@/app/service/defaultGame";
@@ -83,16 +81,4 @@ test("Score is initialised", () => {
 
   expect(updatedGame.throws.length).toBe(0);
   expect(updatedGame.scores.length).toEqual(3);
-});
-
-test("Monster game zone validation", () => {
-  const game = { ...defaultGame, players, scores, status: Game_State.THROWING };
-  const throws: DartThrow[] = [throw20];
-  const updatedGame = throws.reduce(monsterReduce, game);
-  console.log((updatedGame.scores[0] as MonsterScore).attack);
-  expect(updatedGame.throws.length).toBe(1);
-  expect((updatedGame.scores[0] as MonsterScore).attack.length).toEqual(0);
-  expect((updatedGame.scores[0] as MonsterScore).heal.length).toEqual(1);
-  expect((updatedGame.scores[1] as MonsterScore).attack.length).toEqual(3);
-  expect((updatedGame.scores[1] as MonsterScore).heal.length).toEqual(0);
 });

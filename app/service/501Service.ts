@@ -1,3 +1,4 @@
+import { last, replace } from "lodash";
 import { _501Score } from "../Type/501";
 import { DartThrow, Game, Game_State, mults, Score } from "../Type/Game";
 import {
@@ -22,6 +23,10 @@ export function score501Reduce(dartThrow: DartThrow, game: Game): Game {
       if (new_score < 0) {
         newGame = {
           ...newGame,
+          scores: updatePlayerScore(
+            { ...current_score, score: current_score.last_score } as _501Score,
+            game.scores
+          ),
           dart_count: 1,
         };
       } else {
@@ -51,6 +56,22 @@ function winReduce(dartThrow: DartThrow, game: Game): Game {
   return { ...game };
 }
 
+export function lastScoreReduce(
+    dartThrow: DartThrow,
+    game: Game
+  ): Game {
+    if (Game_State.WON !== game.status && game.current_player && game.dart_count == 3) {
+      const current_score = getScoreFromPlayer(
+        game.scores as Score[],
+        game.current_player
+      ) as _501Score;
+      const new_score =  {...current_score, last_score: current_score.score};
+      return { ...game, scores:  updatePlayerScore(new_score, game.scores) };
+    } else {
+      return { ...game };
+    }
+  }
+
 export function _501Reduce(game: Game, dartThrow: DartThrow): Game {
   let updatedGame = throwReduce(dartThrow, game);
   updatedGame = firstPlayerReduce(dartThrow, updatedGame);
@@ -58,6 +79,7 @@ export function _501Reduce(game: Game, dartThrow: DartThrow): Game {
   updatedGame = dartCountReduce(dartThrow, updatedGame);
   updatedGame = gameStatusReduce(dartThrow, updatedGame);
   updatedGame = winReduce(dartThrow, updatedGame);
+  updatedGame = lastScoreReduce(dartThrow, updatedGame);
   updatedGame = playerReduce(dartThrow, updatedGame);
   return updatedGame;
 }

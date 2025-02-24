@@ -18,17 +18,6 @@ import {
 
 import _, { isFunction } from "lodash";
 
-export function findJoueurForAttack(
-  scores: MonsterScore[],
-  value: number
-): Joueur | undefined {
-  console.log("findJoueurForAttack", scores, value);
-  const score = scores.find((score: MonsterScore) =>
-    score.attack.includes(value)
-  );
-  return score?.joueur;
-}
-
 function scoreMonsterReduce(dartThrow: DartThrow, game: Game): Game {
   let newGame = game;
   return newGame;

@@ -7,12 +7,15 @@ import _ from "lodash";
 import AbstractGame from "../app/component/abstractGame";
 import { monsterReduce } from "@/app/service/monsterService";
 import { MonsterScore } from "@/app/Type/Monster";
+import { useState } from "react";
 
 type GameProps = {
   players: Joueur[];
 };
 
 export default function Home(props: GameProps) {
+  const [monsterZones, setMonsterZones] = useState();
+  
   return (
     <AbstractGame
     initialScoreFromPlayer={ (joueur: Joueur) => { return new MonsterScore(joueur)}}

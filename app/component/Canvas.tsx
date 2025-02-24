@@ -15,7 +15,6 @@ import CricketSectionComponent from "./cricket/CricketSection";
 import { isCricketSection } from "../service/cricketService";
 import { CricketScore } from "../Type/Cricket";
 import TextComponent from "./TextButton";
-import { V } from "vitest/dist/chunks/reporters.0x019-V2.js";
 import { findJoueurForAttack } from "../service/monsterService";
 import { MonsterScore } from "../Type/Monster";
 

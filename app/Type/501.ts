@@ -8,6 +8,7 @@ export class _501Score implements Score {
   score: number = 0;
   joueur: Joueur;
   type = Game_Type._501;
+  last_score: number = 0;
   constructor(joueur:Joueur) {
     this.score = 501;
     this.joueur = joueur;
