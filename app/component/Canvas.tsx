@@ -16,7 +16,7 @@ import { isCricketSection } from "../service/cricketService";
 import { CricketScore } from "../Type/Cricket";
 import TextComponent from "./TextButton";
 import { findJoueurForAttack } from "../service/monsterService";
-import { MonsterScore } from "../Type/Monster";
+import { MonsterJoueur, MonsterScore } from "../Type/Monster";
 
 type CanvasProps = {
   game: Game;
@@ -92,7 +92,7 @@ export default function GameCanvas(props: CanvasProps) {
               <SectionComponent
                 tapHandler={props.tapHandler}
                 value={value}
-                joueur={game.scores[0] && game.scores[0].type === Game_Type.MONSTER ? findJoueurForAttack(game.scores as MonsterScore[], value) : undefined}
+                joueur={game.scores[0] && game.scores[0].type === Game_Type.MONSTER ? findJoueurForAttack(game.players as MonsterJoueur[], value) : undefined}
               ></SectionComponent>
             </g>
           </g>

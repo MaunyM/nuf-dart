@@ -36,7 +36,8 @@ export function playerReduce(
       let playerIndex =  getIndexFromPlayers(game.current_player, game.players);
       playerIndex = playerIndex + 1 >= game.players.length ? 0 : playerIndex + 1;
       const current_player = game.players[playerIndex];
-      return { ...game, current_player };
+      const round = game.round +1;
+      return { ...game, current_player, round };
     } else {
       return { ...game };
     }

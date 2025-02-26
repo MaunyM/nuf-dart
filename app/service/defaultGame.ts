@@ -9,4 +9,5 @@ export const defaultGame: Game= {
   dart_count: 3,
   scores: [],
   players: [],
+  round:1
 };

@@ -6,7 +6,6 @@ import {
 } from "@/app/Type/Game";
 import { defaultGame } from "@/app/service/defaultGame";
 import { MonsterScore } from "@/app/Type/Monster";
-import { monsterReduce } from "@/app/service/monsterService";
 
 const matthieu: Joueur = {
   id: 1,
@@ -73,12 +72,3 @@ const throw12: DartThrow = {
 const players = [matthieu, patate, celia];
 const scores = players.map((player) => new MonsterScore(player));
 const TwoPlayers = [matthieu, celia];
-
-test("Score is initialised", () => {
-  const game = { ...defaultGame, players, scores, status: Game_State.THROWING };
-  const throws: DartThrow[] = [];
-  const updatedGame = throws.reduce(monsterReduce, game);
-
-  expect(updatedGame.throws.length).toBe(0);
-  expect(updatedGame.scores.length).toEqual(3);
-});

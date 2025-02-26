@@ -40,7 +40,7 @@ export type Score = {
   type: Game_Type
 };
 
-export type Joueur= {
+export interface Joueur{
   id:number,
   nom: string;
   color: Color;
@@ -49,8 +49,6 @@ export type Joueur= {
 export enum Game_Event {
   DART_HIT,
 }
-
-export type DartThrowMapper = (dart: DartThrow) => DartThrow;
 
 export interface DartThrow {
   player: Joueur;
@@ -66,4 +64,5 @@ export type Game = {
   dart_count: number;
   scores:Score[];
   players:Joueur[];
+  round:number;
 };

@@ -2,7 +2,6 @@
 import GameCanvas from "./Canvas";
 import {
   DartThrow,
-  DartThrowMapper,
   Game,
   Game_State,
   Joueur,
@@ -23,10 +22,7 @@ type GameProps = {
   players: Joueur[];
   gameReducer: (game: Game, dartThrow: DartThrow) => Game;
   initialScoreFromPlayer: (joueur: Joueur) => Score;
-  throwMapper?: DartThrowMapper;
 };
-
-const defaultThrowMapper: DartThrowMapper = (dartThrow: DartThrow) => dartThrow;
 
 const initGame: Game = {
   status: Game_State.UNSTARTED,
@@ -34,9 +30,10 @@ const initGame: Game = {
   scores: [],
   dart_count: 3,
   players: [],
+  round:0
 };
 
-export default function AbstractGame({players, gameReducer, initialScoreFromPlayer, throwMapper = defaultThrowMapper}: GameProps) {
+export default function AbstractGame({players, gameReducer, initialScoreFromPlayer}: GameProps) {
   const [playPlop] = useSound(plopSfx);
   const [playTululu] = useSound(tululuSfx, { volume: 0.1 });
   const [playNextPlayer] = useSound(nextPlayerSfx, { volume: 0.1 });
@@ -88,7 +85,7 @@ export default function AbstractGame({players, gameReducer, initialScoreFromPlay
         playTriple();
         await delay(1000);
       }
-      setDartThrows([...dartThrows, throwMapper(newThrow)]);
+      setDartThrows([...dartThrows, newThrow]);
     }
   };
 

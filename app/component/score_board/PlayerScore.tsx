@@ -8,6 +8,8 @@ import CricketScoreComponent from '../cricket/CricketScore';
 import { CricketScore } from '@/app/Type/Cricket';
 import { _501Score } from '@/app/Type/501';
 import Score501Component from '../501/501Score';
+import ScoreMonsterComponent from '../monster/MonsterScore';
+import { MonsterScore } from '@/app/Type/Monster';
 
 type ScoreBoardProps= {
   score:Score
@@ -50,6 +52,7 @@ export default function PlayerScoreComponent(props:ScoreBoardProps){
         <g transform="translate(50,80)">
             {props.score.type === Game_Type.CRICKET && <CricketScoreComponent score={props.score as CricketScore}></CricketScoreComponent>}
             {props.score.type === Game_Type._501 && <Score501Component score={props.score as _501Score}></Score501Component>}
+            {props.score.type === Game_Type.MONSTER && <ScoreMonsterComponent score={props.score as MonsterScore}></ScoreMonsterComponent>}
         </g>
       </g>
     </g>

@@ -342,6 +342,7 @@ test("prod missing current player", () => {
   const game : Game = {
     status: 2,
     throws: [],
+    round: 1,
     scores: [
       {
         marks: {

@@ -1,11 +1,9 @@
-import { MonsterScore } from "../Type/Monster";
+import { MonsterJoueur, MonsterScore, MonsterZones } from "../Type/Monster";
 import {
   DartThrow,
   Game,
   Game_State,
   Joueur,
-  mults,
-  Score,
   sectionsOrder,
 } from "../Type/Game";
 import {
@@ -15,46 +13,110 @@ import {
   playerReduce,
   throwReduce,
 } from "./commonReduce";
-
-import _, { isFunction } from "lodash";
+import _ from "lodash";
+import { getScoreFromPlayer, updatePlayerScore } from "./gameService";
 
 function scoreMonsterReduce(dartThrow: DartThrow, game: Game): Game {
   let newGame = game;
+  let touchedPlayer = findJoueurForAttack(game.players as MonsterJoueur[], dartThrow.value)
+  if(touchedPlayer && game.current_player) {
+    let score : MonsterScore = getScoreFromPlayer(game.scores, touchedPlayer) as MonsterScore
+    if(touchedPlayer.id === game.current_player.id) {
+      score = {...score, score: score.score+1}
+    } else {
+      score = {...score, score: score.score-1}
+    }
+    newGame = {...newGame, scores: updatePlayerScore(score, game.scores)}
+  }
   return newGame;
 }
 
 function winReduce(dartThrow: DartThrow, game: Game): Game {
-  return { ...game };
+    const won = isWon(
+      game.scores as MonsterScore[]
+    );
+    if (won) {
+      return { ...game, status: Game_State.WON };
+    }
+    return { ...game }
 }
 
-function zoneReduce(dartThrow: DartThrow, game: Game): Game {
+function countAlive(scores: MonsterScore[]):number {
+  return scores.reduce((count, score) => (score.score == 0)?count+1:count, 0)
+}
+
+export function isWon(scores: MonsterScore[]) {
+  return countAlive(scores) === 1;
+}
+
+export function findJoueurForAttack(
+  joueurs: MonsterJoueur[],
+  value: number
+): Joueur | undefined {
+  return joueurs.find(
+    (joueur: MonsterJoueur) => joueur.zone && joueur.zone.includes(value)
+  );
+}
+
+export function randomZone(
+  players: Joueur[],
+  currentPlayer: Joueur
+): MonsterZones {
   let shuffleSection = _.shuffle(sectionsOrder);
   let a1, a2, a3, heal;
-  if (game.dart_count === 3) {
-    const new_scores = (game.scores as MonsterScore[]).map(
-      (score: MonsterScore) => {
-        if (game.current_player && score.joueur.id === game.current_player.id) {
-          [heal, ...shuffleSection] = shuffleSection;
-          return { ...score, heal: [heal], attack: [] };
-        } else {
-          [a1, a2, a3, ...shuffleSection] = shuffleSection;
-          return { ...score, attack: [a1, a2, a3], heal: [] };
-        }
-      }
-    );
-    return { ...game, scores: new_scores };
-  } 
-  return game
+  return players.reduce((acc: MonsterZones, player: Joueur) => {
+    if (player.id === currentPlayer.id) {
+      [heal, ...shuffleSection] = shuffleSection;
+      acc.set(player.id, [heal]);
+    } else {
+      [a1, a2, a3, ...shuffleSection] = shuffleSection;
+      acc.set(player.id, [a1, a2, a3]);
+    }
+    return acc;
+  }, new Map<number, number[]>());
 }
 
-export function monsterReduce(game: Game, dartThrow: DartThrow): Game {
-  let updatedGame = throwReduce(dartThrow, game);
-  updatedGame = firstPlayerReduce(dartThrow, updatedGame);
-  updatedGame = scoreMonsterReduce(dartThrow, updatedGame);
-  updatedGame = dartCountReduce(dartThrow, updatedGame);
-  updatedGame = gameStatusReduce(dartThrow, updatedGame);
-  updatedGame = winReduce(dartThrow, updatedGame);
-  updatedGame = playerReduce(dartThrow, updatedGame);
-  updatedGame = zoneReduce(dartThrow, updatedGame);
-  return updatedGame;
+export function applyZoneToMonsterPlayer(
+  players: Joueur[],
+  zones: MonsterZones
+): MonsterJoueur[] {
+  return players.map((joueur) => {
+    return { ...joueur, zone: zones.get(joueur.id) } as MonsterJoueur;
+  });
+}
+
+export class MonsterReducer {
+  zones: MonsterZones[] = [];
+  reduce(game: Game, dartThrow: DartThrow): Game {
+    let updatedGame = throwReduce(dartThrow, game);
+    updatedGame = firstPlayerReduce(dartThrow, updatedGame);
+    updatedGame = scoreMonsterReduce(dartThrow, updatedGame);
+    updatedGame = dartCountReduce(dartThrow, updatedGame);
+    updatedGame = gameStatusReduce(dartThrow, updatedGame);
+    updatedGame = winReduce(dartThrow, updatedGame);
+    updatedGame = playerReduce(dartThrow, updatedGame);
+
+    if (
+      Game_State.WON !== updatedGame.status &&
+      updatedGame.current_player &&
+      updatedGame.dart_count == 3
+    ) {
+      let current_zones = this.zones[updatedGame.round];
+      if (!current_zones) {
+        (current_zones = randomZone(game.players, updatedGame.current_player)),
+          (this.zones = [...this.zones, current_zones]);
+      }
+      return {
+        ...updatedGame,
+        players: applyZoneToMonsterPlayer(game.players, current_zones),
+      };
+    }
+    return updatedGame;
+  }
+
+  constructor(players?: Joueur[]) {
+    if (players && players.length >= 1) {
+      this.zones = [randomZone(players, players[0])];
+    }
+  }
 }
