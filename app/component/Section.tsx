@@ -4,6 +4,7 @@ import React from "react";
 import PartComponent from "./Part";
 import { Game_Type, Joueur, Ring } from "../Type/Game";
 import BlobComponent from "./monster/Blob";
+import PotionComponent from "./monster/Potion";
 
 type SectionProps = {
   value: number;
@@ -90,6 +91,13 @@ export default function SectionComponent(props: SectionProps) {
         props.player.id !== props.current_player.id && (
           <g transform="scale(0.2) translate(680 -60) rotate(90 0 0)  ">
             <BlobComponent joueur={props.player}></BlobComponent>
+          </g>
+        )}
+            {props.player &&
+        props.current_player &&
+        props.player.id === props.current_player.id && (
+          <g transform="scale(0.15) translate(885 -70) rotate(90 0 0)  ">
+            <PotionComponent></PotionComponent>
           </g>
         )}
     </g>

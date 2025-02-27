@@ -29,6 +29,7 @@ export default function CricketSectionComponent(props: SectionProps) {
                 r2={r1}
                 angle={sectionAngle / playerCount}
                 shift={(index * sectionAngle) / playerCount}
+                gameType={Game_Type.CRICKET}
               ></PartComponent>
             </g>
             <g fill={`url(#grad-${score.joueur.nom}`}>
@@ -37,6 +38,7 @@ export default function CricketSectionComponent(props: SectionProps) {
                 r2={r1}
                 angle={sectionAngle / playerCount}
                 shift={(index * sectionAngle) / playerCount}
+                gameType={Game_Type.CRICKET}
               ></PartComponent>
             </g>
           </g>

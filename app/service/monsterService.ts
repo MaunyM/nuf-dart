@@ -16,13 +16,17 @@ import {
 import _ from "lodash";
 import { getScoreFromPlayer, updatePlayerScore } from "./gameService";
 
+export const max_health = 20;
+
 function scoreMonsterReduce(dartThrow: DartThrow, game: Game): Game {
   let newGame = game;
   let touchedPlayer = findJoueurForAttack(game.players as MonsterJoueur[], dartThrow.value)
   if(touchedPlayer && game.current_player) {
     let score : MonsterScore = getScoreFromPlayer(game.scores, touchedPlayer) as MonsterScore
-    if(touchedPlayer.id === game.current_player.id) {
-      score = {...score, score: score.score+1}
+    if(touchedPlayer.id === game.current_player.id  ) {
+      if(score.score < max_health) {
+        score = {...score, score: score.score+1}
+      }
     } else {
       score = {...score, score: score.score-1}
     }
