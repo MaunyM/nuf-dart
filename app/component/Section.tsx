@@ -89,14 +89,24 @@ export default function SectionComponent(props: SectionProps) {
       {props.player &&
         props.current_player &&
         props.player.id !== props.current_player.id && (
-          <g transform="scale(0.2) translate(680 -60) rotate(90 0 0)  ">
+          <g
+            transform="scale(0.2) translate(680 -60) rotate(90 0 0)"
+            onClick={() => {
+              props.tapHandler(props.value, Ring.SIMPLE_BOTTOM);
+            }}
+          >
             <BlobComponent joueur={props.player}></BlobComponent>
           </g>
         )}
-            {props.player &&
+      {props.player &&
         props.current_player &&
         props.player.id === props.current_player.id && (
-          <g transform="scale(0.15) translate(885 -70) rotate(90 0 0)  ">
+          <g
+            transform="scale(0.15) translate(885 -70) rotate(90 0 0)  "
+            onClick={() => {
+              props.tapHandler(props.value, Ring.SIMPLE_BOTTOM);
+            }}
+          >
             <PotionComponent></PotionComponent>
           </g>
         )}
