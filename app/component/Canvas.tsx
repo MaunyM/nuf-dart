@@ -82,7 +82,7 @@ export default function GameCanvas(props: CanvasProps) {
             >
               <NumberComponent value={value}></NumberComponent>
             </g>
-            <g transform={`rotate(${(360 / sectionsOrder.length) * index})`}>
+            <g transform={`rotate(${(360 / sectionsOrder.length) *index})`}>
               {isCricketSection(value) && (
                 <CricketSectionComponent
                   scores={game.scores as CricketScore[]}
@@ -92,7 +92,8 @@ export default function GameCanvas(props: CanvasProps) {
               <SectionComponent
                 tapHandler={props.tapHandler}
                 value={value}
-                joueur={game.scores[0] && game.scores[0].type === Game_Type.MONSTER ? findJoueurForAttack(game.players as MonsterJoueur[], value) : undefined}
+                player={game.scores[0] && game.scores[0].type === Game_Type.MONSTER ? findJoueurForAttack(game.players as MonsterJoueur[], value) : undefined}
+                current_player={game.current_player}
               ></SectionComponent>
             </g>
           </g>

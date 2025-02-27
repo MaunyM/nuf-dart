@@ -3,12 +3,13 @@
 import React from "react";
 import PartComponent from "./Part";
 import { Joueur, Ring } from "../Type/Game";
-
+import BlobComponent from "./monster/Blob";
 
 type SectionProps = {
   value: number;
   tapHandler: (value: number, ring: Ring) => void;
-  joueur?: Joueur
+  player?: Joueur;
+  current_player?: Joueur;
 };
 
 const thickness = 16;
@@ -21,12 +22,11 @@ const section_count = 20;
 const sectionAngle = (2 * Math.PI) / section_count;
 
 export default function SectionComponent(props: SectionProps) {
-
   return (
     <g>
       <g
         onClick={() => {
-            props.tapHandler(props.value, Ring.DOUBLE);
+          props.tapHandler(props.value, Ring.DOUBLE);
         }}
         className="part1"
       >
@@ -35,7 +35,7 @@ export default function SectionComponent(props: SectionProps) {
           r2={r2}
           angle={sectionAngle}
           shift={0}
-          joueur={props.joueur}
+          joueur={props.player}
         ></PartComponent>
       </g>
       <g
@@ -49,7 +49,7 @@ export default function SectionComponent(props: SectionProps) {
           r2={r3}
           angle={sectionAngle}
           shift={0}
-          joueur={props.joueur}
+          joueur={props.player}
         ></PartComponent>
       </g>
       <g
@@ -63,7 +63,7 @@ export default function SectionComponent(props: SectionProps) {
           r2={r4}
           angle={sectionAngle}
           shift={0}
-          joueur={props.joueur}
+          joueur={props.player}
         ></PartComponent>
       </g>
       <g
@@ -77,9 +77,16 @@ export default function SectionComponent(props: SectionProps) {
           r2={r5}
           angle={(2 * Math.PI) / section_count}
           shift={0}
-          joueur={props.joueur}
+          joueur={props.player}
         ></PartComponent>
       </g>
+      {props.player &&
+        props.current_player &&
+        props.player.id !== props.current_player.id && (
+          <g transform="scale(0.2) translate(600 -60) rotate(90 0 0)  ">
+            <BlobComponent joueur={props.player}></BlobComponent>
+          </g>
+        )}
     </g>
   );
 }

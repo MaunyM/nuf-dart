@@ -1,2 +1,3 @@
 assombrire quand la zone est fermée
 rajouter des manches
+monster à deux, alterner les zones

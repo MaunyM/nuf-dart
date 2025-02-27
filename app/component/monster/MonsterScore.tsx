@@ -5,6 +5,8 @@ import { Coord } from '../../Type/Math';
 import { _501Score } from '@/app/Type/501';
 import "./Monster.css"
 import { MonsterScore } from '@/app/Type/Monster';
+import BlobComponent from './Blob';
+import HealthBarComponent from './HealthBar';
 
 type ScoreBoardProps = {
   score:MonsterScore
@@ -25,18 +27,14 @@ export default function ScoreMonsterComponent(props:ScoreBoardProps){
 
   return (
     <g transform="" className="Monster score">
-      <g transform="translate(-50,-20)">
-        <svg width="150" height="70">
-          <rect x="0" y="0" width="150" height="60" fill="none" />
-          <text
-            x="50%"
-            y="50%"
-            dominantBaseline="middle"
-            textAnchor="middle"
-            className="text"
-          >
-            {props.score.score}
-          </text>
+      <g transform="translate(-50,-40)">
+        <svg width="150" height="150">
+        <g transform="scale(0.5) translate(15 150)">
+          <HealthBarComponent score={props.score.score}/>
+          </g>
+          <g transform="scale(0.5) translate(90 00)">
+              <BlobComponent joueur={props.score.joueur}></BlobComponent>
+          </g>
         </svg>
       </g>
     </g>

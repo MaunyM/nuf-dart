@@ -1,3 +1,38 @@
 .Monster .text{
     font-size: 90px;
 }
+.aquamarine{
+    --strokeColor: #2e2121;
+    --bodyColor: #67cba3;
+    --sparklColor: #f8d088;
+}
+.gold{
+    --strokeColor: #2e2121;
+    --bodyColor: #f8d088;
+    --sparklColor: #fce6c6;
+}
+.blueGreen{
+    --strokeColor: #2e2121;
+    --bodyColor: #40bfbf;
+    --sparklColor: #f8d088;
+}
+.red{
+    --strokeColor: #2e2121;
+    --bodyColor: #f25656;
+    --sparklColor: #f8d088;
+}
+.purple{
+    --strokeColor: #2e2121;
+    --bodyColor: #a47aeb;
+    --sparklColor: #f8d088;
+}
+.lightBlue{
+    --strokeColor: #2e2121;
+    --bodyColor: #88c8f0;
+    --sparklColor: #f8d088;
+}
+.orange{
+    --strokeColor: #2e2121;
+    --bodyColor: #ff8000;
+    --sparklColor: #f8d088;
+}
