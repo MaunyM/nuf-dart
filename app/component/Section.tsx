@@ -2,7 +2,7 @@
 
 import React from "react";
 import PartComponent from "./Part";
-import { Joueur, Ring } from "../Type/Game";
+import { Game_Type, Joueur, Ring } from "../Type/Game";
 import BlobComponent from "./monster/Blob";
 
 type SectionProps = {
@@ -10,6 +10,7 @@ type SectionProps = {
   tapHandler: (value: number, ring: Ring) => void;
   player?: Joueur;
   current_player?: Joueur;
+  gameType: Game_Type;
 };
 
 const thickness = 16;
@@ -36,6 +37,7 @@ export default function SectionComponent(props: SectionProps) {
           angle={sectionAngle}
           shift={0}
           joueur={props.player}
+          gameType={props.gameType}
         ></PartComponent>
       </g>
       <g
@@ -50,6 +52,7 @@ export default function SectionComponent(props: SectionProps) {
           angle={sectionAngle}
           shift={0}
           joueur={props.player}
+          gameType={props.gameType}
         ></PartComponent>
       </g>
       <g
@@ -64,6 +67,7 @@ export default function SectionComponent(props: SectionProps) {
           angle={sectionAngle}
           shift={0}
           joueur={props.player}
+          gameType={props.gameType}
         ></PartComponent>
       </g>
       <g
@@ -78,6 +82,7 @@ export default function SectionComponent(props: SectionProps) {
           angle={(2 * Math.PI) / section_count}
           shift={0}
           joueur={props.player}
+          gameType={props.gameType}
         ></PartComponent>
       </g>
       {props.player &&

@@ -18,8 +18,8 @@ export default function HealthBarComponent(props:HealthBarProps){
 
   return (
     <g >
-      {[...Array(props.score)].map((_, index) => (
-        <rect width="10" height="30" x={index * 13} y="0" fill="white" key={index}/>
+      {[...Array(max_health)].map((_, index) => (
+          <rect width="10" height="30" x={index * 13} y="0" className={index<props.score?"bar full":"bar empty"} key={index} />
       ))}
     </g>
   );

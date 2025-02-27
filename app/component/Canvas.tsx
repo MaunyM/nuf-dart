@@ -94,6 +94,7 @@ export default function GameCanvas(props: CanvasProps) {
                 value={value}
                 player={game.scores[0] && game.scores[0].type === Game_Type.MONSTER ? findJoueurForAttack(game.players as MonsterJoueur[], value) : undefined}
                 current_player={game.current_player}
+                gameType={game.scores[0].type}
               ></SectionComponent>
             </g>
           </g>

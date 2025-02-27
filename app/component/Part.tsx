@@ -3,14 +3,15 @@
 import React, { useState } from "react";
 import { Coord } from "../Type/Math";
 import "./Part.css";
-import { Joueur } from "../Type/Game";
+import { Game_Type, Joueur } from "../Type/Game";
 
 type PartProps = {
   r1: number;
   r2: number;
   angle: number;
   shift: number;
-  joueur?: Joueur
+  joueur?: Joueur;
+  gameType: Game_Type;
 };
 
 export default function PartComponent(props: PartProps) {
@@ -38,7 +39,7 @@ export default function PartComponent(props: PartProps) {
     <g>
       <path
         className="part"
-        fill={props.joueur?`url(#grad-${props.joueur?.nom})`:''}
+        fill={props.joueur?`url(#grad-${props.joueur?.nom})`:props.gameType===Game_Type.MONSTER?'rgb(200, 200,200)':''}
         d={`M ${r1_start.x} ${r1_start.y} A ${props.r1} ${props.r1} 0 0 1 ${r1_end.x} ${r1_end.y} 
         L ${r2_end.x} ${r2_end.y} A ${props.r2} ${props.r2} 0 0 0 ${r2_start.x} ${r2_start.y} L ${r1_start.x} ${r1_start.y} `}
       />
