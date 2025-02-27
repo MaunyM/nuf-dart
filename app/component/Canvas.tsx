@@ -94,11 +94,12 @@ export default function GameCanvas(props: CanvasProps) {
                 value={value}
                 player={game.scores[0] && game.scores[0].type === Game_Type.MONSTER ? findJoueurForAttack(game.players as MonsterJoueur[], value) : undefined}
                 current_player={game.current_player}
-                gameType={game.scores[0].type}
+                gameType={game.scores[0] && game.scores[0].type}
               ></SectionComponent>
             </g>
           </g>
         ))}
+       <g>
         <circle cx="0" cy="0" r="7" className="bulls_eye" />
         <use
           xlinkHref="#bull"
@@ -112,7 +113,7 @@ export default function GameCanvas(props: CanvasProps) {
             props.tapHandler(25, Ring.DOUBLE);
           }}
         />
-
+        </g>
         <WaitingComponent game={game} ready={props.ready} />
 
         <WinComponent game={game} ready={props.ready} />

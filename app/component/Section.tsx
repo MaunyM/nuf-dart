@@ -88,7 +88,7 @@ export default function SectionComponent(props: SectionProps) {
       {props.player &&
         props.current_player &&
         props.player.id !== props.current_player.id && (
-          <g transform="scale(0.2) translate(600 -60) rotate(90 0 0)  ">
+          <g transform="scale(0.2) translate(680 -60) rotate(90 0 0)  ">
             <BlobComponent joueur={props.player}></BlobComponent>
           </g>
         )}
