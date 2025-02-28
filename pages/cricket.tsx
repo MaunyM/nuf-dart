@@ -1,5 +1,6 @@
 "use client";
 import {
+  Game,
   Joueur,
 } from "@/app/Type/Game";
 
@@ -10,6 +11,7 @@ import { CricketScore } from "@/app/Type/Cricket";
 
 type GameProps = {
   players: Joueur[];
+    addPlayers(joueur: Joueur[]): Game;
 };
 
 export default function Home(props: GameProps) {
@@ -18,6 +20,7 @@ export default function Home(props: GameProps) {
     initialScoreFromPlayer={ (joueur: Joueur) => {   return new CricketScore(joueur)}}
     players={props.players}
     gameReducer={cricketReduce}
+    addPlayers={props.addPlayers}
     ></AbstractGame>
   );
 }

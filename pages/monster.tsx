@@ -1,5 +1,5 @@
 "use client";
-import { Joueur } from "@/app/Type/Game";
+import { Game, Joueur } from "@/app/Type/Game";
 
 import _ from "lodash";
 import AbstractGame from "../app/component/abstractGame";
@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 
 type GameProps = {
   players: Joueur[];
+  addPlayers(joueur: Joueur[]): Game;
 };
 
 export default function Home(props: GameProps) {
@@ -30,6 +31,7 @@ export default function Home(props: GameProps) {
       }}
       players={monsterPlayers}
       gameReducer={monsterReducer.reduce.bind(monsterReducer)}
+      addPlayers={props.addPlayers}
     ></AbstractGame>
   );
 }

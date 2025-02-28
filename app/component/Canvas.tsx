@@ -141,7 +141,8 @@ export default function GameCanvas(props: CanvasProps) {
         <g
           transform="translate(1090,800)"
           onClick={() => {
-            props.setPlayers(game.players);
+            const [premier, ...reste] = game.players;
+            props.setPlayers([...reste,premier]);
           }}
         >
           <GameButtonComponent size={300}text="Nouvelle manche" />
