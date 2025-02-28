@@ -2,7 +2,6 @@
 
 import React from 'react'
 import './GameButton.css'; 
-import { AnimatePresence,motion } from "motion/react";
 
 type GameButtonProps = {
   text: string;
@@ -11,6 +10,7 @@ type GameButtonProps = {
 export default function GameButtonComponent(props:GameButtonProps){
   return (
     <g className='gameButton'>
+    <g transform='translate(-100 -30)'>
     <rect
       className="display_panel go"
       x="0"
@@ -19,12 +19,12 @@ export default function GameButtonComponent(props:GameButtonProps){
       height="60"
       rx="10"
       ry="10"
-    />
-    <g transform="translate(100,35)">
-      <text className="text" dominantBaseline="middle">
+    ></rect>
+    </g>
+      <text className="text"    dominantBaseline="middle"
+            textAnchor="middle">
         {props.text}
       </text>
-    </g>
   </g>
   );
 }

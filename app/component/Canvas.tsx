@@ -17,6 +17,8 @@ import { CricketScore } from "../Type/Cricket";
 import TextComponent from "./TextButton";
 import { findJoueurForAttack } from "../service/monsterService";
 import { MonsterJoueur, MonsterScore } from "../Type/Monster";
+import GameButtonComponent from "./GameButton";
+import { useRouter } from "next/router";
 
 type CanvasProps = {
   game: Game;
@@ -27,6 +29,7 @@ type CanvasProps = {
 };
 
 export default function GameCanvas(props: CanvasProps) {
+  const router = useRouter();
   const [game, setGame] = useState<Game>(props.game);
 
   useEffect(() => {
@@ -37,7 +40,7 @@ export default function GameCanvas(props: CanvasProps) {
     <svg
       version="1.1"
       width="1500"
-      height="800"
+      height="900"
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
@@ -82,7 +85,7 @@ export default function GameCanvas(props: CanvasProps) {
             >
               <NumberComponent value={value}></NumberComponent>
             </g>
-            <g transform={`rotate(${(360 / sectionsOrder.length) *index})`}>
+            <g transform={`rotate(${(360 / sectionsOrder.length) * index})`}>
               {isCricketSection(value) && (
                 <CricketSectionComponent
                   scores={game.scores as CricketScore[]}
@@ -92,32 +95,48 @@ export default function GameCanvas(props: CanvasProps) {
               <SectionComponent
                 tapHandler={props.tapHandler}
                 value={value}
-                player={game.scores[0] && game.scores[0].type === Game_Type.MONSTER ? findJoueurForAttack(game.players as MonsterJoueur[], value) : undefined}
+                player={
+                  game.scores[0] && game.scores[0].type === Game_Type.MONSTER
+                    ? findJoueurForAttack(
+                        game.players as MonsterJoueur[],
+                        value
+                      )
+                    : undefined
+                }
                 current_player={game.current_player}
                 gameType={game.scores[0] && game.scores[0].type}
               ></SectionComponent>
             </g>
           </g>
         ))}
-       <g>
-        <circle cx="0" cy="0" r="7" className="bulls_eye" />
-        <use
-          xlinkHref="#bull"
-          onClick={async () => {
-            await props.tapHandler(25, Ring.BULL);
-          }}
-        />
-        <use
-          xlinkHref="#bulls_eye"
-          onClick={() => {
-            props.tapHandler(25, Ring.DOUBLE);
-          }}
-        />
+        <g>
+          <circle cx="0" cy="0" r="7" className="bulls_eye" />
+          <use
+            xlinkHref="#bull"
+            onClick={async () => {
+              await props.tapHandler(25, Ring.BULL);
+            }}
+          />
+          <use
+            xlinkHref="#bulls_eye"
+            onClick={() => {
+              props.tapHandler(25, Ring.DOUBLE);
+            }}
+          />
         </g>
+
         <WaitingComponent game={game} ready={props.ready} />
 
         <WinComponent game={game} ready={props.ready} />
       </g>
+      <g
+          transform="translate(1380,800)"
+          onClick={() => {
+            router.push("/");
+          }}
+        >
+          <GameButtonComponent text="Retour" />
+        </g>
     </svg>
   );
 }

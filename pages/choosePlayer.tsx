@@ -88,8 +88,9 @@ export default function Page(props: GameProps) {
               </g>
             </g>
           </g>
+          <g transform="translate(140,400)">
           <g
-            transform="translate(60,400)"
+            
             onClick={() => {
               props.addPlayers(selected);
               router.push("/cricket");
@@ -98,7 +99,7 @@ export default function Page(props: GameProps) {
            <GameButtonComponent text="Cricket"/>
           </g>
           <g
-            transform="translate(300,400)"
+            transform="translate(240,00)"
             onClick={() => {
               props.addPlayers(selected);
               router.push("/501");
@@ -107,13 +108,14 @@ export default function Page(props: GameProps) {
             <GameButtonComponent text="501"/>
           </g>
           <g
-            transform="translate(540,400)"
+            transform="translate(480,00)"
             onClick={() => {
               props.addPlayers(selected);
               router.push("/monster");
             }}
           >
             <GameButtonComponent text="Monster"/>
+          </g>
           </g>
         </svg>
         <button onClick={() => auth.removeUser()}>Sign out</button>
