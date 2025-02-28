@@ -72,10 +72,34 @@ export function lastScoreReduce(
     }
   }
 
+function volley501Reduce(
+    dartThrow: DartThrow,
+    game: Game
+  ): Game {
+    if (Game_State.WON !== game.status && game.current_player) {
+      const current_score = getScoreFromPlayer(
+        game.scores as Score[],
+        game.current_player
+      ) as _501Score;
+      const volley_score= current_score.volley_score + dartThrow.value * mults[dartThrow.ring]
+      let volley_count= current_score.volley_count;
+      let average = current_score.average;
+      if(game.dart_count == 1) {
+        volley_count+= 1;
+        average = volley_score/ volley_count;
+      }
+      const new_score =  {...current_score, volley_score,volley_count,average};
+      return { ...game, scores:  updatePlayerScore(new_score, game.scores) };
+    } else {
+      return { ...game };
+    }
+  }
+
 export function _501Reduce(game: Game, dartThrow: DartThrow): Game {
   let updatedGame = throwReduce(dartThrow, game);
   updatedGame = firstPlayerReduce(dartThrow, updatedGame);
   updatedGame = score501Reduce(dartThrow, updatedGame);
+  updatedGame = volley501Reduce(dartThrow, updatedGame);
   updatedGame = dartCountReduce(dartThrow, updatedGame);
   updatedGame = gameStatusReduce(dartThrow, updatedGame);
   updatedGame = winReduce(dartThrow, updatedGame);

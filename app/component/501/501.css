@@ -1,3 +1,8 @@
 ._501 .text{
     font-size: 90px;
 }
+
+._501 .text.mini{
+    font-size: 30px;
+    text-anchor: start;
+}

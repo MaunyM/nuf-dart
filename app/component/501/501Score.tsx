@@ -25,16 +25,24 @@ export default function Score501Component(props:ScoreBoardProps){
   return (
     <g transform="" className="_501 score">
       <g transform="translate(-50,-20)">
-        <svg width="150" height="70">
+        <svg width="150" height="120">
           <rect x="0" y="0" width="150" height="60" fill="none" />
           <text
             x="50%"
-            y="50%"
+            y="40"
             dominantBaseline="middle"
             textAnchor="middle"
             className="text"
           >
             {props.score.score}
+          </text>
+          <text
+            x="10"
+            y="90"
+            dominantBaseline="middle"
+            className="text mini"
+          >
+            Moy : {Math.floor(props.score.average)}
           </text>
         </svg>
       </g>
