@@ -8,7 +8,16 @@
     fill: white;
 }
 .bar.empty{
-    fill: rgba(255, 255, 255, 0.4);
+    fill: rgba(255, 255, 255, 0.2);
+}
+.Monster.score .text {
+    font-family: "m6x11plus";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 66px;
+    fill: white;
+    filter: drop-shadow(2px 2px rgba(0, 0, 0, 0.3));
+    text-anchor: middle;;
 }
 .aquamarine{
     --strokeColor: #2e2121;

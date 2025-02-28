@@ -12,7 +12,7 @@ const getColumn = (index: number) => ~~(index / 2);
 const getLine = (index: number) => index % 2;
 
 type GameProps = {
-  addPlayers(joueur: Joueur[]): Game;
+  addPlayers(joueur: Joueur[]): void;
 };
 
 export default function Page(props: GameProps) {

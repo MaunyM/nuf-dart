@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import SectionComponent from "./Section";
-import { Game, Game_State, Game_Type, Ring, sectionsOrder } from "../Type/Game";
+import { Game, Game_State, Game_Type, Joueur, Ring, sectionsOrder } from "../Type/Game";
 import NumberComponent from "./Number";
 import "./Canvas.css";
 import WaitingComponent from "./Waiting";
@@ -26,6 +26,7 @@ type CanvasProps = {
   ready: () => void;
   undo: () => void;
   miss: () => void;
+  setPlayers: (players:Joueur[]) => void;
 };
 
 export default function GameCanvas(props: CanvasProps) {
@@ -136,6 +137,14 @@ export default function GameCanvas(props: CanvasProps) {
           }}
         >
           <GameButtonComponent text="Retour" />
+        </g>
+        <g
+          transform="translate(1090,800)"
+          onClick={() => {
+            props.setPlayers(game.players);
+          }}
+        >
+          <GameButtonComponent size={300}text="Nouvelle manche" />
         </g>
     </svg>
   );

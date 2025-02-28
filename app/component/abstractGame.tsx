@@ -22,6 +22,7 @@ type GameProps = {
   players: Joueur[];
   gameReducer: (game: Game, dartThrow: DartThrow) => Game;
   initialScoreFromPlayer: (joueur: Joueur) => Score;
+  addPlayers(joueur: Joueur[]): void;
 };
 
 const initGame: Game = {
@@ -33,7 +34,7 @@ const initGame: Game = {
   round:0
 };
 
-export default function AbstractGame({players, gameReducer, initialScoreFromPlayer}: GameProps) {
+export default function AbstractGame({players, addPlayers: addPlayersProps,gameReducer, initialScoreFromPlayer}: GameProps) {
   const [playPlop] = useSound(plopSfx);
   const [playTululu] = useSound(tululuSfx, { volume: 0.1 });
   const [playNextPlayer] = useSound(nextPlayerSfx, { volume: 0.1 });
@@ -133,6 +134,7 @@ export default function AbstractGame({players, gameReducer, initialScoreFromPlay
       ready={ready}
       undo={undo}
       miss={miss}
+      setPlayers={addPlayersProps}
     ></GameCanvas>
   );
 }

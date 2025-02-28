@@ -28,8 +28,11 @@ export default function ScoreMonsterComponent(props:ScoreBoardProps){
   return (
     <g transform="" className="Monster score">
       <g transform="translate(-50,-40)">
-        <svg width="150" height="150">
-        <g transform="scale(0.5) translate(15 150)">
+        <svg width="150" height="500">
+          <g transform=" translate(105 200)">
+            <text  className='text'>{props.score.score}</text>
+          </g>
+        <g transform=" translate(15 70)">
           <HealthBarComponent score={props.score.score}/>
           </g>
           <g transform="scale(0.5) translate(90 00)">
