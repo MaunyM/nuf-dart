@@ -181,7 +181,7 @@ export default function PotionComponent() {
             attributeType="XML"
             type="translate"
             values="0 0;-140 0;-280 0;-420 0;-560 0;-700 0;-840 0;-980 0"
-            dur="3s"
+            dur="1s"
             calcMode="discrete"
             repeatCount="indefinite"
           />
