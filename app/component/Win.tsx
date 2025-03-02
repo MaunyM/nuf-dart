@@ -19,7 +19,7 @@ export default function WinComponent(props: WaitingProps) {
     setGame(props.game);
   }, [props.game]);
   return (
-    <g onClick={() => router.push("/")}>
+    <g>
       <AnimatePresence>
         {game.status === Game_State.WON && (
           <motion.g

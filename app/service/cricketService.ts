@@ -78,7 +78,7 @@ export function topScorer(scores: CricketScore[]): Joueur {
 }
 
 export function sorteCricketScore(scores: CricketScore[]): CricketScore[] {
-  return scores.sort(compareCricketScore);
+  return [...scores].sort(compareCricketScore);
 }
 
 export function compareCricketScore(a: CricketScore, b: CricketScore) {

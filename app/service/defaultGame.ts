@@ -8,6 +8,6 @@ export const defaultGame: Game= {
   status: Game_State.CHOOSE_PLAYER,
   dart_count: 3,
   scores: [],
-  players: [],
+  players_: [],
   round:1
 };

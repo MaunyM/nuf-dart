@@ -1,4 +1,4 @@
-import { MonsterJoueur, MonsterScore, MonsterZones } from "../Type/Monster";
+import { MonsterScore, MonsterZones } from "../Type/Monster";
 import {
   DartThrow,
   Game,
@@ -15,22 +15,17 @@ import {
 } from "./commonReduce";
 import _ from "lodash";
 import { getScoreFromPlayer, updatePlayerScore } from "./gameService";
-import { M } from "vitest/dist/chunks/environment.d8YfPkTm.js";
 
 export const max_health = 10;
 
 function scoreMonsterReduce(dartThrow: DartThrow, game: Game): Game {
   let newGame = game;
-  let touchedPlayer = findJoueurForAttack(
-    game.players as MonsterJoueur[],
+  let score = findJoueurForAttack(
+    game.scores as MonsterScore[],
     dartThrow.value
   );
-  if (touchedPlayer && game.current_player) {
-    let score: MonsterScore = getScoreFromPlayer(
-      game.scores,
-      touchedPlayer
-    ) as MonsterScore;
-    if (touchedPlayer.id === game.current_player.id) {
+  if (score && game.current_player) {
+    if (score.joueur.id === game.current_player.id) {
       if (score.score < max_health) {
         score = { ...score, score: score.score + 1 };
       }
@@ -52,6 +47,11 @@ function winReduce(dartThrow: DartThrow, game: Game): Game {
   return { ...game };
 }
 
+function keepAliveReduce(dartThrow: DartThrow, game: Game): Game {
+  const scores =  scoreAlive(game.scores as MonsterScore[])
+  return { ...game, scores };
+}
+
 function countAlive(scores: MonsterScore[]): number {
   return scores.reduce(
     (count, score) => (score.score !== 0 ? count + 1 : count),
@@ -64,11 +64,11 @@ export function isWon(scores: MonsterScore[]) {
 }
 
 export function findJoueurForAttack(
-  joueurs: MonsterJoueur[],
+  scores: MonsterScore[],
   value: number
-): Joueur | undefined {
-  return joueurs.find(
-    (joueur: MonsterJoueur) => joueur.zone && joueur.zone.includes(value)
+): MonsterScore | undefined {
+  return scores.find(
+    (score: MonsterScore) => score.zone && score.zone.includes(value)
   );
 }
 
@@ -91,16 +91,16 @@ export function randomZone(
 }
 
 export function applyZoneToMonsterPlayer(
-  players: Joueur[],
+  scores: MonsterScore[],
   zones: MonsterZones
-): MonsterJoueur[] {
-  return players.map((joueur) => {
-    return { ...joueur, zone: zones.get(joueur.id) } as MonsterJoueur;
+): MonsterScore[] {
+  return scores.map((score) => {
+    return { ...score, zone: zones.get(score.joueur.id) } as MonsterScore;
   });
 }
 
-function playerAlive(scores:MonsterScore[]):Joueur[] {
-  return scores.filter((score:MonsterScore) =>  score.score>0).map((score:MonsterScore) => score.joueur)
+function scoreAlive(scores:MonsterScore[]):MonsterScore[] {
+  return scores.filter((score:MonsterScore) =>  score.score>0)
 }
 
 export class MonsterReducer {
@@ -110,6 +110,7 @@ export class MonsterReducer {
     updatedGame = firstPlayerReduce(dartThrow, updatedGame);
     updatedGame = scoreMonsterReduce(dartThrow, updatedGame);
     updatedGame = dartCountReduce(dartThrow, updatedGame);
+    updatedGame = keepAliveReduce(dartThrow, updatedGame);
     updatedGame = gameStatusReduce(dartThrow, updatedGame);
     updatedGame = winReduce(dartThrow, updatedGame);
     updatedGame = playerReduce(dartThrow, updatedGame);
@@ -121,12 +122,12 @@ export class MonsterReducer {
     ) {
       let current_zones = this.zones[updatedGame.round];
       if (!current_zones) {
-        (current_zones = randomZone(game.players, updatedGame.current_player)),
+        (current_zones = randomZone(game.players_, updatedGame.current_player)),
           (this.zones = [...this.zones, current_zones]);
       }
       return {
         ...updatedGame,
-        players: applyZoneToMonsterPlayer(playerAlive(updatedGame.scores as MonsterScore[]), current_zones),
+        scores: applyZoneToMonsterPlayer(updatedGame.scores as MonsterScore[], current_zones),
       };
     }
     return updatedGame;

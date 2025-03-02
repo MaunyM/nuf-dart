@@ -6,8 +6,8 @@ const base_api = process.env.NEXT_PUBLIC_API;
 
 export const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
-export function getIndexFromPlayers(current_player: Joueur, players: Joueur[]) {
-  return players.findIndex((player) => player.nom === current_player?.nom);
+export function getIndexFromPlayers(current_player: Joueur, scores: Score[]) {
+  return scores.findIndex((score) => score.joueur.id === current_player?.id);
 }
 
 export function getIndexFromScores(current_score: Score, scores: Score[]) {
@@ -19,13 +19,6 @@ export function getScoreFromPlayer(
   player: Joueur
 ): Score | undefined {
   return scores.find((score) => score.joueur.id === player.id);
-}
-
-
-export function updatePlayers(current_player: Joueur, players: Joueur[]) {
-  const index = getIndexFromPlayers(current_player, players);
-  players[index] = current_player;
-  return [...players];
 }
 
 export function updatePlayerScore(current_score: Score, scores: Score[]) {
@@ -58,7 +51,7 @@ export function addPlayers(
   players: Joueur[],
   game: Game
 ): Game {
-  return { ...game, players: [ ...players ]};
+  return { ...game, players_: [ ...players ]};
 }
 
 export function usePlayers(auth: AuthContextProps) {

@@ -3,7 +3,7 @@ import { getIndexFromPlayers } from "./gameService";
 
 export function firstPlayerReduce(dartThrow: DartThrow, game: Game): Game {
   if (!game.current_player) {
-    return { ...game, current_player: game.players[0] };
+    return { ...game, current_player: game.players_[0] };
   }
   return game;
 }
@@ -33,9 +33,9 @@ export function playerReduce(
     game: Game
   ): Game {
     if (Game_State.WON !== game.status && game.current_player && game.dart_count == 3) {
-      let playerIndex =  getIndexFromPlayers(game.current_player, game.players);
-      playerIndex = playerIndex + 1 >= game.players.length ? 0 : playerIndex + 1;
-      const current_player = game.players[playerIndex];
+      let playerIndex =  getIndexFromPlayers(game.current_player, game.scores);
+      playerIndex = playerIndex + 1 >= game.scores.length ? 0 : playerIndex + 1;
+      const current_player = game.scores[playerIndex].joueur;
       const round = game.round +1;
       return { ...game, current_player, round };
     } else {

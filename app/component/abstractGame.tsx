@@ -30,7 +30,7 @@ const initGame: Game = {
   throws: [],
   scores: [],
   dart_count: 3,
-  players: [],
+  players_: [],
   round:0
 };
 
@@ -105,7 +105,7 @@ export default function AbstractGame({players, addPlayers: addPlayersProps,gameR
     if (game.status === Game_State.UNSTARTED)
       setGame({
         ...startingGame,
-        current_player: startingGame.players[0],
+        current_player: startingGame.players_[0],
         status: Game_State.WAITING_NEXT_PLAYER,
       });
   }, [game, startingGame]);

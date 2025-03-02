@@ -4,13 +4,11 @@ export class MonsterScore implements Score {
   score: number = 10;
   joueur: Joueur;
   type = Game_Type.MONSTER;
-  constructor(joueur:Joueur) {
+  zone? : number[];
+  constructor(joueur:Joueur, zone?: number[]) {
     this.joueur = joueur;
+    this.zone = zone;
   }
-}
-
-export interface MonsterJoueur extends Joueur{
-  zone : number[]
 }
 
 export type MonsterZones=  Map<number, number[]>

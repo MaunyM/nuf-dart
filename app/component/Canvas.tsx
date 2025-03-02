@@ -16,9 +16,9 @@ import { isCricketSection } from "../service/cricketService";
 import { CricketScore } from "../Type/Cricket";
 import TextComponent from "./TextButton";
 import { findJoueurForAttack } from "../service/monsterService";
-import { MonsterJoueur, MonsterScore } from "../Type/Monster";
 import GameButtonComponent from "./GameButton";
 import { useRouter } from "next/router";
+import { MonsterScore } from "../Type/Monster";
 
 type CanvasProps = {
   game: Game;
@@ -45,7 +45,7 @@ export default function GameCanvas(props: CanvasProps) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
-        <DefsComponent players={game.players} />
+        <DefsComponent players={game.players_} />
       </defs>
       <g transform={`translate(900,0)`}>
         <ScoreBoardComponent scores={game.scores}></ScoreBoardComponent>
@@ -99,9 +99,9 @@ export default function GameCanvas(props: CanvasProps) {
                 player={
                   game.scores[0] && game.scores[0].type === Game_Type.MONSTER
                     ? findJoueurForAttack(
-                        game.players as MonsterJoueur[],
+                        game.scores as MonsterScore[],
                         value
-                      )
+                      )?.joueur
                     : undefined
                 }
                 current_player={game.current_player}
@@ -141,7 +141,7 @@ export default function GameCanvas(props: CanvasProps) {
         <g
           transform="translate(1090,800)"
           onClick={() => {
-            const [premier, ...reste] = game.players;
+            const [premier, ...reste] = game.players_;
             props.setPlayers([...reste,premier]);
           }}
         >
