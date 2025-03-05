@@ -6,7 +6,7 @@ import './PlayerScore.css'
 import { Game_Type, Score } from '../../Type/Game';
 import CricketScoreComponent from '../cricket/CricketScore';
 import { CricketScore } from '@/app/Type/Cricket';
-import { _501Score } from '@/app/Type/501';
+import { _501Score } from '@/app/Type/[start]';
 import Score501Component from '../501/501Score';
 import ScoreMonsterComponent from '../monster/MonsterScore';
 import { MonsterScore } from '@/app/Type/Monster';

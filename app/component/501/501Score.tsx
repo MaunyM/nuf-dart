@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Coord } from '../../Type/Math';
-import { _501Score } from '@/app/Type/501';
+import { _501Score } from '@/app/Type/[start]';
 import "./501.css"
 
 type ScoreBoardProps = {

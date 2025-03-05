@@ -1,5 +1,5 @@
 import { last, replace } from "lodash";
-import { _501Score } from "../Type/501";
+import { x01Score } from "../Type/x01";
 import { DartThrow, Game, Game_State, mults, Score } from "../Type/Game";
 import {
   dartCountReduce,
@@ -16,7 +16,7 @@ export function score501Reduce(dartThrow: DartThrow, game: Game): Game {
     const current_score = getScoreFromPlayer(
       game.scores as Score[],
       game.current_player
-    ) as _501Score;
+    ) as x01Score;
     if (current_score) {
       let score = current_score.score;
       const new_score = score - dartThrow.value * mults[dartThrow.ring];
@@ -24,7 +24,7 @@ export function score501Reduce(dartThrow: DartThrow, game: Game): Game {
         newGame = {
           ...newGame,
           scores: updatePlayerScore(
-            { ...current_score, score: current_score.last_score } as _501Score,
+            { ...current_score, score: current_score.last_score } as x01Score,
             game.scores
           ),
           dart_count: 1,
@@ -33,7 +33,7 @@ export function score501Reduce(dartThrow: DartThrow, game: Game): Game {
         newGame = {
           ...newGame,
           scores: updatePlayerScore(
-            { ...current_score, score: new_score } as _501Score,
+            { ...current_score, score: new_score } as x01Score,
             game.scores
           ),
         };
@@ -48,7 +48,7 @@ function winReduce(dartThrow: DartThrow, game: Game): Game {
     const current_score = getScoreFromPlayer(
       game.scores as Score[],
       game.current_player
-    ) as _501Score;
+    ) as x01Score;
     if (current_score.score === 0) {
       return { ...game, status: Game_State.WON };
     }
@@ -64,7 +64,7 @@ export function lastScoreReduce(
       const current_score = getScoreFromPlayer(
         game.scores as Score[],
         game.current_player
-      ) as _501Score;
+      ) as x01Score;
       const new_score =  {...current_score, last_score: current_score.score};
       return { ...game, scores:  updatePlayerScore(new_score, game.scores) };
     } else {
@@ -80,7 +80,7 @@ function volley501Reduce(
       const current_score = getScoreFromPlayer(
         game.scores as Score[],
         game.current_player
-      ) as _501Score;
+      ) as x01Score;
       const volley_score= current_score.volley_score + dartThrow.value * mults[dartThrow.ring]
       let volley_count= current_score.volley_count;
       let average = current_score.average;

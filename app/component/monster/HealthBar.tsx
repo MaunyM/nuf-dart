@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { _501Score } from '@/app/Type/501';
+import { _501Score } from '@/app/Type/[start]';
 import "./Monster.css"
 import { max_health } from '@/app/service/monsterService';
 

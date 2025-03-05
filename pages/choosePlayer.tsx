@@ -102,10 +102,19 @@ export default function Page(props: GameProps) {
             transform="translate(240,00)"
             onClick={() => {
               props.addPlayers(selected);
-              router.push("/501");
+              router.push("/x01/501");
             }}
           >
             <GameButtonComponent text="501"/>
+          </g>
+          <g
+            transform="translate(240,80)"
+            onClick={() => {
+              props.addPlayers(selected);
+              router.push("/x01/301");
+            }}
+          >
+            <GameButtonComponent text="301"/>
           </g>
           <g
             transform="translate(480,00)"

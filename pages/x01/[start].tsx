@@ -5,9 +5,10 @@ import {
 } from "@/app/Type/Game";
 
 import _ from "lodash";
-import AbstractGame from "../app/component/abstractGame";
+import AbstractGame from "../../app/component/abstractGame";
 import { _501Reduce } from "@/app/service/501Service";
-import { _501Score } from "@/app/Type/501";
+import { x01Score } from "@/app/Type/x01";
+import { useRouter } from "next/router";
 
 type GameProps = {
   players: Joueur[];
@@ -15,9 +16,10 @@ type GameProps = {
 };
 
 export default function Home(props: GameProps) {
+  const router = useRouter()
   return (
     <AbstractGame
-    initialScoreFromPlayer={ (joueur: Joueur) => {   return new _501Score(joueur)}}
+    initialScoreFromPlayer={ (joueur: Joueur) => {   return new x01Score(joueur,Number(router.query.start))}}
     players={props.players}
     gameReducer={_501Reduce}
     addPlayers={props.addPlayers}
