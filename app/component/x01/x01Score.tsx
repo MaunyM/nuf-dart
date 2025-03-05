@@ -2,11 +2,11 @@
 
 import React from 'react'
 import { Coord } from '../../Type/Math';
-import { _501Score } from '@/app/Type/[start]';
-import "./501.css"
+import { x01Score } from '@/app/Type/x01';
+import "./x01.css"
 
 type ScoreBoardProps = {
-  score:_501Score
+  score:x01Score
   }; 
 
  const angle = Math.PI/10
@@ -19,11 +19,11 @@ type ScoreBoardProps = {
  const start:(r:number) => Coord = (r:number) => ({ x :cos_start * r, y: sin_start * r})
  const end:(r:number) => Coord = (r:number) => ({ x :cos_end * r, y: sin_end * r})
 
-export default function Score501Component(props:ScoreBoardProps){
+export default function ScoreX01Component(props:ScoreBoardProps){
 
 
   return (
-    <g transform="" className="_501 score">
+    <g transform="" className="x01 score">
       <g transform="translate(-50,-20)">
         <svg width="150" height="120">
           <rect x="0" y="0" width="150" height="60" fill="none" />

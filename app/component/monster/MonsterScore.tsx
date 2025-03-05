@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { Coord } from '../../Type/Math';
-import { _501Score } from '@/app/Type/[start]';
 import "./Monster.css"
 import { MonsterScore } from '@/app/Type/Monster';
 import BlobComponent from './Blob';

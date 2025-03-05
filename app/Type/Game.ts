@@ -7,7 +7,7 @@ export const sectionsOrder= [
 
 export enum Game_Type {
   CRICKET,
-  _501,
+  X01,
   MONSTER
 }
 

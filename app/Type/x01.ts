@@ -7,7 +7,7 @@ export type Marks = Record<number, number>
 export class x01Score implements Score {
   score: number = 0;
   joueur: Joueur;
-  type = Game_Type._501;
+  type = Game_Type.X01;
   last_score: number = 0;
   average: number = 0;
   volley_count:number=0;

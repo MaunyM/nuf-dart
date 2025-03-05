@@ -10,7 +10,7 @@ import {
 } from "./commonReduce";
 import { getScoreFromPlayer, updatePlayerScore } from "./gameService";
 
-export function score501Reduce(dartThrow: DartThrow, game: Game): Game {
+export function scoreX01Reduce(dartThrow: DartThrow, game: Game): Game {
   let newGame = game;
   if (game.current_player) {
     const current_score = getScoreFromPlayer(
@@ -72,7 +72,7 @@ export function lastScoreReduce(
     }
   }
 
-function volley501Reduce(
+function volleyX01Reduce(
     dartThrow: DartThrow,
     game: Game
   ): Game {
@@ -95,11 +95,11 @@ function volley501Reduce(
     }
   }
 
-export function _501Reduce(game: Game, dartThrow: DartThrow): Game {
+export function x01Reduce(game: Game, dartThrow: DartThrow): Game {
   let updatedGame = throwReduce(dartThrow, game);
   updatedGame = firstPlayerReduce(dartThrow, updatedGame);
-  updatedGame = score501Reduce(dartThrow, updatedGame);
-  updatedGame = volley501Reduce(dartThrow, updatedGame);
+  updatedGame = scoreX01Reduce(dartThrow, updatedGame);
+  updatedGame = volleyX01Reduce(dartThrow, updatedGame);
   updatedGame = dartCountReduce(dartThrow, updatedGame);
   updatedGame = gameStatusReduce(dartThrow, updatedGame);
   updatedGame = winReduce(dartThrow, updatedGame);
