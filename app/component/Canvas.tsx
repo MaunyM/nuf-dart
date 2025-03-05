@@ -130,8 +130,9 @@ export default function GameCanvas(props: CanvasProps) {
 
         <WinComponent game={game} ready={props.ready} />
       </g>
+      <g transform="translate(1230,450)">
       <g
-          transform="translate(1380,800)"
+          transform="translate(90,100)"
           onClick={() => {
             router.push("/");
           }}
@@ -139,13 +140,14 @@ export default function GameCanvas(props: CanvasProps) {
           <GameButtonComponent text="Retour" />
         </g>
         <g
-          transform="translate(1090,800)"
+          transform="translate(90,0)"
           onClick={() => {
             const [premier, ...reste] = game.players_;
             props.setPlayers([...reste,premier]);
           }}
         >
           <GameButtonComponent size={300}text="Nouvelle manche" />
+        </g>
         </g>
     </svg>
   );
