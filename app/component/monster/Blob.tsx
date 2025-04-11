@@ -10,6 +10,7 @@ const colorToMonster: Map<number, string> = new Map([
   [145.4, "aquamarine"],
   [10, "red"],
   [296, "purple"],
+  [300, "pink"],
   [38.8, "orange"],
 ]);
 
