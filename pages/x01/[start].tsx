@@ -15,11 +15,15 @@ type GameProps = {
     addPlayers(joueur: Joueur[]): Game;
 };
 
+const VALID_STARTS = [301, 501];
+
 export default function Home(props: GameProps) {
   const router = useRouter()
+  const startParam = Number(router.query.start);
+  const start = VALID_STARTS.includes(startParam) ? startParam : 501;
   return (
     <AbstractGame
-    initialScoreFromPlayer={ (joueur: Joueur) => {   return new x01Score(joueur,Number(router.query.start))}}
+    initialScoreFromPlayer={ (joueur: Joueur) => { return new x01Score(joueur, start)}}
     players={props.players}
     gameReducer={x01Reduce}
     addPlayers={props.addPlayers}
