@@ -15,7 +15,8 @@ import tululuSfx from "/public/Tululu.mp3";
 import nextPlayerSfx from "/public/nextPlayer.mp3";
 import doubleSfx from "/public/double.mp3";
 import tripleSfx from "/public/triple.mp3";
-import { addPlayers, delay } from "@/app/service/gameService";
+import { addPlayers, delay, saveGameState } from "@/app/service/gameService";
+import { useAuth } from "react-oidc-context";
 import _ from "lodash";
 
 type GameProps = {
@@ -35,6 +36,7 @@ const initGame: Game = {
 };
 
 export default function AbstractGame({players, addPlayers: addPlayersProps,gameReducer, initialScoreFromPlayer}: GameProps) {
+  const auth = useAuth();
   const [playPlop] = useSound(plopSfx);
   const [playTululu] = useSound(tululuSfx, { volume: 0.1 });
   const [playNextPlayer] = useSound(nextPlayerSfx, { volume: 0.1 });
@@ -93,7 +95,10 @@ export default function AbstractGame({players, addPlayers: addPlayersProps,gameR
   useEffect(() => {
     const newGame = dartThrows.reduce(gameReducer, _.cloneDeep(startingGame));
     setGame(newGame);
-  }, [dartThrows, startingGame, gameReducer]);
+    if (auth.user?.id_token) {
+      saveGameState(newGame, auth.user.id_token);
+    }
+  }, [dartThrows, startingGame, gameReducer, auth.user?.id_token]);
 
   useEffect(() => {
     if (game.status === Game_State.WAITING_NEXT_PLAYER) {

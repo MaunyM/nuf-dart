@@ -54,6 +54,17 @@ export function addPlayers(
   return { ...game, players_: [ ...players ]};
 }
 
+export function saveGameState(game: Game, token: string) {
+  fetch(`${base_api}/game`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      Authorization: token,
+    },
+    body: JSON.stringify(game),
+  }).catch(() => {});
+}
+
 export function usePlayers(auth: AuthContextProps) {
   const { data, error, isLoading } = useSWR<Joueur[]>(
     `${base_api}/players`,

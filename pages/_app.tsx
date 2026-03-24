@@ -6,6 +6,7 @@ import {
   Joueur,
 } from "@/app/Type/Game";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const cognitoAuthConfig = {
   authority: "https://cognito-idp.eu-west-3.amazonaws.com/eu-west-3_hdaUJXlME",
@@ -19,7 +20,7 @@ const cognitoAuthConfig = {
 const inter = Inter({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }: AppProps) {
-
+  const router = useRouter();
   const [players, setPlayers] = useState<Joueur[]>([]);
 
   const addPlayersToState = function (joueurs: Joueur[]) {
@@ -27,7 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
   };
 
   return (
-    <AuthProvider {...cognitoAuthConfig}>
+    <AuthProvider {...cognitoAuthConfig} onSigninCallback={() => { router.replace(router.pathname); }}>
       <Component
         className={inter.className}
         {...pageProps}
