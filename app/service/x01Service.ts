@@ -60,7 +60,7 @@ export function lastScoreReduce(
     dartThrow: DartThrow,
     game: Game
   ): Game {
-    if (Game_State.WON !== game.status && game.current_player && game.dart_count == 3) {
+    if (Game_State.WON !== game.status && game.current_player && game.dart_count === 3) {
       const current_score = getScoreFromPlayer(
         game.scores as Score[],
         game.current_player
@@ -84,7 +84,7 @@ function volleyX01Reduce(
       const volley_score= current_score.volley_score + dartThrow.value * mults[dartThrow.ring]
       let volley_count= current_score.volley_count;
       let average = current_score.average;
-      if(game.dart_count == 1) {
+      if(game.dart_count === 1) {
         volley_count+= 1;
         average = volley_score/ volley_count;
       }

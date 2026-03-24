@@ -115,5 +115,5 @@ export function isWon(currentPlayer: Joueur, scores: CricketScore[]) {
     scores,
     currentPlayer
   ) as CricketScore;
-  return score && topScorer(scores).id == currentPlayer.id && allOpen(score);
+  return score && topScorer(scores).id === currentPlayer.id && allOpen(score);
 }
