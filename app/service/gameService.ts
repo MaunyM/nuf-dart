@@ -54,6 +54,18 @@ export function addPlayers(
   return { ...game, players_: [ ...players ]};
 }
 
+export async function getValidToken(auth: AuthContextProps): Promise<string | undefined> {
+  if (!auth.user || auth.user.expired) {
+    try {
+      const user = await auth.signinSilent();
+      return user?.id_token;
+    } catch {
+      return undefined;
+    }
+  }
+  return auth.user.id_token;
+}
+
 export function saveGameState(game: Game, token: string) {
   fetch(`${base_api}/game`, {
     method: "POST",
