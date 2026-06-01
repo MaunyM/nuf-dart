@@ -16,4 +16,16 @@
     stroke-width: 1px;
 }
 
+.throw-slot-bg {
+    fill: #c2bfbf;
+    filter: drop-shadow(3px 3px 6px #bebebe) drop-shadow(-3px -3px 6px #ffffff);
+}
+
+.throw-slot-text {
+    font-family: "m6x11plus";
+    font-size: 26px;
+    fill: white;
+    filter: drop-shadow(1px 1px rgba(0, 0, 0, 0.4));
+}
+
 
