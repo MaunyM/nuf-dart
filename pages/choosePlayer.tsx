@@ -19,9 +19,9 @@ type GameProps = {
 
 const SERIES_OPTIONS = [
   { label: "1", target: 1 },
-  { label: "BO3", target: 3 },
-  { label: "BO5", target: 5 },
-  { label: "BO7", target: 7 },
+  { label: "3", target: 3 },
+  { label: "5", target: 5 },
+  { label: "7", target: 7 },
 ];
 
 export default function Page(props: GameProps) {
