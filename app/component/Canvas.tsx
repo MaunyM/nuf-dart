@@ -137,7 +137,7 @@ export default function GameCanvas(props: CanvasProps) {
             router.push("/");
           }}
         >
-          <GameButtonComponent text="Retour" />
+          <GameButtonComponent size={300} text="Retour" />
         </g>
         <g
           transform="translate(90,0)"
