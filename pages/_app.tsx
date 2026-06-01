@@ -22,6 +22,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [players, setPlayers] = useState<Joueur[]>([]);
+  const [seriesTarget, setSeriesTarget] = useState<number>(1);
 
   const addPlayersToState = function (joueurs: Joueur[]) {
       setPlayers(joueurs);
@@ -34,6 +35,8 @@ export default function App({ Component, pageProps }: AppProps) {
         {...pageProps}
         players={players}
         addPlayers={addPlayersToState}
+        seriesTarget={seriesTarget}
+        setSeriesTarget={setSeriesTarget}
       />
     </AuthProvider>
   );

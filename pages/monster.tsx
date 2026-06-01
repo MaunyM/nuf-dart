@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 type GameProps = {
   players: Joueur[];
   addPlayers(joueur: Joueur[]): Game;
+  seriesTarget: number;
 };
 
 export default function Home(props: GameProps) {
@@ -29,6 +30,7 @@ export default function Home(props: GameProps) {
           players={props.players}
           gameReducer={monsterReducer.reduce.bind(monsterReducer)}
           addPlayers={props.addPlayers}
+          seriesTarget={props.seriesTarget}
         ></AbstractGame>
       )}
     </g>

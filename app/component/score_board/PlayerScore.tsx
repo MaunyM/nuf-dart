@@ -12,8 +12,10 @@ import ScoreMonsterComponent from '../monster/MonsterScore';
 import { MonsterScore } from '@/app/Type/Monster';
 
 type ScoreBoardProps= {
-  score:Score
-  }; 
+  score: Score;
+  wins: number;
+  seriesTarget: number;
+};
 
  const angle = Math.PI/10
  const start_angle = -Math.PI/20
@@ -25,9 +27,8 @@ type ScoreBoardProps= {
  const start:(r:number) => Coord = (r:number) => ({ x :cos_start * r, y: sin_start * r})
  const end:(r:number) => Coord = (r:number) => ({ x :cos_end * r, y: sin_end * r})
 
-export default function PlayerScoreComponent(props:ScoreBoardProps){
-
-
+export default function PlayerScoreComponent(props: ScoreBoardProps){
+  const winsNeeded = Math.ceil(props.seriesTarget / 2);
   return (
     <g transform="" className="score">
       <g transform="translate(-80,-27)">
@@ -42,6 +43,15 @@ export default function PlayerScoreComponent(props:ScoreBoardProps){
           ry="10"
         />
         <svg width="150px" height="70px">
+          {props.seriesTarget > 1 && (
+            <g transform={`translate(${75 - (winsNeeded - 1) * 10}, 10)`}>
+              {Array.from({ length: winsNeeded }).map((_, i) => (
+                <circle key={i} cx={i * 20} cy={0} r={5}
+                  fill={i < props.wins ? 'white' : 'rgba(255,255,255,0.25)'}
+                />
+              ))}
+            </g>
+          )}
           <text x="50%" y="50%" dominantBaseline="middle" className="text">
             {props.score.joueur.nom}
           </text>

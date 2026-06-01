@@ -8,7 +8,7 @@ import {
   Ring,
   Score,
 } from "@/app/Type/Game";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useSound from "use-sound";
 import plopSfx from "/public/664624__luis0413__plop-bonk-sound.mp3";
 import tululuSfx from "/public/Tululu.mp3";
@@ -24,6 +24,7 @@ type GameProps = {
   gameReducer: (game: Game, dartThrow: DartThrow) => Game;
   initialScoreFromPlayer: (joueur: Joueur) => Score;
   addPlayers(joueur: Joueur[]): void;
+  seriesTarget: number;
 };
 
 const initGame: Game = {
@@ -35,7 +36,7 @@ const initGame: Game = {
   round:0
 };
 
-export default function AbstractGame({players, addPlayers: addPlayersProps,gameReducer, initialScoreFromPlayer}: GameProps) {
+export default function AbstractGame({players, addPlayers: addPlayersProps, gameReducer, initialScoreFromPlayer, seriesTarget}: GameProps) {
   const auth = useAuth();
   const [playPlop] = useSound(plopSfx);
   const [playTululu] = useSound(tululuSfx, { volume: 0.1 });
@@ -45,6 +46,37 @@ export default function AbstractGame({players, addPlayers: addPlayersProps,gameR
   const [startingGame, setStartingGame] = useState(initGame);
   const [game, setGame] = useState(initGame);
   const [dartThrows, setDartThrows] = useState<DartThrow[]>([]);
+  const [wins, setWins] = useState<Record<number, number>>({});
+  const [seriesWinner, setSeriesWinner] = useState<Joueur | undefined>();
+  const winCountedRef = useRef(false);
+
+  useEffect(() => {
+    if (game.status !== Game_State.WON) {
+      winCountedRef.current = false;
+      return;
+    }
+    if (!game.current_player || winCountedRef.current || seriesTarget <= 1) return;
+    winCountedRef.current = true;
+    const playerId = game.current_player.id;
+    const newWins = { ...wins, [playerId]: (wins[playerId] || 0) + 1 };
+    const winsNeeded = Math.ceil(seriesTarget / 2);
+    setWins(newWins);
+    if (newWins[playerId] >= winsNeeded) {
+      setSeriesWinner(game.current_player);
+    }
+  }, [game.status, game.current_player, seriesTarget, wins]);
+
+  const newRound = function () {
+    const [premier, ...reste] = game.players_;
+    addPlayersProps([...reste, premier]);
+  };
+
+  const newSeries = function () {
+    setWins({});
+    setSeriesWinner(undefined);
+    const [premier, ...reste] = game.players_;
+    addPlayersProps([...reste, premier]);
+  };
 
   const ready = function () {
     if (game.current_player) {
@@ -139,7 +171,11 @@ export default function AbstractGame({players, addPlayers: addPlayersProps,gameR
       ready={ready}
       undo={undo}
       miss={miss}
-      setPlayers={addPlayersProps}
+      newRound={newRound}
+      newSeries={newSeries}
+      wins={wins}
+      seriesWinner={seriesWinner}
+      seriesTarget={seriesTarget}
     ></GameCanvas>
   );
 }

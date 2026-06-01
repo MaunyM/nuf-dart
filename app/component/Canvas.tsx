@@ -26,16 +26,30 @@ type CanvasProps = {
   ready: () => void;
   undo: () => void;
   miss: () => void;
-  setPlayers: (players:Joueur[]) => void;
+  newRound: () => void;
+  newSeries: () => void;
+  wins: Record<number, number>;
+  seriesWinner?: Joueur;
+  seriesTarget: number;
 };
 
 export default function GameCanvas(props: CanvasProps) {
   const router = useRouter();
   const [game, setGame] = useState<Game>(props.game);
+  const [wins, setWins] = useState<Record<number, number>>(props.wins);
+  const [seriesWinner, setSeriesWinner] = useState<Joueur | undefined>(props.seriesWinner);
 
   useEffect(() => {
     setGame(props.game);
   }, [props.game]);
+
+  useEffect(() => {
+    setWins(props.wins);
+  }, [props.wins]);
+
+  useEffect(() => {
+    setSeriesWinner(props.seriesWinner);
+  }, [props.seriesWinner]);
 
   return (
     <svg
@@ -48,7 +62,7 @@ export default function GameCanvas(props: CanvasProps) {
         <DefsComponent players={game.players_} />
       </defs>
       <g transform={`translate(900,0)`}>
-        <ScoreBoardComponent scores={game.scores}></ScoreBoardComponent>
+        <ScoreBoardComponent scores={game.scores} wins={wins} seriesTarget={props.seriesTarget}></ScoreBoardComponent>
       </g>
       <g transform={`translate(710,18)`}>
         {game.current_player && <DartsComponent dart_count={game.dart_count} />}
@@ -128,27 +142,33 @@ export default function GameCanvas(props: CanvasProps) {
 
         <WaitingComponent game={game} ready={props.ready} />
 
-        <WinComponent game={game} ready={props.ready} />
+        {!seriesWinner && <WinComponent game={game} ready={props.ready} />}
+
+        {seriesWinner && (
+          <g>
+            <rect
+              fill={`url(#grad-${seriesWinner.nom})`}
+              x="-200" y="-60" width="400" height="120" rx="15" ry="15"
+            />
+            <text className="text" dominantBaseline="middle" y="-18" textAnchor="middle">Champion !</text>
+            <text className="text" dominantBaseline="middle" y="28" textAnchor="middle">{seriesWinner.nom}</text>
+          </g>
+        )}
       </g>
       <g transform="translate(1230,450)">
-      <g
-          transform="translate(90,100)"
-          onClick={() => {
-            router.push("/");
-          }}
-        >
+        <g transform="translate(90,100)" onClick={() => router.push("/")}>
           <GameButtonComponent size={300} text="Retour" />
         </g>
-        <g
-          transform="translate(90,0)"
-          onClick={() => {
-            const [premier, ...reste] = game.players_;
-            props.setPlayers([...reste,premier]);
-          }}
-        >
-          <GameButtonComponent size={300}text="Nouvelle manche" />
-        </g>
-        </g>
+        {seriesWinner ? (
+          <g transform="translate(90,0)" onClick={props.newSeries}>
+            <GameButtonComponent size={300} text="Nouvelle série" />
+          </g>
+        ) : (
+          <g transform="translate(90,0)" onClick={props.newRound}>
+            <GameButtonComponent size={300} text="Nouvelle manche" />
+          </g>
+        )}
+      </g>
     </svg>
   );
 }

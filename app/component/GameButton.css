@@ -11,6 +11,10 @@
   filter: drop-shadow(5px 5px 10px #bebebe) drop-shadow(-5px -5px 10px #ffffff);
   fill: #c2bfbf;
 }
+
+.gameButton.selected .go {
+  fill: #4a8a6a;
+}
   
 .gameButton .text {
     font-family: "m6x11plus";

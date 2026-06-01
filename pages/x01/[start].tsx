@@ -12,7 +12,8 @@ import { useRouter } from "next/router";
 
 type GameProps = {
   players: Joueur[];
-    addPlayers(joueur: Joueur[]): Game;
+  addPlayers(joueur: Joueur[]): Game;
+  seriesTarget: number;
 };
 
 const VALID_STARTS = [301, 501];
@@ -27,6 +28,7 @@ export default function Home(props: GameProps) {
     players={props.players}
     gameReducer={x01Reduce}
     addPlayers={props.addPlayers}
+    seriesTarget={props.seriesTarget}
     ></AbstractGame>
   );
 }

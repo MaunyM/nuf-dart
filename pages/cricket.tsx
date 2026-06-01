@@ -11,7 +11,8 @@ import { CricketScore } from "@/app/Type/Cricket";
 
 type GameProps = {
   players: Joueur[];
-    addPlayers(joueur: Joueur[]): Game;
+  addPlayers(joueur: Joueur[]): Game;
+  seriesTarget: number;
 };
 
 export default function Home(props: GameProps) {
@@ -21,6 +22,7 @@ export default function Home(props: GameProps) {
     players={props.players}
     gameReducer={cricketReduce}
     addPlayers={props.addPlayers}
+    seriesTarget={props.seriesTarget}
     ></AbstractGame>
   );
 }

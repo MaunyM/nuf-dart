@@ -13,7 +13,16 @@ const getLine = (index: number) => index % 2;
 
 type GameProps = {
   addPlayers(joueur: Joueur[]): void;
+  seriesTarget: number;
+  setSeriesTarget(n: number): void;
 };
+
+const SERIES_OPTIONS = [
+  { label: "1", target: 1 },
+  { label: "BO3", target: 3 },
+  { label: "BO5", target: 5 },
+  { label: "BO7", target: 7 },
+];
 
 export default function Page(props: GameProps) {
   const router = useRouter();
@@ -125,6 +134,13 @@ export default function Page(props: GameProps) {
           >
             <GameButtonComponent text="Monster"/>
           </g>
+          </g>
+          <g transform="translate(140,620)">
+            {SERIES_OPTIONS.map((opt, i) => (
+              <g key={opt.target} transform={`translate(${i * 160}, 0)`} onClick={() => props.setSeriesTarget(opt.target)}>
+                <GameButtonComponent text={opt.label} size={140} selected={props.seriesTarget === opt.target} />
+              </g>
+            ))}
           </g>
         </svg>
         <button onClick={() => auth.removeUser()}>Sign out</button>
