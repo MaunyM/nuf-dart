@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import PartComponent from "../Part";
 import "./Cricket.css";
 import { Game_Type, Joueur, Score } from "@/app/Type/Game";
@@ -17,7 +17,7 @@ const r1 = 170;
 const sectionAngle = (2 * Math.PI) / 20;
 
 export default function CricketSectionComponent(props: SectionProps) {
-  const [playerCount] = useState(props.scores.length);
+  const playerCount = props.scores.length;
   return (
     <g className="CricketSection">
       {props.scores.map((score, index) =>
@@ -32,7 +32,7 @@ export default function CricketSectionComponent(props: SectionProps) {
                 gameType={Game_Type.CRICKET}
               ></PartComponent>
             </g>
-            <g fill={`url(#grad-${score.joueur.nom}`}>
+            <g fill={`url(#grad-${score.joueur.nom})`}>
               <PartComponent
                 r1={r0}
                 r2={r1}

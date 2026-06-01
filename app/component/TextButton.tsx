@@ -11,7 +11,7 @@ type MissProps = {
 
 export default function TextComponent(props:MissProps){
   return (
-    <g onClick={() => props.undo()}>
+    <g className="textButton" onClick={() => props.undo()}>
       <rect
         className="dispaly_panel"
         x="-60"

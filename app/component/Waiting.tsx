@@ -16,7 +16,7 @@ export default function WaitingComponent(props: WaitingProps) {
     setGame(props.game);
   }, [props.game]);
   return (
-    <g onClick={() => props.ready()}>
+    <g className="waiting" onClick={() => props.ready()}>
       <AnimatePresence>
         {game.status === Game_State.WAITING_NEXT_PLAYER && (
           <motion.g

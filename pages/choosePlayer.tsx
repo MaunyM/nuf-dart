@@ -34,10 +34,10 @@ export default function Page(props: GameProps) {
     if (players) setAvailable(players);
   }, [players]);
   useEffect(() => {
-    if (!auth.isAuthenticated) {
+    if (!auth.isLoading && !auth.isAuthenticated) {
       router.push("/");
     }
-  }, [auth.isAuthenticated, router]);
+  }, [auth.isAuthenticated, auth.isLoading, router]);
   if (auth.isAuthenticated) {
     return (
       <div className="choosePlayer">
