@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import SectionComponent from "./Section";
-import { Game, Game_State, Game_Type, Joueur, Ring, sectionsOrder } from "../Type/Game";
+import { DartThrow, Game, Game_State, Game_Type, Joueur, Ring, sectionsOrder } from "../Type/Game";
 import NumberComponent from "./Number";
 import "./Canvas.css";
 import WaitingComponent from "./Waiting";
@@ -32,6 +32,13 @@ type CanvasProps = {
   seriesTarget: number;
 };
 
+function formatThrow(dartThrow: DartThrow): string {
+  if (dartThrow.value === 0) return "Miss";
+  if (dartThrow.ring === Ring.BULL) return "Bull";
+  const prefix = dartThrow.ring === Ring.TRIPLE ? "T" : dartThrow.ring === Ring.DOUBLE ? "D" : "";
+  return `${prefix}${dartThrow.value}`;
+}
+
 export default function GameCanvas(props: CanvasProps) {
   const router = useRouter();
   const [game, setGame] = useState<Game>(props.game);
@@ -49,6 +56,11 @@ export default function GameCanvas(props: CanvasProps) {
   useEffect(() => {
     setSeriesWinner(props.seriesWinner);
   }, [props.seriesWinner]);
+
+  const currentTurnThrowCount =
+    game.status === Game_State.WAITING_NEXT_PLAYER ? 3 : 3 - game.dart_count;
+  const currentTurnThrows =
+    currentTurnThrowCount > 0 ? game.throws.slice(-currentTurnThrowCount) : [];
 
   return (
     <svg
@@ -155,6 +167,19 @@ export default function GameCanvas(props: CanvasProps) {
         )}
       </g>
       <g transform="translate(1230,450)">
+        <g transform="translate(90,30)">
+          {[0, 1, 2].map((i) => {
+            const t = currentTurnThrows[i];
+            return (
+              <g key={i} transform={`translate(${(i - 1) * 90}, 0)`}>
+                <rect x="-38" y="-20" width="76" height="40" rx="8" ry="8" className="throw-slot-bg" />
+                <text dominantBaseline="middle" textAnchor="middle" className="throw-slot-text">
+                  {t ? formatThrow(t) : "—"}
+                </text>
+              </g>
+            );
+          })}
+        </g>
         <g transform="translate(90,100)" onClick={() => router.push("/")}>
           <GameButtonComponent size={300} text="Retour" />
         </g>
