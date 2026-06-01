@@ -66,11 +66,6 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
     }
   }, [game.status, game.current_player, seriesTarget, wins]);
 
-  const newRound = function () {
-    const [premier, ...reste] = game.players_;
-    addPlayersProps([...reste, premier]);
-  };
-
   const newSeries = function () {
     setWins({});
     setSeriesWinner(undefined);
@@ -171,7 +166,6 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
       ready={ready}
       undo={undo}
       miss={miss}
-      newRound={newRound}
       newSeries={newSeries}
       wins={wins}
       seriesWinner={seriesWinner}

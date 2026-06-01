@@ -26,7 +26,6 @@ type CanvasProps = {
   ready: () => void;
   undo: () => void;
   miss: () => void;
-  newRound: () => void;
   newSeries: () => void;
   wins: Record<number, number>;
   seriesWinner?: Joueur;
@@ -159,13 +158,9 @@ export default function GameCanvas(props: CanvasProps) {
         <g transform="translate(90,100)" onClick={() => router.push("/")}>
           <GameButtonComponent size={300} text="Retour" />
         </g>
-        {seriesWinner ? (
+        {seriesWinner && (
           <g transform="translate(90,0)" onClick={props.newSeries}>
             <GameButtonComponent size={300} text="Nouvelle série" />
-          </g>
-        ) : (
-          <g transform="translate(90,0)" onClick={props.newRound}>
-            <GameButtonComponent size={300} text="Nouvelle manche" />
           </g>
         )}
       </g>
