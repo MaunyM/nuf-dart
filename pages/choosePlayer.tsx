@@ -99,40 +99,43 @@ export default function Page(props: GameProps) {
           </g>
           <g transform="translate(140,400)">
           <g
-            
             onClick={() => {
+              if (selected.length === 0) return;
               props.addPlayers(selected);
               router.push("/cricket");
             }}
           >
-           <GameButtonComponent text="Cricket"/>
+           <GameButtonComponent text="Cricket" disabled={selected.length === 0}/>
           </g>
           <g
             transform="translate(240,00)"
             onClick={() => {
+              if (selected.length === 0) return;
               props.addPlayers(selected);
               router.push("/x01/501");
             }}
           >
-            <GameButtonComponent text="501"/>
+            <GameButtonComponent text="501" disabled={selected.length === 0}/>
           </g>
           <g
             transform="translate(240,80)"
             onClick={() => {
+              if (selected.length === 0) return;
               props.addPlayers(selected);
               router.push("/x01/301");
             }}
           >
-            <GameButtonComponent text="301"/>
+            <GameButtonComponent text="301" disabled={selected.length === 0}/>
           </g>
           <g
             transform="translate(480,00)"
             onClick={() => {
+              if (selected.length === 0) return;
               props.addPlayers(selected);
               router.push("/monster");
             }}
           >
-            <GameButtonComponent text="Monster"/>
+            <GameButtonComponent text="Monster" disabled={selected.length === 0}/>
           </g>
           </g>
           <text transform="translate(10,592)" className="text">Nombre de série :</text>

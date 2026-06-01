@@ -7,11 +7,12 @@ type GameButtonProps = {
   text: string;
   size?:number;
   selected?: boolean;
+  disabled?: boolean;
 };
 
-export default function GameButtonComponent({text, size = 200, selected = false}: GameButtonProps){
+export default function GameButtonComponent({text, size = 200, selected = false, disabled = false}: GameButtonProps){
   return (
-    <g className={`gameButton${selected ? ' selected' : ''}`}>
+    <g className={`gameButton${selected ? ' selected' : ''}${disabled ? ' disabled' : ''}`}>
     <g transform={`translate(-${size/2} -30)`}>
     <rect
       className="display_panel go"
