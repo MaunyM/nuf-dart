@@ -135,7 +135,8 @@ export default function Page(props: GameProps) {
             <GameButtonComponent text="Monster"/>
           </g>
           </g>
-          <g transform="translate(140,620)">
+          <text transform="translate(10,592)" className="text">Nombre de série :</text>
+          <g transform="translate(140,635)">
             {SERIES_OPTIONS.map((opt, i) => (
               <g key={opt.target} transform={`translate(${i * 160}, 0)`} onClick={() => props.setSeriesTarget(opt.target)}>
                 <GameButtonComponent text={opt.label} size={140} selected={props.seriesTarget === opt.target} />
