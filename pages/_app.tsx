@@ -15,6 +15,8 @@ const cognitoAuthConfig = {
   response_type: "code",
   lang: "fr",
   scope: "aws.cognito.signin.user.admin email openid profile",
+  automaticSilentRenew: process.env.NODE_ENV === "production",
+  monitorSession: process.env.NODE_ENV === "production",
 };
 
 const inter = Inter({ subsets: ["latin"] });
