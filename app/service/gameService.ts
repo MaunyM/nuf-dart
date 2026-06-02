@@ -4,7 +4,6 @@ import { AuthContextProps } from "react-oidc-context";
 
 const base_api = process.env.NEXT_PUBLIC_API;
 
-export const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
 export function getIndexFromPlayers(current_player: Joueur, scores: Score[]) {
   return scores.findIndex((score) => score.joueur.id === current_player?.id);
