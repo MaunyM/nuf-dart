@@ -15,7 +15,7 @@ import tululuSfx from "/public/Tululu.mp3";
 import nextPlayerSfx from "/public/nextPlayer.mp3";
 import doubleSfx from "/public/double.mp3";
 import tripleSfx from "/public/triple.mp3";
-import { addPlayers, delay, getValidToken, saveGameState } from "@/app/service/gameService";
+import { addPlayers, getValidToken, saveGameState } from "@/app/service/gameService";
 import { useAuth } from "react-oidc-context";
 import _ from "lodash";
 
@@ -83,7 +83,7 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
     setDartThrows(dartThrows.slice(0, -1));
   };
 
-  const miss = async function () {
+  const miss = function () {
     if (game.current_player && game.status === Game_State.THROWING) {
       const newThrow: DartThrow = {
         player: game.current_player,
@@ -92,7 +92,6 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
         date: new Date(),
       };
       playTululu();
-      await delay(1000);
       setDartThrows([...dartThrows, newThrow]);
     }
   };
@@ -107,14 +106,8 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
       };
 
       playPlop();
-      if (ring === Ring.DOUBLE) {
-        playDouble();
-        await delay(1000);
-      }
-      if (ring === Ring.TRIPLE) {
-        playTriple();
-        await delay(1000);
-      }
+      if (ring === Ring.DOUBLE) playDouble();
+      if (ring === Ring.TRIPLE) playTriple();
       setDartThrows([...dartThrows, newThrow]);
     }
   };
