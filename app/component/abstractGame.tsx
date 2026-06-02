@@ -49,6 +49,7 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
   const [wins, setWins] = useState<Record<number, number>>({});
   const [seriesWinner, setSeriesWinner] = useState<Joueur | undefined>();
   const winCountedRef = useRef(false);
+  const lastTapRef = useRef<number>(0);
 
   useEffect(() => {
     if (game.status !== Game_State.WON) {
@@ -84,6 +85,9 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
   };
 
   const miss = function () {
+    const now = Date.now();
+    if (now - lastTapRef.current < 200) return;
+    lastTapRef.current = now;
     if (game.current_player && game.status === Game_State.THROWING) {
       const newThrow: DartThrow = {
         player: game.current_player,
@@ -97,6 +101,9 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
   };
 
   const tapHandler = async function (value: number, ring: Ring) {
+    const now = Date.now();
+    if (now - lastTapRef.current < 200) return;
+    lastTapRef.current = now;
     if (game.current_player && game.status === Game_State.THROWING) {
       const newThrow: DartThrow = {
         player: game.current_player,
