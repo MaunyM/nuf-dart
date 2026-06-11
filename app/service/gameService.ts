@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { Game, Joueur, Score } from "../Type/Game";
 import { AuthContextProps } from "react-oidc-context";
+import { cognitoAuthConfig, cognitoDomain } from "./authConfig";
 
 const base_api = process.env.NEXT_PUBLIC_API;
 
@@ -53,6 +54,40 @@ export function addPlayers(
   return { ...game, players: [ ...players ]};
 }
 
+export function resumeSessionOnReconnect(auth: AuthContextProps): () => void {
+  const handleOnline = () => {
+    if (auth.user?.expired) {
+      auth.signinSilent().catch(() => {});
+    }
+  };
+
+  window.addEventListener("online", handleOnline);
+  return () => window.removeEventListener("online", handleOnline);
+}
+
+export function subscribeToSessionExpiry(auth: AuthContextProps, onExpired: () => void): () => void {
+  auth.events.addSilentRenewError(onExpired);
+  auth.events.addUserSignedOut(onExpired);
+
+  return () => {
+    auth.events.removeSilentRenewError(onExpired);
+    auth.events.removeUserSignedOut(onExpired);
+  };
+}
+
+export async function signOut(auth: AuthContextProps): Promise<void> {
+  // Cognito's /oauth2/revoke endpoint only supports revoking the refresh_token;
+  // requesting access_token revocation returns "unsupported_token_type".
+  await auth.revokeTokens(["refresh_token"]);
+  await auth.removeUser();
+  // Cognito's hosted UI keeps its own SSO session cookie, which `removeUser()`
+  // does not clear. Redirecting to its /logout endpoint (with the Cognito-specific
+  // client_id + logout_uri params, registered as a sign-out URL) ends that SSO
+  // session so the next "Sign in" prompts for credentials again.
+  const logoutUri = encodeURIComponent(cognitoAuthConfig.redirect_uri);
+  window.location.href = `${cognitoDomain}/logout?client_id=${cognitoAuthConfig.client_id}&logout_uri=${logoutUri}`;
+}
+
 export async function getValidToken(auth: AuthContextProps): Promise<string | undefined> {
   if (!auth.user || auth.user.expired) {
     try {
@@ -74,6 +109,18 @@ export function saveGameState(game: Game, token: string) {
     },
     body: JSON.stringify(game),
   }).catch(() => {});
+}
+
+export async function restoreGame(): Promise<Game | undefined> {
+  try {
+    const res = await fetch(`${base_api}/game`);
+    if (!res.ok) {
+      return undefined;
+    }
+    return await res.json();
+  } catch {
+    return undefined;
+  }
 }
 
 export function usePlayers(auth: AuthContextProps) {

@@ -15,7 +15,7 @@ import tululuSfx from "/public/Tululu.mp3";
 import nextPlayerSfx from "/public/nextPlayer.mp3";
 import doubleSfx from "/public/double.mp3";
 import tripleSfx from "/public/triple.mp3";
-import { addPlayers, getValidToken, saveGameState } from "@/app/service/gameService";
+import { addPlayers, getValidToken, restoreGame, saveGameState } from "@/app/service/gameService";
 import { useAuth } from "react-oidc-context";
 import _ from "lodash";
 
@@ -158,6 +158,20 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
       })
     );
   }, [players, initialScoreFromPlayer]);
+
+  useEffect(() => {
+    restoreGame().then((restored) => {
+      if (!restored) return;
+      const samePlayers =
+        restored.players.length === players.length &&
+        restored.players.every((p, i) => p.id === players[i]?.id);
+      if (!samePlayers) return;
+
+      setGame(restored);
+      setDartThrows(restored.throws);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <GameCanvas

@@ -1,25 +1,47 @@
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
-import { AuthProvider } from "react-oidc-context";
+import { AuthProvider, useAuth } from "react-oidc-context";
 import {
   Joueur,
 } from "@/app/Type/Game";
-import { useState } from "react";
+import { cognitoAuthConfig } from "@/app/service/authConfig";
+import { resumeSessionOnReconnect, subscribeToSessionExpiry } from "@/app/service/gameService";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-const cognitoAuthConfig = {
-  authority: "https://cognito-idp.eu-west-3.amazonaws.com/eu-west-3_hdaUJXlME",
-  client_id: "1cusrvvn01cc7dq61lk8g7mr1a",
-  redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI,
-  response_type: "code",
-  lang: "fr",
-  scope: "aws.cognito.signin.user.admin email openid profile",
-  automaticSilentRenew: process.env.NODE_ENV === "production",
-  monitorSession: process.env.NODE_ENV === "production",
+const inter = Inter({ subsets: ["latin"] });
+
+type AppContentProps = Pick<AppProps, "Component" | "pageProps"> & {
+  players: Joueur[];
+  addPlayers: (joueurs: Joueur[]) => void;
+  seriesTarget: number;
+  setSeriesTarget: (seriesTarget: number) => void;
 };
 
-const inter = Inter({ subsets: ["latin"] });
+function AppContent({ Component, pageProps, players, addPlayers, seriesTarget, setSeriesTarget }: AppContentProps) {
+  const auth = useAuth();
+  const router = useRouter();
+
+  useEffect(() => resumeSessionOnReconnect(auth), [auth]);
+
+  useEffect(() => {
+    return subscribeToSessionExpiry(auth, () => {
+      router.replace("/?sessionExpired=1");
+    });
+  }, [auth, router]);
+
+  return (
+    <Component
+      className={inter.className}
+      {...pageProps}
+      players={players}
+      addPlayers={addPlayers}
+      seriesTarget={seriesTarget}
+      setSeriesTarget={setSeriesTarget}
+    />
+  );
+}
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -32,9 +54,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <AuthProvider {...cognitoAuthConfig} onSigninCallback={() => { router.replace(router.pathname); }}>
-      <Component
-        className={inter.className}
-        {...pageProps}
+      <AppContent
+        Component={Component}
+        pageProps={pageProps}
         players={players}
         addPlayers={addPlayersToState}
         seriesTarget={seriesTarget}
