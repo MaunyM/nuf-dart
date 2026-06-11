@@ -107,14 +107,24 @@ test("First player is again Matthieu", () => {
 });
 
 test("Second player is Patate", () => {
-  const game = { ...defaultGame, players, status: Game_State.THROWING };
+  const game = {
+    ...defaultGame,
+    players,
+    status: Game_State.THROWING,
+    scores: players.map((player: Joueur) => new CricketScore(player)),
+  };
   const throws = [throw20, throw20, throw20];
   const updatedGame = throws.reduce(cricketReduce, game);
   expect(updatedGame.current_player).toBe(patate);
 });
 
 test("Third player is Celia", () => {
-  const game = { ...defaultGame, players, status: Game_State.THROWING };
+  const game = {
+    ...defaultGame,
+    players,
+    status: Game_State.THROWING,
+    scores: players.map((player: Joueur) => new CricketScore(player)),
+  };
   const throws = [
     throw20,
     throw20,
@@ -129,7 +139,12 @@ test("Third player is Celia", () => {
 });
 
 test("5th player is Patate", () => {
-  const game = { ...defaultGame, players, status: Game_State.THROWING };
+  const game = {
+    ...defaultGame,
+    players,
+    status: Game_State.THROWING,
+    scores: players.map((player: Joueur) => new CricketScore(player)),
+  };
   const throws = [
     throw20,
     throw20,
@@ -149,7 +164,12 @@ test("5th player is Patate", () => {
 });
 
 test("5th player is Patate", () => {
-  const game = { ...defaultGame, players, status: Game_State.THROWING };
+  const game = {
+    ...defaultGame,
+    players,
+    status: Game_State.THROWING,
+    scores: players.map((player: Joueur) => new CricketScore(player)),
+  };
   const throws = [
     throw20,
     throw20,
@@ -194,6 +214,7 @@ test("celia have 3 dart left", () => {
     players: TwoPlayers,
     current_player: matthieu,
     status: Game_State.THROWING,
+    scores: TwoPlayers.map((player: Joueur) => new CricketScore(player)),
   };
   const throws = [throw20, throw20, throw20, throw20]; //4 throws
   const updatedGame = throws.reduce(cricketReduce, game);
@@ -206,6 +227,7 @@ test("new turn matthieu have 3 dart left", () => {
     ...defaultGame,
     players: TwoPlayers,
     current_player: matthieu,
+    scores: TwoPlayers.map((player: Joueur) => new CricketScore(player)),
   };
   const throws = [throw20, throw20, throw20, throw20, throw20, throw20]; //6 throws
   const updatedGame = throws.reduce(cricketReduce, game);
@@ -219,6 +241,7 @@ test("new turn celia have 3 dart left", () => {
     players: TwoPlayers,
     current_player: matthieu,
     status: Game_State.THROWING,
+    scores: TwoPlayers.map((player: Joueur) => new CricketScore(player)),
   };
   const throws = [
     throw20,

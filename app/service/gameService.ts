@@ -50,7 +50,7 @@ export function addPlayers(
   players: Joueur[],
   game: Game
 ): Game {
-  return { ...game, players_: [ ...players ]};
+  return { ...game, players: [ ...players ]};
 }
 
 export async function getValidToken(auth: AuthContextProps): Promise<string | undefined> {

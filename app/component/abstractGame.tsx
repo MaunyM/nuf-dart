@@ -32,7 +32,7 @@ const initGame: Game = {
   throws: [],
   scores: [],
   dart_count: 3,
-  players_: [],
+  players: [],
   round:0
 };
 
@@ -70,7 +70,7 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
   const newSeries = function () {
     setWins({});
     setSeriesWinner(undefined);
-    const [premier, ...reste] = game.players_;
+    const [premier, ...reste] = game.players;
     addPlayersProps([...reste, premier]);
   };
 
@@ -137,7 +137,7 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
     if (game.status === Game_State.UNSTARTED)
       setGame({
         ...startingGame,
-        current_player: startingGame.players_[0],
+        current_player: startingGame.players[0],
         status: Game_State.WAITING_NEXT_PLAYER,
       });
   }, [game, startingGame]);

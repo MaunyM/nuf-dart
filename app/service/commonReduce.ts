@@ -3,7 +3,7 @@ import { getIndexFromPlayers } from "./gameService";
 
 export function firstPlayerReduce(dartThrow: DartThrow, game: Game): Game {
   if (!game.current_player) {
-    return { ...game, current_player: game.players_[0] };
+    return { ...game, current_player: game.players[0] };
   }
   return game;
 }

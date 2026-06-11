@@ -63,6 +63,6 @@ export type Game = {
   status: Game_State;
   dart_count: number;
   scores:Score[];
-  players_:Joueur[];
+  players:Joueur[];
   round:number;
 };
