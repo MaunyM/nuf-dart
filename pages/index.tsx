@@ -15,6 +15,9 @@ export default function Page() {
   }, [auth.isAuthenticated, router]);
   return (
     <div>
+      {router.query.sessionExpired && (
+        <p>Votre session a expiré, veuillez vous reconnecter.</p>
+      )}
       <button onClick={() => auth.signinRedirect()}>Sign in</button>
       <h1>Hello, Next.js!</h1>
       <Link href="/game">Go</Link>

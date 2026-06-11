@@ -1,6 +1,6 @@
 import DefsComponent from "@/app/component/Defs";
 import DisplayPlayerComponent from "@/app/component/DisplayPlayer";
-import { addPlayer, removePlayer, usePlayers } from "@/app/service/gameService";
+import { addPlayer, removePlayer, signOut, usePlayers } from "@/app/service/gameService";
 import { Game, Game_Type, Joueur } from "@/app/Type/Game";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -147,7 +147,7 @@ export default function Page(props: GameProps) {
             ))}
           </g>
         </svg>
-        <button onClick={() => auth.removeUser()}>Sign out</button>
+        <button onClick={() => signOut(auth)}>Sign out</button>
       </div>
     );
   }
