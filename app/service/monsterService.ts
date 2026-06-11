@@ -14,7 +14,7 @@ import {
   throwReduce,
 } from "./commonReduce";
 import _ from "lodash";
-import { getScoreFromPlayer, updatePlayerScore } from "./gameService";
+import { updatePlayerScore } from "./gameService";
 
 export const max_health = 10;
 
@@ -106,14 +106,22 @@ function scoreAlive(scores:MonsterScore[]):MonsterScore[] {
 export class MonsterReducer {
   zones: MonsterZones[] = [];
   reduce(game: Game, dartThrow: DartThrow): Game {
-    let updatedGame = throwReduce(dartThrow, game);
-    updatedGame = firstPlayerReduce(dartThrow, updatedGame);
-    updatedGame = scoreMonsterReduce(dartThrow, updatedGame);
-    updatedGame = dartCountReduce(dartThrow, updatedGame);
-    updatedGame = keepAliveReduce(dartThrow, updatedGame);
-    updatedGame = gameStatusReduce(dartThrow, updatedGame);
-    updatedGame = winReduce(dartThrow, updatedGame);
-    updatedGame = playerReduce(dartThrow, updatedGame);
+    // Toutes les zones en jeu (soin du joueur courant + zones d'attaque de
+    // chaque adversaire) : un lancer y touchant compte comme une réussite,
+    // cf. findJoueurForAttack qui recherche sur l'ensemble de game.scores.
+    const targetZones = (game.scores as MonsterScore[]).flatMap(
+      (score) => score.zone ?? []
+    );
+    const enrichedThrow: DartThrow = { ...dartThrow, targetZones };
+
+    let updatedGame = throwReduce(enrichedThrow, game);
+    updatedGame = firstPlayerReduce(enrichedThrow, updatedGame);
+    updatedGame = scoreMonsterReduce(enrichedThrow, updatedGame);
+    updatedGame = dartCountReduce(enrichedThrow, updatedGame);
+    updatedGame = keepAliveReduce(enrichedThrow, updatedGame);
+    updatedGame = gameStatusReduce(enrichedThrow, updatedGame);
+    updatedGame = winReduce(enrichedThrow, updatedGame);
+    updatedGame = playerReduce(enrichedThrow, updatedGame);
 
     if (
       Game_State.WON !== updatedGame.status &&
