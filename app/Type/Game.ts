@@ -55,6 +55,7 @@ export interface DartThrow {
   value: number;
   ring: Ring;
   date: Date;
+  targetZones?: number[];
 };
 
 export type Game = {

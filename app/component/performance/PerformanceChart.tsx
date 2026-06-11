@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Game } from "../../Type/Game";
-import { getPlayerPerformanceHistory } from "../../service/performanceService";
+import { Game, Game_Type } from "../../Type/Game";
+import { getPlayerPerformanceHistory, getPerformanceUnit } from "../../service/performanceService";
 import "./PerformanceChart.css";
 
 type PerformanceChartProps = {
@@ -16,9 +16,11 @@ const X_STEP = PLOT_WIDTH / (MAX_POINTS - 1);
 
 export default function PerformanceChartComponent({ game }: PerformanceChartProps) {
   const players = game.players ?? [];
+  const gameType = game.scores[0]?.type ?? Game_Type.X01;
+  const unit = getPerformanceUnit(gameType);
   const performances = players.map((joueur) => ({
     joueur,
-    history: getPlayerPerformanceHistory(game.throws, joueur),
+    history: getPlayerPerformanceHistory(game.throws, joueur, gameType),
   }));
 
   const allValues = performances.flatMap((p) => p.history);
@@ -29,6 +31,7 @@ export default function PerformanceChartComponent({ game }: PerformanceChartProp
   return (
     <g className="performance-chart" transform="translate(-40,-64)">
       <rect className="background" x={0} y={0} width={260} height={60} rx={8} ry={8} />
+      <text className="unit-label" x={252} y={10}>{unit}</text>
       <g transform="translate(5,8)">
         <line className="axis" x1={0} y1={PLOT_HEIGHT} x2={PLOT_WIDTH} y2={PLOT_HEIGHT} />
         {!hasAnyHistory && (
