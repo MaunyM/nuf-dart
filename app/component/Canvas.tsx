@@ -19,6 +19,7 @@ import { findJoueurForAttack } from "../service/monsterService";
 import GameButtonComponent from "./GameButton";
 import { useRouter } from "next/router";
 import { MonsterScore } from "../Type/Monster";
+import PerformanceChartComponent from "./performance/PerformanceChart";
 
 type CanvasProps = {
   game: Game;
@@ -167,6 +168,7 @@ export default function GameCanvas(props: CanvasProps) {
         )}
       </g>
       <g transform="translate(1230,450)">
+        <PerformanceChartComponent game={game} />
         <g transform="translate(90,30)">
           {[0, 1, 2].map((i) => {
             const t = currentTurnThrows[i];
