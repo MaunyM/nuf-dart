@@ -11,3 +11,23 @@
     filter: drop-shadow(5px 5px 10px #bebebe) drop-shadow(-5px -5px 10px #ffffff);
     fill: #c2bfbf;
   }
+
+  .choosePlayer .team-badge.team-1 {
+    fill: #4a90d9;
+  }
+
+  .choosePlayer .team-badge.team-2 {
+    fill: #e07b39;
+  }
+
+  .choosePlayer .team-badge.team-none {
+    fill: #9a9a9a;
+  }
+
+  .choosePlayer .team-badge-text {
+    font-family: "m6x11plus";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    fill: white;
+  }

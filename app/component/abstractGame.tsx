@@ -7,6 +7,7 @@ import {
   Joueur,
   Ring,
   Score,
+  Team,
 } from "@/app/Type/Game";
 import { useEffect, useRef, useState } from "react";
 import useSound from "use-sound";
@@ -25,6 +26,7 @@ type GameProps = {
   initialScoreFromPlayer: (joueur: Joueur) => Score;
   addPlayers(joueur: Joueur[]): void;
   seriesTarget: number;
+  teams?: Team[];
 };
 
 const initGame: Game = {
@@ -36,7 +38,7 @@ const initGame: Game = {
   round:0
 };
 
-export default function AbstractGame({players, addPlayers: addPlayersProps, gameReducer, initialScoreFromPlayer, seriesTarget}: GameProps) {
+export default function AbstractGame({players, addPlayers: addPlayersProps, gameReducer, initialScoreFromPlayer, seriesTarget, teams}: GameProps) {
   const auth = useAuth();
   const [playPlop] = useSound(plopSfx);
   const [playTululu] = useSound(tululuSfx, { volume: 0.1 });
@@ -155,9 +157,10 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
         scores,
         status: Game_State.THROWING,
         current_player: joueurs[0],
+        teams,
       })
     );
-  }, [players, initialScoreFromPlayer]);
+  }, [players, initialScoreFromPlayer, teams]);
 
   useEffect(() => {
     restoreGame().then((restored) => {

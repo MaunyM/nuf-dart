@@ -46,6 +46,12 @@ export interface Joueur{
   color: Color;
 };
 
+export type Team = {
+  id: number;
+  name: string;
+  players: Joueur[];
+};
+
 export enum Game_Event {
   DART_HIT,
 }
@@ -66,4 +72,5 @@ export type Game = {
   scores:Score[];
   players:Joueur[];
   round:number;
+  teams?: Team[];
 };
