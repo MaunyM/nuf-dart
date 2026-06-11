@@ -122,7 +122,7 @@ export class MonsterReducer {
     ) {
       let current_zones = this.zones[updatedGame.round];
       if (!current_zones) {
-        (current_zones = randomZone(game.players_, updatedGame.current_player)),
+        (current_zones = randomZone(game.players, updatedGame.current_player)),
           (this.zones = [...this.zones, current_zones]);
       }
       return {

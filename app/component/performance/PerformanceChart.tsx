@@ -15,7 +15,7 @@ const PLOT_HEIGHT = 50;
 const X_STEP = PLOT_WIDTH / (MAX_POINTS - 1);
 
 export default function PerformanceChartComponent({ game }: PerformanceChartProps) {
-  const players = game.players_ ?? [];
+  const players = game.players ?? [];
   const performances = players.map((joueur) => ({
     joueur,
     history: getPlayerPerformanceHistory(game.throws, joueur),

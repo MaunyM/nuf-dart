@@ -71,7 +71,7 @@ export default function GameCanvas(props: CanvasProps) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
-        <DefsComponent players={game.players_} />
+        <DefsComponent players={game.players} />
       </defs>
       <g transform={`translate(900,0)`}>
         <ScoreBoardComponent scores={game.scores} wins={wins} seriesTarget={props.seriesTarget}></ScoreBoardComponent>
