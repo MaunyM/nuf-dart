@@ -1,0 +1,39 @@
+.performance-chart .background {
+  fill: rgba(0, 0, 0, 0.35);
+  filter: drop-shadow(2px 2px rgba(0, 0, 0, 0.3));
+}
+
+.performance-chart .axis {
+  stroke: rgba(255, 255, 255, 0.25);
+  stroke-width: 1;
+}
+
+.performance-chart .series-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.performance-chart .series-point {
+  stroke: white;
+  stroke-width: 1;
+}
+
+.performance-chart .empty-text,
+.performance-chart .empty-marker {
+  font-family: "m6x11plus";
+  font-weight: normal;
+  font-style: normal;
+  fill: rgba(255, 255, 255, 0.6);
+  text-anchor: middle;
+}
+
+.performance-chart .empty-text {
+  font-size: 18px;
+}
+
+.performance-chart .empty-marker {
+  text-anchor: start;
+  font-size: 14px;
+}
