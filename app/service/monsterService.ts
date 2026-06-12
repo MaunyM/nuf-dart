@@ -11,11 +11,10 @@ import {
   dartCountReduce,
   firstPlayerReduce,
   gameStatusReduce,
-  playerReduce,
   throwReduce,
 } from "./commonReduce";
+import { getIndexFromPlayers } from "./gameService";
 import _ from "lodash";
-import { updateTeamScore } from "./teamService";
 
 export const max_health = 10;
 
@@ -27,9 +26,12 @@ function scoreMonsterReduce(dartThrow: DartThrow, game: Game): Game {
   );
   if (score && game.current_player) {
     const delta = score.joueur.id === game.current_player.id ? +1 : -1;
+    const newScore = Math.min(Math.max(score.score + delta, 0), score.maxScore);
     newGame = {
       ...newGame,
-      scores: updateTeamScore(game.scores as MonsterScore[], score.teamId, delta, score.maxScore),
+      scores: (game.scores as MonsterScore[]).map((s) =>
+        s.joueur.id === score.joueur.id ? { ...s, score: newScore } : s
+      ),
     };
   }
   return newGame;
@@ -92,21 +94,33 @@ export function applyZoneToMonsterPlayer(
   });
 }
 
-function scoreAlive(scores:MonsterScore[]):MonsterScore[] {
-  return scores.filter((score:MonsterScore) =>  score.score>0)
+function scoreAlive(scores: MonsterScore[]): MonsterScore[] {
+  const aliveTeamIds = new Set(
+    scores.filter((score) => score.score > 0).map((score) => score.teamId)
+  );
+  return scores.filter((score) => aliveTeamIds.has(score.teamId));
+}
+
+function monsterPlayerReduce(dartThrow: DartThrow, game: Game): Game {
+  if (Game_State.WON !== game.status && game.current_player && game.dart_count == 3) {
+    const scores = game.scores as MonsterScore[];
+    let playerIndex = getIndexFromPlayers(game.current_player, scores);
+    do {
+      playerIndex = (playerIndex + 1) % scores.length;
+    } while (scores[playerIndex].score === 0);
+    const current_player = scores[playerIndex].joueur;
+    const round = game.round + 1;
+    return { ...game, current_player, round };
+  }
+  return { ...game };
 }
 
 export class MonsterReducer {
   zones: MonsterZones[] = [];
   playerTeamId: Map<number, number> = new Map();
-  teamMaxScore: Map<number, number> = new Map();
 
   getTeamId(player: Joueur): number {
     return this.playerTeamId.get(player.id) ?? player.id;
-  }
-
-  getMaxScore(player: Joueur): number {
-    return this.teamMaxScore.get(this.getTeamId(player)) ?? max_health;
   }
 
   reduce(game: Game, dartThrow: DartThrow): Game {
@@ -125,7 +139,7 @@ export class MonsterReducer {
     updatedGame = keepAliveReduce(enrichedThrow, updatedGame);
     updatedGame = gameStatusReduce(enrichedThrow, updatedGame);
     updatedGame = winReduce(enrichedThrow, updatedGame);
-    updatedGame = playerReduce(enrichedThrow, updatedGame);
+    updatedGame = monsterPlayerReduce(enrichedThrow, updatedGame);
 
     if (
       Game_State.WON !== updatedGame.status &&
@@ -134,7 +148,10 @@ export class MonsterReducer {
     ) {
       let current_zones = this.zones[updatedGame.round];
       if (!current_zones) {
-        (current_zones = randomZone(game.players, updatedGame.current_player)),
+        const alivePlayers = (updatedGame.scores as MonsterScore[])
+          .filter((score) => score.score > 0)
+          .map((score) => score.joueur);
+        (current_zones = randomZone(alivePlayers, updatedGame.current_player)),
           (this.zones = [...this.zones, current_zones]);
       }
       return {
@@ -151,8 +168,6 @@ export class MonsterReducer {
     }
     if (teams && teams.length > 0) {
       teams.forEach((team) => {
-        const maxScore = max_health * team.players.length;
-        this.teamMaxScore.set(team.id, maxScore);
         team.players.forEach((player) => {
           this.playerTeamId.set(player.id, team.id);
         });
@@ -160,7 +175,6 @@ export class MonsterReducer {
     } else if (players) {
       players.forEach((player) => {
         this.playerTeamId.set(player.id, player.id);
-        this.teamMaxScore.set(player.id, max_health);
       });
     }
   }

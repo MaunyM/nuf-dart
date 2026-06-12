@@ -29,8 +29,7 @@ export default function Home(props: GameProps) {
             return new MonsterScore(
               joueur,
               monsterZone.get(joueur.id),
-              monsterReducer.getTeamId(joueur),
-              monsterReducer.getMaxScore(joueur)
+              monsterReducer.getTeamId(joueur)
             );
           }}
           players={props.players}

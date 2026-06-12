@@ -1,9 +1,7 @@
 import { expect, test } from "vitest";
 import { Joueur, Team } from "@/app/Type/Game";
-import { MonsterScore } from "@/app/Type/Monster";
 import {
   interleaveByTeam,
-  updateTeamScore,
   validateTeams,
 } from "@/app/service/teamService";
 
@@ -61,44 +59,4 @@ test("interleaveByTeam gère des effectifs inégaux (2 vs 3) sans perdre de joue
   const ordered = interleaveByTeam(teams);
   expect(ordered).toEqual([a1, b1, a2, b2, b3]);
   expect(ordered.length).toBe(teams.flatMap((t) => t.players).length);
-});
-
-test("updateTeamScore applique le soin (+1) plafonné à maxScore pour toute l'équipe", () => {
-  const scores = [
-    new MonsterScore(a1, undefined, 1, 20),
-    new MonsterScore(a2, undefined, 1, 20),
-    new MonsterScore(b1, undefined, 2, 20),
-  ];
-  scores[0].score = 20;
-  scores[1].score = 20;
-
-  const updated = updateTeamScore(scores, 1, +1, 20);
-  expect(updated[0].score).toBe(20);
-  expect(updated[1].score).toBe(20);
-  expect(updated[2].score).toBe(20);
-});
-
-test("updateTeamScore applique l'attaque (-1) plancher à 0 pour toute l'équipe", () => {
-  const scores = [
-    new MonsterScore(a1, undefined, 1, 20),
-    new MonsterScore(a2, undefined, 1, 20),
-  ];
-  scores[0].score = 0;
-  scores[1].score = 0;
-
-  const updated = updateTeamScore(scores, 1, -1, 20);
-  expect(updated[0].score).toBe(0);
-  expect(updated[1].score).toBe(0);
-});
-
-test("updateTeamScore ne modifie que les MonsterScore du teamId ciblé", () => {
-  const scores = [
-    new MonsterScore(a1, undefined, 1, 20),
-    new MonsterScore(b1, undefined, 2, 20),
-  ];
-
-  const updated = updateTeamScore(scores, 1, -1, 20);
-  expect(updated[0].score).toBe(19);
-  expect(updated[1].score).toBe(20);
-  expect(updated[1]).toBe(scores[1]);
 });

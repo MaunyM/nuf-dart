@@ -1,5 +1,4 @@
 import { Joueur, Team } from "../Type/Game";
-import { MonsterScore } from "../Type/Monster";
 
 export function validateTeams(teams: Team[], selectedPlayers: Joueur[]): boolean {
   if (teams.length < 2) return false;
@@ -28,17 +27,4 @@ export function interleaveByTeam(teams: Team[]): Joueur[] {
   }
 
   return result;
-}
-
-export function updateTeamScore(
-  scores: MonsterScore[],
-  teamId: number,
-  delta: number,
-  maxScore: number
-): MonsterScore[] {
-  return scores.map((score) =>
-    score.teamId === teamId
-      ? { ...score, score: Math.min(Math.max(score.score + delta, 0), maxScore) }
-      : score
-  );
 }
