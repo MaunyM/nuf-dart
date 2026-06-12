@@ -74,7 +74,7 @@ export default function GameCanvas(props: CanvasProps) {
         <DefsComponent players={game.players} />
       </defs>
       <g transform={`translate(900,0)`}>
-        <ScoreBoardComponent scores={game.scores} wins={wins} seriesTarget={props.seriesTarget}></ScoreBoardComponent>
+        <ScoreBoardComponent scores={game.scores} wins={wins} seriesTarget={props.seriesTarget} teams={game.teams}></ScoreBoardComponent>
       </g>
       <g transform={`translate(710,18)`}>
         {game.current_player && <DartsComponent dart_count={game.dart_count} />}

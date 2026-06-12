@@ -32,7 +32,7 @@ export default function ScoreMonsterComponent(props:ScoreBoardProps){
             <text  className='text'>{props.score.score}</text>
           </g>
         <g transform=" translate(15 70)">
-          <HealthBarComponent score={props.score.score}/>
+          <HealthBarComponent score={props.score.score} maxScore={props.score.maxScore}/>
           </g>
           <g transform="scale(0.5) translate(90 00)">
               <BlobComponent joueur={props.score.joueur}></BlobComponent>

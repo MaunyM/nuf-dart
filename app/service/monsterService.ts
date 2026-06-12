@@ -4,6 +4,7 @@ import {
   Game,
   Game_State,
   Joueur,
+  Team,
   sectionsOrder,
 } from "../Type/Game";
 import {
@@ -14,27 +15,22 @@ import {
   throwReduce,
 } from "./commonReduce";
 import _ from "lodash";
-import { updatePlayerScore } from "./gameService";
+import { updateTeamScore } from "./teamService";
 
 export const max_health = 10;
 
 function scoreMonsterReduce(dartThrow: DartThrow, game: Game): Game {
   let newGame = game;
-  let score = findJoueurForAttack(
+  const score = findJoueurForAttack(
     game.scores as MonsterScore[],
     dartThrow.value
   );
   if (score && game.current_player) {
-    if (score.joueur.id === game.current_player.id) {
-      if (score.score < max_health) {
-        score = { ...score, score: score.score + 1 };
-      }
-    } else {
-      if (score.score > 0) {
-        score = { ...score, score: score.score - 1 };
-      }
-    }
-    newGame = { ...newGame, scores: updatePlayerScore(score, game.scores) };
+    const delta = score.joueur.id === game.current_player.id ? +1 : -1;
+    newGame = {
+      ...newGame,
+      scores: updateTeamScore(game.scores as MonsterScore[], score.teamId, delta, score.maxScore),
+    };
   }
   return newGame;
 }
@@ -53,10 +49,7 @@ function keepAliveReduce(dartThrow: DartThrow, game: Game): Game {
 }
 
 function countAlive(scores: MonsterScore[]): number {
-  return scores.reduce(
-    (count, score) => (score.score !== 0 ? count + 1 : count),
-    0
-  );
+  return new Set(scores.map((score) => score.teamId)).size;
 }
 
 export function isWon(scores: MonsterScore[]) {
@@ -105,6 +98,17 @@ function scoreAlive(scores:MonsterScore[]):MonsterScore[] {
 
 export class MonsterReducer {
   zones: MonsterZones[] = [];
+  playerTeamId: Map<number, number> = new Map();
+  teamMaxScore: Map<number, number> = new Map();
+
+  getTeamId(player: Joueur): number {
+    return this.playerTeamId.get(player.id) ?? player.id;
+  }
+
+  getMaxScore(player: Joueur): number {
+    return this.teamMaxScore.get(this.getTeamId(player)) ?? max_health;
+  }
+
   reduce(game: Game, dartThrow: DartThrow): Game {
     // Toutes les zones en jeu (soin du joueur courant + zones d'attaque de
     // chaque adversaire) : un lancer y touchant compte comme une réussite,
@@ -141,9 +145,23 @@ export class MonsterReducer {
     return updatedGame;
   }
 
-  constructor(players?: Joueur[]) {
+  constructor(players?: Joueur[], teams?: Team[]) {
     if (players && players.length >= 1) {
       this.zones = [randomZone(players, players[0])];
+    }
+    if (teams && teams.length > 0) {
+      teams.forEach((team) => {
+        const maxScore = max_health * team.players.length;
+        this.teamMaxScore.set(team.id, maxScore);
+        team.players.forEach((player) => {
+          this.playerTeamId.set(player.id, team.id);
+        });
+      });
+    } else if (players) {
+      players.forEach((player) => {
+        this.playerTeamId.set(player.id, player.id);
+        this.teamMaxScore.set(player.id, max_health);
+      });
     }
   }
 }

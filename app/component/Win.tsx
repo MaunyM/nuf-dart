@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import "./Waiting.css";
 import { Game, Game_State, Game_Type } from "../Type/Game";
 import { AnimatePresence,motion } from "motion/react";
-import { CricketScore } from "../Type/Cricket";
+import { MonsterScore } from "../Type/Monster";
 import { useRouter } from "next/router";
 
 type WaitingProps = {
@@ -18,6 +18,22 @@ export default function WinComponent(props: WaitingProps) {
   useEffect(() => {
     setGame(props.game);
   }, [props.game]);
+
+  const winningTeammates =
+    game.scores[0]?.type === Game_Type.MONSTER && game.current_player
+      ? (game.scores as MonsterScore[]).filter(
+          (score) =>
+            score.teamId ===
+            (game.scores as MonsterScore[]).find(
+              (s) => s.joueur.id === game.current_player?.id
+            )?.teamId
+        )
+      : [];
+  const winLabel =
+    winningTeammates.length > 1
+      ? `Victoire de l'équipe : ${winningTeammates.map((s) => s.joueur.nom).join(" & ")}`
+      : `Victoire de ${game.current_player?.nom}`;
+
   return (
     <g className="waiting">
       <AnimatePresence>
@@ -42,7 +58,7 @@ export default function WinComponent(props: WaitingProps) {
               ry="15"
             />
             <text className="text" dominantBaseline="middle">
-              Victoire de {game.current_player?.nom}
+              {winLabel}
             </text>
           </motion.g>
         )}

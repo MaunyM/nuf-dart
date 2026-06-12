@@ -4,6 +4,7 @@ import "@/app/globals.css";
 import { AuthProvider, useAuth } from "react-oidc-context";
 import {
   Joueur,
+  Team,
 } from "@/app/Type/Game";
 import { cognitoAuthConfig } from "@/app/service/authConfig";
 import { resumeSessionOnReconnect, subscribeToSessionExpiry } from "@/app/service/gameService";
@@ -17,9 +18,11 @@ type AppContentProps = Pick<AppProps, "Component" | "pageProps"> & {
   addPlayers: (joueurs: Joueur[]) => void;
   seriesTarget: number;
   setSeriesTarget: (seriesTarget: number) => void;
+  teams: Team[];
+  setTeams: (teams: Team[]) => void;
 };
 
-function AppContent({ Component, pageProps, players, addPlayers, seriesTarget, setSeriesTarget }: AppContentProps) {
+function AppContent({ Component, pageProps, players, addPlayers, seriesTarget, setSeriesTarget, teams, setTeams }: AppContentProps) {
   const auth = useAuth();
   const router = useRouter();
 
@@ -39,6 +42,8 @@ function AppContent({ Component, pageProps, players, addPlayers, seriesTarget, s
       addPlayers={addPlayers}
       seriesTarget={seriesTarget}
       setSeriesTarget={setSeriesTarget}
+      teams={teams}
+      setTeams={setTeams}
     />
   );
 }
@@ -47,6 +52,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [players, setPlayers] = useState<Joueur[]>([]);
   const [seriesTarget, setSeriesTarget] = useState<number>(1);
+  const [teams, setTeams] = useState<Team[]>([]);
 
   const addPlayersToState = function (joueurs: Joueur[]) {
       setPlayers(joueurs);
@@ -61,6 +67,8 @@ export default function App({ Component, pageProps }: AppProps) {
         addPlayers={addPlayersToState}
         seriesTarget={seriesTarget}
         setSeriesTarget={setSeriesTarget}
+        teams={teams}
+        setTeams={setTeams}
       />
     </AuthProvider>
   );

@@ -15,6 +15,7 @@ type ScoreBoardProps= {
   score: Score;
   wins: number;
   seriesTarget: number;
+  teamColorName?: string;
 };
 
  const angle = Math.PI/10
@@ -32,6 +33,18 @@ export default function PlayerScoreComponent(props: ScoreBoardProps){
   return (
     <g transform="" className="score">
       <g transform="translate(-80,-27)">
+        {props.teamColorName && (
+          <rect
+            fill={`url(#grad-${props.teamColorName})`}
+            className="team_board"
+            x="-8"
+            y="-8"
+            width="166"
+            height="376"
+            rx="14"
+            ry="14"
+          />
+        )}
         <rect
           fill={`url(#grad-${props.score.joueur.nom})`}
           className="score_board"
