@@ -144,10 +144,15 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
       });
   }, [game, startingGame]);
 
+  const initialScoreFromPlayerRef = useRef(initialScoreFromPlayer);
+  initialScoreFromPlayerRef.current = initialScoreFromPlayer;
+  const teamsRef = useRef(teams);
+  teamsRef.current = teams;
+
   useEffect(() => {
     const joueurs = players;
     const scores: Score[] = joueurs.map(
-     initialScoreFromPlayer
+     initialScoreFromPlayerRef.current
     );
 
     setDartThrows([]);
@@ -157,10 +162,14 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
         scores,
         status: Game_State.THROWING,
         current_player: joueurs[0],
-        teams,
+        teams: teamsRef.current,
       })
     );
-  }, [players, initialScoreFromPlayer, teams]);
+    // initialScoreFromPlayer and teams are read via refs so an unrelated
+    // re-render (e.g. Cognito silent token renewal) that recreates these
+    // props doesn't wipe the in-progress game back to its starting state.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [players]);
 
   useEffect(() => {
     restoreGame().then((restored) => {
