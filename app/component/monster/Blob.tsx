@@ -23,7 +23,7 @@ type blobProps = {
 };
 export default function BlobComponent(props: blobProps) {
   const [color, setColor] = useState<string>("");
-  const [duration] = useState<number>(Math.random()* (max-min) + min);
+  const [duration] = useState<number>(() => Math.random() * (max - min) + min);
 
   useEffect(() => {
     if (props.joueur) {
