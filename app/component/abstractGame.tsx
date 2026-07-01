@@ -11,11 +11,11 @@ import {
 } from "@/app/Type/Game";
 import { useEffect, useRef, useState } from "react";
 import useSound from "use-sound";
-import plopSfx from "/public/664624__luis0413__plop-bonk-sound.mp3";
-import tululuSfx from "/public/Tululu.mp3";
-import nextPlayerSfx from "/public/nextPlayer.mp3";
-import doubleSfx from "/public/double.mp3";
-import tripleSfx from "/public/triple.mp3";
+const plopSfx = "/664624__luis0413__plop-bonk-sound.mp3";
+const tululuSfx = "/Tululu.mp3";
+const nextPlayerSfx = "/nextPlayer.mp3";
+const doubleSfx = "/double.mp3";
+const tripleSfx = "/triple.mp3";
 import { addPlayers, getValidToken, restoreGame, saveGameState } from "@/app/service/gameService";
 import { useAuth } from "react-oidc-context";
 import _ from "lodash";
