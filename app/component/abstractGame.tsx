@@ -9,7 +9,7 @@ import {
   Score,
   Team,
 } from "@/app/Type/Game";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import useSound from "use-sound";
 const plopSfx = "/664624__luis0413__plop-bonk-sound.mp3";
 const tululuSfx = "/Tululu.mp3";
@@ -145,9 +145,11 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
   }, [game, startingGame]);
 
   const initialScoreFromPlayerRef = useRef(initialScoreFromPlayer);
-  initialScoreFromPlayerRef.current = initialScoreFromPlayer;
   const teamsRef = useRef(teams);
-  teamsRef.current = teams;
+  useLayoutEffect(() => {
+    initialScoreFromPlayerRef.current = initialScoreFromPlayer;
+    teamsRef.current = teams;
+  });
 
   useEffect(() => {
     const joueurs = players;
