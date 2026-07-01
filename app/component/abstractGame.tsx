@@ -9,7 +9,7 @@ import {
   Score,
   Team,
 } from "@/app/Type/Game";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useReducer, useRef } from "react";
 import useSound from "use-sound";
 const plopSfx = "/664624__luis0413__plop-bonk-sound.mp3";
 const tululuSfx = "/Tululu.mp3";
@@ -38,102 +38,73 @@ const initGame: Game = {
   round:0
 };
 
-export default function AbstractGame({players, addPlayers: addPlayersProps, gameReducer, initialScoreFromPlayer, seriesTarget, teams}: GameProps) {
+type AbstractGameState = {
+  dartThrows: DartThrow[];
+  startingGame: Game;
+  game: Game;
+  wins: Record<number, number>;
+  seriesWinner: Joueur | undefined;
+};
+
+type AbstractGameAction =
+  | { type: 'ADD_THROW'; throw: DartThrow; seriesTarget: number; gameReducer: (g: Game, t: DartThrow) => Game }
+  | { type: 'UNDO'; gameReducer: (g: Game, t: DartThrow) => Game }
+  | { type: 'READY' }
+  | { type: 'RESET_PLAYERS'; startingGame: Game }
+  | { type: 'RESTORE'; restored: Game }
+  | { type: 'NEW_SERIES' };
+
+const initialState: AbstractGameState = {
+  dartThrows: [],
+  startingGame: initGame,
+  game: initGame,
+  wins: {},
+  seriesWinner: undefined,
+};
+
+function abstractGameReducer(state: AbstractGameState, action: AbstractGameAction): AbstractGameState {
+  switch (action.type) {
+    case 'ADD_THROW': {
+      const newThrows = [...state.dartThrows, action.throw];
+      const newGame = newThrows.reduce(action.gameReducer, _.cloneDeep(state.startingGame));
+      let { wins, seriesWinner } = state;
+      if (newGame.status === Game_State.WON && newGame.current_player && action.seriesTarget > 1) {
+        const pid = newGame.current_player.id;
+        const newWins = { ...wins, [pid]: (wins[pid] || 0) + 1 };
+        wins = newWins;
+        if (newWins[pid] >= Math.ceil(action.seriesTarget / 2)) {
+          seriesWinner = newGame.current_player;
+        }
+      }
+      return { ...state, dartThrows: newThrows, game: newGame, wins, seriesWinner };
+    }
+    case 'UNDO': {
+      const newThrows = state.dartThrows.slice(0, -1);
+      const newGame = newThrows.reduce(action.gameReducer, _.cloneDeep(state.startingGame));
+      return { ...state, dartThrows: newThrows, game: newGame };
+    }
+    case 'READY':
+      if (!state.game.current_player) return state;
+      return { ...state, game: { ...state.game, status: Game_State.THROWING } };
+    case 'RESET_PLAYERS':
+      return { ...state, dartThrows: [], startingGame: action.startingGame, game: action.startingGame };
+    case 'RESTORE':
+      return { ...state, dartThrows: action.restored.throws, game: action.restored };
+    case 'NEW_SERIES':
+      return { ...state, wins: {}, seriesWinner: undefined };
+  }
+}
+
+export default function AbstractGame({ players, addPlayers: addPlayersProps, gameReducer, initialScoreFromPlayer, seriesTarget, teams }: GameProps) {
   const auth = useAuth();
   const [playPlop] = useSound(plopSfx);
   const [playTululu] = useSound(tululuSfx, { volume: 0.1 });
   const [playNextPlayer] = useSound(nextPlayerSfx, { volume: 0.1 });
   const [playDouble] = useSound(doubleSfx, { volume: 0.1 });
   const [playTriple] = useSound(tripleSfx, { volume: 0.1 });
-  const [startingGame, setStartingGame] = useState(initGame);
-  const [game, setGame] = useState(initGame);
-  const [dartThrows, setDartThrows] = useState<DartThrow[]>([]);
-  const [wins, setWins] = useState<Record<number, number>>({});
-  const [seriesWinner, setSeriesWinner] = useState<Joueur | undefined>();
-  const winCountedRef = useRef(false);
+  const [state, dispatch] = useReducer(abstractGameReducer, initialState);
+  const { game, wins, seriesWinner } = state;
   const lastTapRef = useRef<number>(0);
-
-  useEffect(() => {
-    if (game.status !== Game_State.WON) {
-      winCountedRef.current = false;
-      return;
-    }
-    if (!game.current_player || winCountedRef.current || seriesTarget <= 1) return;
-    winCountedRef.current = true;
-    const playerId = game.current_player.id;
-    const newWins = { ...wins, [playerId]: (wins[playerId] || 0) + 1 };
-    const winsNeeded = Math.ceil(seriesTarget / 2);
-    setWins(newWins);
-    if (newWins[playerId] >= winsNeeded) {
-      setSeriesWinner(game.current_player);
-    }
-  }, [game.status, game.current_player, seriesTarget, wins]);
-
-  const newSeries = function () {
-    setWins({});
-    setSeriesWinner(undefined);
-    const [premier, ...reste] = game.players;
-    addPlayersProps([...reste, premier]);
-  };
-
-  const ready = function () {
-    if (game.current_player) {
-      setGame({ ...game, status: Game_State.THROWING });
-    }
-  };
-
-  const undo = function () {
-    setDartThrows(dartThrows.slice(0, -1));
-  };
-
-  const miss = function () {
-    const now = Date.now();
-    if (now - lastTapRef.current < 200) return;
-    lastTapRef.current = now;
-    if (game.current_player && game.status === Game_State.THROWING) {
-      const newThrow: DartThrow = {
-        player: game.current_player,
-        value: 0,
-        ring: Ring.SIMPLE_BOTTOM,
-        date: new Date(),
-      };
-      playTululu();
-      setDartThrows([...dartThrows, newThrow]);
-    }
-  };
-
-  const tapHandler = async function (value: number, ring: Ring) {
-    const now = Date.now();
-    if (now - lastTapRef.current < 200) return;
-    lastTapRef.current = now;
-    if (game.current_player && game.status === Game_State.THROWING) {
-      const newThrow: DartThrow = {
-        player: game.current_player,
-        value,
-        ring,
-        date: new Date(),
-      };
-
-      playPlop();
-      if (ring === Ring.DOUBLE) playDouble();
-      if (ring === Ring.TRIPLE) playTriple();
-      setDartThrows([...dartThrows, newThrow]);
-    }
-  };
-
-  useEffect(() => {
-    const newGame = dartThrows.reduce(gameReducer, _.cloneDeep(startingGame));
-    setGame(newGame);
-    getValidToken(auth).then((token) => {
-      if (token) saveGameState(newGame, token);
-    });
-  }, [dartThrows, startingGame, gameReducer, auth]);
-
-  useEffect(() => {
-    if (game.status === Game_State.WAITING_NEXT_PLAYER) {
-      playNextPlayer();
-    }
-  }, [game, playNextPlayer]);
 
   const initialScoreFromPlayerRef = useRef(initialScoreFromPlayer);
   const teamsRef = useRef(teams);
@@ -143,24 +114,29 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
   });
 
   useEffect(() => {
-    const joueurs = players;
-    const scores: Score[] = joueurs.map(
-     initialScoreFromPlayerRef.current
-    );
+    getValidToken(auth).then((token) => {
+      if (token) saveGameState(game, token);
+    });
+  }, [game, auth]);
 
-    setDartThrows([]);
-    setStartingGame(
-      addPlayers(joueurs, {
+  useEffect(() => {
+    if (game.status === Game_State.WAITING_NEXT_PLAYER) {
+      playNextPlayer();
+    }
+  }, [game, playNextPlayer]);
+
+  useEffect(() => {
+    const scores: Score[] = players.map(initialScoreFromPlayerRef.current);
+    dispatch({
+      type: 'RESET_PLAYERS',
+      startingGame: addPlayers(players, {
         ...initGame,
         scores,
         status: Game_State.THROWING,
-        current_player: joueurs[0],
+        current_player: players[0],
         teams: teamsRef.current,
-      })
-    );
-    // initialScoreFromPlayer and teams are read via refs so an unrelated
-    // re-render (e.g. Cognito silent token renewal) that recreates these
-    // props doesn't wipe the in-progress game back to its starting state.
+      }),
+    });
   }, [players]);
 
   useEffect(() => {
@@ -170,12 +146,56 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
         restored.players.length === players.length &&
         restored.players.every((p, i) => p.id === players[i]?.id);
       if (!samePlayers) return;
-
-      setGame(restored);
-      setDartThrows(restored.throws);
+      dispatch({ type: 'RESTORE', restored });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const newSeries = () => {
+    dispatch({ type: 'NEW_SERIES' });
+    const [premier, ...reste] = game.players;
+    addPlayersProps([...reste, premier]);
+  };
+
+  const ready = () => {
+    dispatch({ type: 'READY' });
+  };
+
+  const undo = () => {
+    dispatch({ type: 'UNDO', gameReducer });
+  };
+
+  const miss = () => {
+    const now = Date.now();
+    if (now - lastTapRef.current < 200) return;
+    lastTapRef.current = now;
+    if (game.current_player && game.status === Game_State.THROWING) {
+      playTululu();
+      dispatch({
+        type: 'ADD_THROW',
+        throw: { player: game.current_player, value: 0, ring: Ring.SIMPLE_BOTTOM, date: new Date() },
+        seriesTarget,
+        gameReducer,
+      });
+    }
+  };
+
+  const tapHandler = async (value: number, ring: Ring) => {
+    const now = Date.now();
+    if (now - lastTapRef.current < 200) return;
+    lastTapRef.current = now;
+    if (game.current_player && game.status === Game_State.THROWING) {
+      playPlop();
+      if (ring === Ring.DOUBLE) playDouble();
+      if (ring === Ring.TRIPLE) playTriple();
+      dispatch({
+        type: 'ADD_THROW',
+        throw: { player: game.current_player, value, ring, date: new Date() },
+        seriesTarget,
+        gameReducer,
+      });
+    }
+  };
 
   return (
     <GameCanvas
@@ -188,6 +208,6 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
       wins={wins}
       seriesWinner={seriesWinner}
       seriesTarget={seriesTarget}
-    ></GameCanvas>
+    />
   );
 }
