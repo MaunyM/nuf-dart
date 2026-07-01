@@ -64,24 +64,14 @@ export default function Page(props: GameProps) {
   const router = useRouter();
   const auth = useAuth();
   const { players, isLoading } = usePlayers(auth);
-  const [available, setAvailable] = useState<Joueur[]>([]);
   const [selected, setSelected] = useState<Joueur[]>([]);
   const [teamMode, setTeamMode] = useState(false);
-  useEffect(() => {
-    if (players) setAvailable(players);
-  }, [players]);
+  const available = (players ?? []).filter(p => !selected.some(s => s.id === p.id));
   useEffect(() => {
     if (!auth.isLoading && !auth.isAuthenticated) {
       router.push("/");
     }
   }, [auth.isAuthenticated, auth.isLoading, router]);
-  useEffect(() => {
-    if (teamMode && selected.length < MIN_PLAYERS_FOR_TEAM_MODE) {
-      setTeamMode(false);
-      props.setTeams([]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected, teamMode]);
 
   const toggleTeamMode = () => {
     if (teamMode) {
@@ -144,7 +134,6 @@ export default function Page(props: GameProps) {
                     onClick={() => {
                       if (teamMode) return;
                       setSelected(addPlayer(selected, player));
-                      setAvailable(removePlayer(available, player));
                     }}
                   >
                     <DisplayPlayerComponent
@@ -170,7 +159,6 @@ export default function Page(props: GameProps) {
                             props.setTeams(cyclePlayerTeam(props.teams, player));
                           } else {
                             setSelected(removePlayer(selected, player));
-                            setAvailable(addPlayer(available, player));
                           }
                         }}
                       >
