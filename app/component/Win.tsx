@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./Waiting.css";
 import { Game, Game_State, Game_Type } from "../Type/Game";
 import { AnimatePresence,motion } from "motion/react";
@@ -13,11 +13,8 @@ type WaitingProps = {
 };
 
 export default function WinComponent(props: WaitingProps) {
-  const [game, setGame] = useState(props.game);
+  const { game } = props;
   const router = useRouter();
-  useEffect(() => {
-    setGame(props.game);
-  }, [props.game]);
 
   const winningTeammates =
     game.scores[0]?.type === Game_Type.MONSTER && game.current_player

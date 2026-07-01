@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import SectionComponent from "./Section";
 import { DartThrow, Game, Game_State, Game_Type, Joueur, Ring, sectionsOrder } from "../Type/Game";
 import NumberComponent from "./Number";
@@ -42,21 +42,7 @@ function formatThrow(dartThrow: DartThrow): string {
 
 export default function GameCanvas(props: CanvasProps) {
   const router = useRouter();
-  const [game, setGame] = useState<Game>(props.game);
-  const [wins, setWins] = useState<Record<number, number>>(props.wins);
-  const [seriesWinner, setSeriesWinner] = useState<Joueur | undefined>(props.seriesWinner);
-
-  useEffect(() => {
-    setGame(props.game);
-  }, [props.game]);
-
-  useEffect(() => {
-    setWins(props.wins);
-  }, [props.wins]);
-
-  useEffect(() => {
-    setSeriesWinner(props.seriesWinner);
-  }, [props.seriesWinner]);
+  const { game, wins, seriesWinner } = props;
 
   const currentTurnThrowCount =
     game.status === Game_State.WAITING_NEXT_PLAYER ? 3 : 3 - game.dart_count;

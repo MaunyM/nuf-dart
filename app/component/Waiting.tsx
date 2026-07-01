@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import "./Waiting.css";
 import { Game, Game_State, Game_Type } from "../Type/Game";
 import { AnimatePresence,motion } from "motion/react";
@@ -14,13 +14,9 @@ const MIN_PANEL_WIDTH = 200;
 const PANEL_PADDING = 40;
 
 export default function WaitingComponent(props: WaitingProps) {
-  const [game, setGame] = useState(props.game);
+  const { game } = props;
   const textRef = useRef<SVGTextElement>(null);
   const [panelWidth, setPanelWidth] = useState(MIN_PANEL_WIDTH);
-
-  useEffect(() => {
-    setGame(props.game);
-  }, [props.game]);
 
   useLayoutEffect(() => {
     if (textRef.current) {
