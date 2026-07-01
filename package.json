@@ -17,8 +17,8 @@
     "motion": "^11.15.0",
     "next": "^16.2.9",
     "oidc-client-ts": "^3.1.0",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "react-oidc-context": "^3.2.0",
     "swr": "^2.3.0",
     "use-sound": "^4.0.1"
@@ -29,8 +29,8 @@
     "@testing-library/react": "^16.2.0",
     "@types/lodash": "^4.17.15",
     "@types/node": "^20",
-    "@types/react": "19.0.2",
-    "@types/react-dom": "19.0.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/coverage-v8": "^4.1.9",
     "eslint": "^9.39.4",
@@ -44,7 +44,7 @@
     "vitest": "^4.1.9"
   },
   "overrides": {
-    "@types/react": "19.0.2",
-    "@types/react-dom": "19.0.2"
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0"
   }
 }
