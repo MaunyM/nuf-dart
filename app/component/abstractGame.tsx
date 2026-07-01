@@ -168,7 +168,6 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
     // initialScoreFromPlayer and teams are read via refs so an unrelated
     // re-render (e.g. Cognito silent token renewal) that recreates these
     // props doesn't wipe the in-progress game back to its starting state.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [players]);
 
   useEffect(() => {
