@@ -135,15 +135,6 @@ export default function AbstractGame({players, addPlayers: addPlayersProps, game
     }
   }, [game, playNextPlayer]);
 
-  useEffect(() => {
-    if (game.status === Game_State.UNSTARTED)
-      setGame({
-        ...startingGame,
-        current_player: startingGame.players[0],
-        status: Game_State.WAITING_NEXT_PLAYER,
-      });
-  }, [game, startingGame]);
-
   const initialScoreFromPlayerRef = useRef(initialScoreFromPlayer);
   const teamsRef = useRef(teams);
   useLayoutEffect(() => {
