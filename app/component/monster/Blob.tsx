@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import "./Monster.css";
 import { Joueur } from "@/app/Type/Game";
 
@@ -22,17 +22,11 @@ type blobProps = {
   joueur?: Joueur;
 };
 export default function BlobComponent(props: blobProps) {
-  const [color, setColor] = useState<string>("");
-  const [duration] = useState<number>(() => Math.random() * (max - min) + min);
-
-  useEffect(() => {
-    if (props.joueur) {
-      const blobColor = colorToMonster.get(props.joueur.color.h);
-      if (blobColor) {
-        setColor(blobColor);
-      }
-    }
+  const color = useMemo(() => {
+    if (!props.joueur) return "";
+    return colorToMonster.get(props.joueur.color.h) ?? "";
   }, [props.joueur]);
+  const [duration] = useState<number>(() => Math.random() * (max - min) + min);
 
   return (
     <svg width="120" height="140" xmlns="http://www.w3.org/2000/svg">
