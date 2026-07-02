@@ -8,10 +8,10 @@ const GAME_TYPES: { key: Game_Type; label: string }[] = [
 ];
 
 const COL_WIDTH = 210;
-const ROW_HEIGHT = 26;
-const HEADER_Y = 30;
-const NAME_RECT_W = 125;
-const NAME_RECT_H = 22;
+const ROW_HEIGHT = 38;
+const HEADER_Y = 36;
+const NAME_RECT_W = 130;
+const NAME_RECT_H = 30;
 const RANK_X = 10;
 const RECT_X = 24;
 
@@ -24,13 +24,13 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
 
   return (
     <g>
-      <text x={x + COL_WIDTH / 2} y={16} textAnchor="middle" className="elo-col-label">
+      <text x={x + COL_WIDTH / 2} y={18} textAnchor="middle" fontSize={18} fill="#888888">
         {label}
       </text>
-      <line x1={x} y1={HEADER_Y} x2={x + COL_WIDTH - 10} y2={HEADER_Y} className="elo-separator" />
+      <line x1={x} y1={HEADER_Y} x2={x + COL_WIDTH - 10} y2={HEADER_Y} stroke="#333333" strokeWidth={1} />
 
       {isLoading && (
-        <text x={x + COL_WIDTH / 2} y={HEADER_Y + 30} textAnchor="middle" className="elo-loading">
+        <text x={x + COL_WIDTH / 2} y={HEADER_Y + 30} textAnchor="middle" fontSize={18} fill="#666666">
           …
         </text>
       )}
@@ -42,13 +42,13 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
         return (
           <g key={entry.joueur.id} opacity={opacity}>
             {showRank && (
-              <text x={x + RANK_X} y={y} className="elo-rank" textAnchor="middle">
+              <text x={x + RANK_X} y={y} textAnchor="middle" fontSize={22} fill="#aaaaaa">
                 {entry.ranked ? i + 1 : "—"}
               </text>
             )}
             <rect
               x={x + RECT_X}
-              y={y - NAME_RECT_H + 4}
+              y={y - NAME_RECT_H + 5}
               width={NAME_RECT_W}
               height={NAME_RECT_H}
               rx={5}
@@ -56,15 +56,15 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
             />
             <text
               x={x + RECT_X + NAME_RECT_W / 2}
-              y={y - NAME_RECT_H / 2 + 4}
+              y={y - NAME_RECT_H / 2 + 5}
               textAnchor="middle"
               dominantBaseline="middle"
-              className="elo-name"
+              fontSize={22}
               fill="white"
             >
               {entry.joueur.nom}
             </text>
-            <text x={x + COL_WIDTH - 8} y={y} textAnchor="end" className="elo-value">
+            <text x={x + COL_WIDTH - 8} y={y} textAnchor="end" fontSize={22} fill="white">
               {entry.ranked ? Math.round(entry.elo) : "?"}
             </text>
           </g>
@@ -76,7 +76,7 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
 
 export default function InlineRankings() {
   return (
-    <g className="elo-ranking" style={{ fontFamily: "'m6x11plus'" }}>
+    <g style={{ fontFamily: "'m6x11plus'" }}>
       {GAME_TYPES.map((gt, i) => (
         <RankingColumn key={gt.key} gameType={gt.key} label={gt.label} x={i * COL_WIDTH} showRank={i === 0} />
       ))}
