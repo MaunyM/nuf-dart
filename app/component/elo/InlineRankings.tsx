@@ -10,6 +10,10 @@ const GAME_TYPES: { key: Game_Type; label: string }[] = [
 const COL_WIDTH = 210;
 const ROW_HEIGHT = 26;
 const HEADER_Y = 30;
+const NAME_RECT_W = 125;
+const NAME_RECT_H = 22;
+const RANK_X = 10;
+const RECT_X = 24;
 
 function hsl(color: { h: number; s: number; l: number }) {
   return `hsl(${color.h}, ${color.s}%, ${color.l}%)`;
@@ -37,14 +41,28 @@ function RankingColumn({ gameType, label, x }: { gameType: Game_Type; label: str
         const color = hsl(entry.joueur.color);
         return (
           <g key={entry.joueur.id} opacity={opacity}>
-            <circle cx={x + 10} cy={y - 7} r={6} fill={color} />
-            <text x={x + 22} y={y} className="elo-rank" textAnchor="middle">
+            <text x={x + RANK_X} y={y} className="elo-rank" textAnchor="middle">
               {entry.ranked ? i + 1 : "—"}
             </text>
-            <text x={x + 36} y={y} className="elo-name">
+            <rect
+              x={x + RECT_X}
+              y={y - NAME_RECT_H + 4}
+              width={NAME_RECT_W}
+              height={NAME_RECT_H}
+              rx={5}
+              fill={color}
+            />
+            <text
+              x={x + RECT_X + NAME_RECT_W / 2}
+              y={y - NAME_RECT_H / 2 + 4}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              className="elo-name"
+              fill="white"
+            >
               {entry.joueur.nom}
             </text>
-            <text x={x + COL_WIDTH - 12} y={y} textAnchor="end" className="elo-value">
+            <text x={x + COL_WIDTH - 8} y={y} textAnchor="end" className="elo-value">
               {entry.ranked ? Math.round(entry.elo) : "?"}
             </text>
           </g>
