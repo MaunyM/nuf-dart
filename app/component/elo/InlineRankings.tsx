@@ -19,7 +19,7 @@ function hsl(color: { h: number; s: number; l: number }) {
   return `hsl(${color.h}, ${color.s}%, ${color.l}%)`;
 }
 
-function RankingColumn({ gameType, label, x }: { gameType: Game_Type; label: string; x: number }) {
+function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; label: string; x: number; showRank: boolean }) {
   const { rankings, isLoading } = useEloRankings(gameType);
 
   return (
@@ -41,9 +41,11 @@ function RankingColumn({ gameType, label, x }: { gameType: Game_Type; label: str
         const color = hsl(entry.joueur.color);
         return (
           <g key={entry.joueur.id} opacity={opacity}>
-            <text x={x + RANK_X} y={y} className="elo-rank" textAnchor="middle">
-              {entry.ranked ? i + 1 : "—"}
-            </text>
+            {showRank && (
+              <text x={x + RANK_X} y={y} className="elo-rank" textAnchor="middle">
+                {entry.ranked ? i + 1 : "—"}
+              </text>
+            )}
             <rect
               x={x + RECT_X}
               y={y - NAME_RECT_H + 4}
@@ -76,7 +78,7 @@ export default function InlineRankings() {
   return (
     <g className="elo-ranking">
       {GAME_TYPES.map((gt, i) => (
-        <RankingColumn key={gt.key} gameType={gt.key} label={gt.label} x={i * COL_WIDTH} />
+        <RankingColumn key={gt.key} gameType={gt.key} label={gt.label} x={i * COL_WIDTH} showRank={i === 0} />
       ))}
     </g>
   );
