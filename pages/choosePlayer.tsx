@@ -1,8 +1,10 @@
 import DefsComponent from "@/app/component/Defs";
 import DisplayPlayerComponent from "@/app/component/DisplayPlayer";
+import WinPredictionComponent from "@/app/component/elo/WinPrediction";
 import { addPlayer, removePlayer, signOut, usePlayers } from "@/app/service/gameService";
 import { interleaveByTeam, validateTeams } from "@/app/service/teamService";
 import { Joueur, Team } from "@/app/Type/Game";
+import { JoueurWithElo } from "@/app/Type/Elo";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
@@ -64,7 +66,7 @@ export default function Page(props: GameProps) {
   const router = useRouter();
   const auth = useAuth();
   const { players, isLoading } = usePlayers(auth);
-  const [selected, setSelected] = useState<Joueur[]>([]);
+  const [selected, setSelected] = useState<JoueurWithElo[]>([]);
   const [teamMode, setTeamMode] = useState(false);
   const available = (players ?? []).filter(p => !selected.some(s => s.id === p.id));
   useEffect(() => {
@@ -226,8 +228,16 @@ export default function Page(props: GameProps) {
               </g>
             ))}
           </g>
+          {selected.length >= 2 && (
+            <g transform="translate(800, 390)">
+              <WinPredictionComponent players={selected} />
+            </g>
+          )}
         </svg>
-        <button onClick={() => signOut(auth)}>Sign out</button>
+        <div style={{ display: "flex", gap: "12px" }}>
+          <button onClick={() => router.push("/ranking")}>Classement ELO</button>
+          <button onClick={() => signOut(auth)}>Sign out</button>
+        </div>
       </div>
     );
   }

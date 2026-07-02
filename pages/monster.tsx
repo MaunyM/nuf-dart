@@ -1,5 +1,5 @@
 "use client";
-import { Game, Joueur, Team } from "@/app/Type/Game";
+import { Game, Game_Type, Joueur, Team } from "@/app/Type/Game";
 
 import AbstractGame from "../app/component/abstractGame";
 import { MonsterReducer } from "@/app/service/monsterService";
@@ -33,6 +33,7 @@ export default function Home(props: GameProps) {
       gameReducer={monsterReducer.reduce.bind(monsterReducer)}
       addPlayers={props.addPlayers}
       seriesTarget={props.seriesTarget}
+      gameType={Game_Type.MONSTER}
       teams={props.teams}
     />
   );

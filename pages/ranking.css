@@ -1,0 +1,107 @@
+.ranking-page {
+  background: #0a0a0a;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ranking-title {
+  font-size: 36px;
+  fill: #ffffff;
+  font-weight: bold;
+}
+
+.ranking-back {
+  font-size: 20px;
+  fill: #aaaaaa;
+  cursor: pointer;
+}
+
+.ranking-back:hover {
+  fill: #ffffff;
+}
+
+.ranking-tab {
+  fill: #1a1a2e;
+  stroke: #333366;
+  stroke-width: 1;
+}
+
+.ranking-tab-active {
+  fill: #2a2a6e;
+  stroke: #6666ff;
+  stroke-width: 2;
+}
+
+.ranking-tab-label {
+  font-size: 18px;
+  fill: #aaaaaa;
+}
+
+.ranking-tab-label-active {
+  fill: #ffffff;
+  font-weight: bold;
+}
+
+.elo-col-label {
+  font-size: 14px;
+  fill: #888888;
+  text-transform: uppercase;
+}
+
+.elo-separator {
+  stroke: #333333;
+  stroke-width: 1;
+}
+
+.elo-row-unranked {
+  opacity: 0.5;
+}
+
+.elo-rank {
+  font-size: 20px;
+  fill: #aaaaaa;
+  font-weight: bold;
+}
+
+.elo-name {
+  font-size: 22px;
+  fill: #ffffff;
+}
+
+.elo-value {
+  font-size: 22px;
+  fill: #ffffff;
+  font-weight: bold;
+}
+
+.elo-games {
+  font-size: 18px;
+  fill: #888888;
+}
+
+.elo-delta-positive {
+  font-size: 18px;
+  fill: #44ff88;
+}
+
+.elo-delta-negative {
+  font-size: 18px;
+  fill: #ff4444;
+}
+
+.elo-delta-neutral {
+  font-size: 18px;
+  fill: #888888;
+}
+
+.elo-unranked-label {
+  font-size: 12px;
+  fill: #666666;
+}
+
+.elo-loading, .elo-empty {
+  font-size: 20px;
+  fill: #666666;
+}

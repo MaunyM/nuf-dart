@@ -1,6 +1,7 @@
 "use client";
 import {
   Game,
+  Game_Type,
   Joueur,
 } from "@/app/Type/Game";
 
@@ -23,6 +24,7 @@ export default function Home(props: GameProps) {
     gameReducer={cricketReduce}
     addPlayers={props.addPlayers}
     seriesTarget={props.seriesTarget}
+    gameType={Game_Type.CRICKET}
     ></AbstractGame>
   );
 }

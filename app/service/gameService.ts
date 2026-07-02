@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import { Game, Joueur, Score } from "../Type/Game";
+import { JoueurWithElo } from "../Type/Elo";
 import { AuthContextProps } from "react-oidc-context";
 import { cognitoAuthConfig, cognitoDomain } from "./authConfig";
 
@@ -124,7 +125,7 @@ export async function restoreGame(): Promise<Game | undefined> {
 }
 
 export function usePlayers(auth: AuthContextProps) {
-  const { data, error, isLoading } = useSWR<Joueur[]>(
+  const { data, error, isLoading } = useSWR<JoueurWithElo[]>(
     `${base_api}/players`,
     authFetcher(auth.user?.id_token)
   );
