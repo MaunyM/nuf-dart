@@ -13,7 +13,10 @@ const GAME_TYPES: { key: Game_Type; label: string }[] = [
 ];
 
 const COL_WIDTH = 220;
-const ROW_HEIGHT = 36;
+const NAME_WIDTH = 75;
+const BAR_MAX_WIDTH = 130;
+const BAR_HEIGHT = 18;
+const ROW_HEIGHT = 32;
 
 export default function WinPredictionComponent({ players }: Props) {
   if (players.length < 2) return null;
@@ -24,51 +27,57 @@ export default function WinPredictionComponent({ players }: Props) {
         Prédiction de victoire
       </text>
 
-      {/* Headers */}
-      {GAME_TYPES.map((gt, colIdx) => (
-        <text
-          key={gt.key}
-          x={colIdx * COL_WIDTH + COL_WIDTH / 2}
-          y={18}
-          textAnchor="middle"
-          className="win-prediction-game-label"
-        >
-          {gt.label}
-        </text>
-      ))}
+      {GAME_TYPES.map((gt, colIdx) => {
+        const results = computeWinProbabilities(players, gt.key);
+        const x0 = colIdx * COL_WIDTH;
 
-      {/* Player rows per game type */}
-      {players.map((player, rowIdx) => {
-        const y = 44 + rowIdx * ROW_HEIGHT;
         return (
-          <g key={player.id}>
-            {GAME_TYPES.map((gt, colIdx) => {
-              const results = computeWinProbabilities(players, gt.key);
+          <g key={gt.key}>
+            <text
+              x={x0 + COL_WIDTH / 2}
+              y={18}
+              textAnchor="middle"
+              className="win-prediction-game-label"
+            >
+              {gt.label}
+            </text>
+
+            {players.map((player, rowIdx) => {
+              const y = 44 + rowIdx * ROW_HEIGHT;
               const result = results.find((r) => r.joueur.id === player.id);
               const prob = result?.winProbability;
+              const barWidth =
+                prob != null ? (prob / 100) * BAR_MAX_WIDTH : 0;
+              const hsl = `hsl(${player.color.h}, ${player.color.s}%, ${player.color.l}%)`;
+
               return (
-                <g key={gt.key}>
+                <g key={player.id}>
                   <text
-                    x={colIdx * COL_WIDTH + 20}
+                    x={x0 + 10}
                     y={y}
                     className="win-prediction-player-name"
                   >
                     {player.nom}
                   </text>
-                  <text
-                    x={colIdx * COL_WIDTH + COL_WIDTH - 20}
-                    y={y}
-                    textAnchor="end"
-                    className={
-                      prob == null
-                        ? "win-prediction-unknown"
-                        : prob >= 50
-                        ? "win-prediction-high"
-                        : "win-prediction-low"
-                    }
-                  >
-                    {prob === null ? "?" : `${prob}%`}
-                  </text>
+                  {prob != null ? (
+                    <rect
+                      x={x0 + NAME_WIDTH}
+                      y={y - BAR_HEIGHT + 4}
+                      width={barWidth}
+                      height={BAR_HEIGHT}
+                      rx={4}
+                      fill={hsl}
+                      opacity={0.85}
+                    />
+                  ) : (
+                    <text
+                      x={x0 + NAME_WIDTH + 10}
+                      y={y}
+                      className="win-prediction-unknown"
+                    >
+                      ?
+                    </text>
+                  )}
                 </g>
               );
             })}
