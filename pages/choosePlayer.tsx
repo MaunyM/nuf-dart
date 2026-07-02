@@ -202,7 +202,7 @@ export default function Page(props: GameProps) {
             </g>
           </g>
           {selected.length >= MIN_PLAYERS_FOR_TEAM_MODE && (
-            <g transform="translate(1120,325)" onClick={toggleTeamMode}>
+            <g transform="translate(1120,192)" onClick={toggleTeamMode}>
               <GameButtonComponent text="Mode équipe" size={300} selected={teamMode} />
             </g>
           )}
