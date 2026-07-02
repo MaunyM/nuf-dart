@@ -12,7 +12,7 @@ const GAME_TYPES: { key: Game_Type; label: string }[] = [
   { key: Game_Type.MONSTER, label: "Monster" },
 ];
 
-const COL_WIDTH = 300;
+const COL_WIDTH = 220;
 const ROW_HEIGHT = 36;
 
 export default function WinPredictionComponent({ players }: Props) {
