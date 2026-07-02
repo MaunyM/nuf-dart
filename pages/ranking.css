@@ -44,6 +44,20 @@
   font-weight: bold;
 }
 
+.elo-col-label,
+.elo-rank,
+.elo-name,
+.elo-value,
+.elo-games,
+.elo-delta-positive,
+.elo-delta-negative,
+.elo-delta-neutral,
+.elo-unranked-label,
+.elo-loading,
+.elo-empty {
+  font-family: 'm6x11plus';
+}
+
 .elo-col-label {
   font-size: 14px;
   fill: #888888;
