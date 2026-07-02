@@ -76,7 +76,7 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
 
 export default function InlineRankings() {
   return (
-    <g className="elo-ranking">
+    <g className="elo-ranking" style={{ fontFamily: "'m6x11plus'" }}>
       {GAME_TYPES.map((gt, i) => (
         <RankingColumn key={gt.key} gameType={gt.key} label={gt.label} x={i * COL_WIDTH} showRank={i === 0} />
       ))}
