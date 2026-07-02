@@ -8,7 +8,7 @@ const GAME_TYPES: { key: Game_Type; label: string }[] = [
 ];
 
 const COL_WIDTH = 210;
-const ROW_HEIGHT = 34;
+const ROW_HEIGHT = 26;
 const HEADER_Y = 30;
 
 function hsl(color: { h: number; s: number; l: number }) {

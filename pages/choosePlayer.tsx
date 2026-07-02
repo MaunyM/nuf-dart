@@ -202,8 +202,8 @@ export default function Page(props: GameProps) {
             </g>
           </g>
           {selected.length >= MIN_PLAYERS_FOR_TEAM_MODE && (
-            <g transform="translate(1000,142)" onClick={toggleTeamMode}>
-              <GameButtonComponent text="Mode équipe" size={300} selected={teamMode} />
+            <g transform="translate(720,500)" onClick={toggleTeamMode}>
+              <GameButtonComponent text="Mode équipe" size={200} selected={teamMode} />
             </g>
           )}
           <g transform="translate(140,400)">
@@ -240,7 +240,7 @@ export default function Page(props: GameProps) {
             ))}
           </g>
 
-          <g transform="translate(870, 270)">
+          <g transform="translate(870, 360)">
             <InlineRankings />
           </g>
         </svg>
