@@ -17,6 +17,8 @@ const nextPlayerSfx = "/nextPlayer.mp3";
 const doubleSfx = "/double.mp3";
 const tripleSfx = "/triple.mp3";
 import { addPlayers, getValidToken, restoreGame, saveGameState } from "@/app/service/gameService";
+import { reportGameEnd } from "@/app/service/eloService";
+import { Game_Type } from "@/app/Type/Game";
 import { useAuth } from "react-oidc-context";
 import _ from "lodash";
 
@@ -26,6 +28,7 @@ type GameProps = {
   initialScoreFromPlayer: (joueur: Joueur) => Score;
   addPlayers(joueur: Joueur[]): void;
   seriesTarget: number;
+  gameType: Game_Type;
   teams?: Team[];
 };
 
@@ -95,7 +98,7 @@ function abstractGameReducer(state: AbstractGameState, action: AbstractGameActio
   }
 }
 
-export default function AbstractGame({ players, addPlayers: addPlayersProps, gameReducer, initialScoreFromPlayer, seriesTarget, teams }: GameProps) {
+export default function AbstractGame({ players, addPlayers: addPlayersProps, gameReducer, initialScoreFromPlayer, seriesTarget, gameType, teams }: GameProps) {
   const auth = useAuth();
   const [playPlop] = useSound(plopSfx);
   const [playTululu] = useSound(tululuSfx, { volume: 0.1 });
@@ -118,6 +121,18 @@ export default function AbstractGame({ players, addPlayers: addPlayersProps, gam
       if (token) saveGameState(game, token);
     });
   }, [game, auth]);
+
+  useEffect(() => {
+    if (game.status !== Game_State.WON || !game.current_player) return;
+    getValidToken(auth).then((token) => {
+      if (!token) return;
+      const winner = game.current_player!;
+      const others = game.players.filter((p) => p.id !== winner.id);
+      const rankedPlayerIds = [winner.id.toString(), ...others.map((p) => p.id.toString())];
+      reportGameEnd(rankedPlayerIds, gameType, token);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [game.status]);
 
   useEffect(() => {
     if (game.status === Game_State.WAITING_NEXT_PLAYER) {
