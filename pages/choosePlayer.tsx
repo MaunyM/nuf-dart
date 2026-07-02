@@ -218,7 +218,7 @@ export default function Page(props: GameProps) {
             <GameButtonComponent text="501" disabled={selected.length === 0} segments={toSegments(Game_Type.X01)}/>
           </g>
           <g
-            transform="translate(240,80)"
+            transform="translate(240,100)"
             onClick={() => launchIndividual("/x01/301")}
           >
             <GameButtonComponent text="301" disabled={selected.length === 0} segments={toSegments(Game_Type.X01)}/>
