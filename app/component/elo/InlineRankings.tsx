@@ -64,7 +64,7 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
             >
               {entry.joueur.nom}
             </text>
-            <text x={x + COL_WIDTH - 8} y={y} textAnchor="end" fontSize={22} fill="#333333">
+            <text x={x + COL_WIDTH - 8} y={y} textAnchor="end" fontSize={22} fill="#888888">
               {entry.ranked ? Math.round(entry.elo) : "?"}
             </text>
           </g>
@@ -75,10 +75,15 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
 }
 
 export default function InlineRankings() {
+  const totalHeight = HEADER_Y + 8 + 8 * ROW_HEIGHT;
+
   return (
     <g style={{ fontFamily: "'m6x11plus'" }}>
       {GAME_TYPES.map((gt, i) => (
         <RankingColumn key={gt.key} gameType={gt.key} label={gt.label} x={i * COL_WIDTH} showRank={i === 0} />
+      ))}
+      {[1, 2].map((i) => (
+        <line key={i} x1={i * COL_WIDTH} y1={0} x2={i * COL_WIDTH} y2={totalHeight} stroke="#444444" strokeWidth={1} />
       ))}
     </g>
   );
