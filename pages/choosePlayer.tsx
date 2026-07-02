@@ -1,5 +1,6 @@
 import DefsComponent from "@/app/component/Defs";
 import DisplayPlayerComponent from "@/app/component/DisplayPlayer";
+import InlineRankings from "@/app/component/elo/InlineRankings";
 import { computeWinProbabilities } from "@/app/service/eloService";
 import { addPlayer, removePlayer, signOut, usePlayers } from "@/app/service/gameService";
 import { interleaveByTeam, validateTeams } from "@/app/service/teamService";
@@ -239,9 +240,11 @@ export default function Page(props: GameProps) {
             ))}
           </g>
 
+          <g transform="translate(860, 40)">
+            <InlineRankings />
+          </g>
         </svg>
         <div style={{ display: "flex", gap: "12px" }}>
-          <button onClick={() => router.push("/ranking")}>Classement ELO</button>
           <button onClick={() => signOut(auth)}>Sign out</button>
         </div>
       </div>
