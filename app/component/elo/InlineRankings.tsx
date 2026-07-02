@@ -64,7 +64,7 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
             >
               {entry.joueur.nom}
             </text>
-            <text x={x + COL_WIDTH - 8} y={y} textAnchor="end" fontSize={22} fill="white">
+            <text x={x + COL_WIDTH - 8} y={y} textAnchor="end" fontSize={22} fill="#333333">
               {entry.ranked ? Math.round(entry.elo) : "?"}
             </text>
           </g>
