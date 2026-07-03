@@ -22,6 +22,9 @@ function hsl(color: { h: number; s: number; l: number }) {
 
 const BLOB_SCALE = 0.215;
 const BLOB_W = Math.round(120 * BLOB_SCALE); // ~26px
+// #big shape spans y=0..110 in a 140px SVG → visual height ≈ 110*BLOB_SCALE ≈ 24px
+// rect height = 30px → center offset = (30 - 24) / 2 ≈ 3px
+const BLOB_Y_OFFSET = Math.round((NAME_RECT_H - 110 * BLOB_SCALE) / 2);
 
 function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; label: string; x: number; showRank: boolean }) {
   const showBlob = gameType === Game_Type.MONSTER;
@@ -60,7 +63,7 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
               fill={color}
             />
             {showBlob && (
-              <g transform={`translate(${x + RECT_X}, ${y - NAME_RECT_H + 5}) scale(${BLOB_SCALE})`}>
+              <g transform={`translate(${x + RECT_X}, ${y - NAME_RECT_H + 5 + BLOB_Y_OFFSET}) scale(${BLOB_SCALE})`}>
                 <BlobComponent joueur={entry.joueur} animated={false} />
               </g>
             )}
