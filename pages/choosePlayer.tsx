@@ -240,7 +240,7 @@ export default function Page(props: GameProps) {
             ))}
           </g>
 
-          <g transform="translate(870, 360)">
+          <g transform="translate(810, 360)">
             <InlineRankings />
           </g>
         </svg>
