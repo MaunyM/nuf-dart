@@ -6,7 +6,8 @@ import { PALETTE, createPlayer, updatePlayer, PlayerColor } from "@/app/service/
 import { JoueurWithElo } from "@/app/Type/Elo";
 
 const base_api = process.env.NEXT_PUBLIC_API;
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+const authFetcher = (token: string) => (url: string) =>
+  fetch(url, { headers: { Authorization: token } }).then((r) => r.json());
 
 function hslStr(h: number, s: number, l: number) {
   return `hsl(${h}, ${s}%, ${l}%)`;
@@ -24,8 +25,8 @@ export default function ManagePlayers() {
   const router = useRouter();
 
   const { data: players, mutate } = useSWR<JoueurWithElo[]>(
-    `${base_api}/elo`,
-    fetcher
+    auth.isAuthenticated ? `${base_api}/elo` : null,
+    authFetcher(auth.user?.id_token ?? "")
   );
 
   const [nom, setNom] = useState("");

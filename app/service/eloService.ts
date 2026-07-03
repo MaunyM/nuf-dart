@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { useAuth } from "react-oidc-context";
 import { Game_Type, Joueur } from "../Type/Game";
 import {
   ELO_MIN_GAMES,
@@ -11,16 +12,18 @@ import {
 
 const base_api = process.env.NEXT_PUBLIC_API;
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+const authFetcher = (token: string) => (url: string) =>
+  fetch(url, { headers: { Authorization: token } }).then((r) => r.json());
 
 export function useEloRankings(gameType: Game_Type): {
   rankings: EloRankingEntry[];
   isLoading: boolean;
   isError: unknown;
 } {
+  const auth = useAuth();
   const { data, error, isLoading } = useSWR<JoueurWithElo[]>(
-    `${base_api}/elo`,
-    fetcher
+    auth.isAuthenticated ? `${base_api}/elo` : null,
+    authFetcher(auth.user?.id_token ?? "")
   );
 
   const key = GAME_TYPE_KEY[gameType];
