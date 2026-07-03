@@ -13,6 +13,7 @@ const colorToMonster: Map<number, string> = new Map([
   [271, "purple"],
   [300, "pink"],
   [38.8, "orange"],
+  [180, "blueGreen"],
 ]);
 
 const min = 1.2
