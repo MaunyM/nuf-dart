@@ -42,7 +42,7 @@ export default function ManagePlayers() {
 
   if (auth.isLoading || !auth.isAuthenticated) return null;
 
-  const token = auth.user?.access_token ?? "";
+  const token = auth.user?.id_token ?? "";
 
   function selectPlayer(p: JoueurWithElo) {
     setEditingId(p.nom);
