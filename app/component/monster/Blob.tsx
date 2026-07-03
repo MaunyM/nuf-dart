@@ -5,14 +5,14 @@ import "./Monster.css";
 import { Joueur } from "@/app/Type/Game";
 
 const colorToMonster: Map<number, string> = new Map([
-  [205.9, "lightBlue"],
+  [205.9, "lightBlue"], [206, "lightBlue"],
   [54, "gold"],
-  [145.4, "aquamarine"],
+  [145.4, "aquamarine"], [145, "aquamarine"],
   [10, "red"],
   [296, "purple"],
   [271, "purple"],
   [300, "pink"],
-  [38.8, "orange"],
+  [38.8, "orange"], [38, "orange"],
   [180, "blueGreen"],
   [25, "brown"],
   [88, "lime"],
