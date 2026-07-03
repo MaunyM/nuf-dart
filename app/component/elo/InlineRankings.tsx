@@ -47,12 +47,13 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
       {rankings.map((entry, i) => {
         const y = HEADER_Y + 8 + (i + 1) * ROW_HEIGHT;
         const yMid = y - NAME_RECT_H / 2 + 5;
+        const yMidExt = yMid + 3; // correction visuelle : glyphes sans descendeurs paraissent ~3px trop haut
         const opacity = entry.ranked ? 1 : 0.35;
         const color = hsl(entry.joueur.color);
         return (
           <g key={entry.joueur.id} opacity={opacity}>
             {showRank && (
-              <text x={x + RANK_X} y={yMid} textAnchor="middle" dominantBaseline="middle" fontSize={22} fill="#aaaaaa">
+              <text x={x + RANK_X} y={yMidExt} textAnchor="middle" dominantBaseline="middle" fontSize={22} fill="#aaaaaa">
                 {entry.ranked ? i + 1 : "—"}
               </text>
             )}
@@ -82,7 +83,7 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
             {entry.ranked && entry.eloDelta !== 0 && (
               <text
                 x={x + RECT_X + NAME_RECT_W + 8}
-                y={yMid}
+                y={yMidExt}
                 dominantBaseline="middle"
                 fontSize={18}
                 fill={entry.eloDelta > 0 ? "#44cc66" : "#ff4444"}
@@ -90,7 +91,7 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
                 {entry.eloDelta > 0 ? "▲" : "▼"}
               </text>
             )}
-            <text x={x + COL_WIDTH - 8} y={yMid} textAnchor="end" dominantBaseline="middle" fontSize={18} fill="#888888">
+            <text x={x + COL_WIDTH - 8} y={yMidExt} textAnchor="end" dominantBaseline="middle" fontSize={18} fill="#888888">
               {entry.ranked ? Math.round(entry.elo) : "?"}
             </text>
           </g>
