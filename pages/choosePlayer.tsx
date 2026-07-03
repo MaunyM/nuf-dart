@@ -98,7 +98,7 @@ export default function Page(props: GameProps) {
 
   const monsterEnabled = teamMode
     ? validateTeams(props.teams, selected)
-    : selected.length > 0;
+    : selected.length >= 2;
 
   const launchIndividual = (path: string) => {
     if (selected.length === 0) return;
@@ -210,7 +210,7 @@ export default function Page(props: GameProps) {
           <g
             onClick={() => launchIndividual("/cricket")}
           >
-           <GameButtonComponent text="Cricket" disabled={selected.length === 0} segments={toSegments(Game_Type.CRICKET)}/>
+           <GameButtonComponent text="Cricket" disabled={selected.length < 2} segments={toSegments(Game_Type.CRICKET)}/>
           </g>
           <g
             transform="translate(240,00)"
