@@ -124,12 +124,10 @@ export async function restoreGame(): Promise<Game | undefined> {
   }
 }
 
-const publicFetcher = (url: string) => fetch(url).then((r) => r.json());
-
-export function usePlayers(_auth: AuthContextProps) {
+export function usePlayers(auth: AuthContextProps) {
   const { data, error, isLoading } = useSWR<JoueurWithElo[]>(
-    `${base_api}/elo`,
-    publicFetcher
+    auth.isAuthenticated ? `${base_api}/players` : null,
+    authFetcher(auth.user?.id_token)
   );
 
   return {
