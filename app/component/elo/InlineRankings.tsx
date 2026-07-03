@@ -81,8 +81,7 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
             {entry.ranked && entry.eloDelta !== 0 && (
               <text
                 x={x + RECT_X + NAME_RECT_W + 8}
-                y={y - NAME_RECT_H / 2 + 5}
-                dominantBaseline="middle"
+                y={y}
                 fontSize={18}
                 fill={entry.eloDelta > 0 ? "#44cc66" : "#ff4444"}
               >
