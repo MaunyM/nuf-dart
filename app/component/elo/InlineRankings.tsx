@@ -24,7 +24,7 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
 
   return (
     <g>
-      <text x={x + COL_WIDTH / 2} y={18} textAnchor="middle" fontSize={18} fill="#888888">
+      <text x={x + COL_WIDTH / 2} y={24} textAnchor="middle" fontSize={26} fill="#888888">
         {label}
       </text>
       <line x1={x + 10} y1={HEADER_Y} x2={x + COL_WIDTH - 10} y2={HEADER_Y} stroke="#333333" strokeWidth={1} />
