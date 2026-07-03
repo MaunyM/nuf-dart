@@ -126,7 +126,7 @@ export async function restoreGame(): Promise<Game | undefined> {
 
 export function usePlayers(auth: AuthContextProps) {
   const { data, error, isLoading } = useSWR<JoueurWithElo[]>(
-    auth.isAuthenticated ? `${base_api}/players` : null,
+    auth.isAuthenticated ? `${base_api}/elo` : null,
     authFetcher(auth.user?.id_token)
   );
 

@@ -25,8 +25,10 @@ const max = 2
 
 type blobProps = {
   joueur?: Joueur;
+  animated?: boolean;
 };
 export default function BlobComponent(props: blobProps) {
+  const animated = props.animated ?? true;
   const color = useMemo(() => {
     if (!props.joueur) return "";
     return colorToMonster.get(props.joueur.color.h) ?? "";
@@ -203,15 +205,17 @@ export default function BlobComponent(props: blobProps) {
             <use href="#big" />
           </g>
 
-          <animateTransform
-            attributeName="transform"
-            attributeType="XML"
-            type="translate"
-            values="0 0;-120 0;-240 0;-360 0;-480 0;-600 0;-720 0;-840 0;-960 0;-1080 0;-1200 0;-1320 0;-1440 0;-1560 0;-1680 0;-1800 0"
-            dur={duration + "s"}
-            calcMode="discrete"
-            repeatCount="indefinite"
-          />
+          {animated && (
+            <animateTransform
+              attributeName="transform"
+              attributeType="XML"
+              type="translate"
+              values="0 0;-120 0;-240 0;-360 0;-480 0;-600 0;-720 0;-840 0;-960 0;-1080 0;-1200 0;-1320 0;-1440 0;-1560 0;-1680 0;-1800 0"
+              dur={duration + "s"}
+              calcMode="discrete"
+              repeatCount="indefinite"
+            />
+          )}
         </g>
       </svg>
     </svg>

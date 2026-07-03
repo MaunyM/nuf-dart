@@ -1,5 +1,6 @@
 import { useEloRankings } from "@/app/service/eloService";
 import { Game_Type } from "@/app/Type/Game";
+import BlobComponent from "../monster/Blob";
 
 const GAME_TYPES: { key: Game_Type; label: string }[] = [
   { key: Game_Type.CRICKET, label: "Cricket" },
@@ -19,7 +20,11 @@ function hsl(color: { h: number; s: number; l: number }) {
   return `hsl(${color.h}, ${color.s}%, ${color.l}%)`;
 }
 
+const BLOB_SCALE = 0.215;
+const BLOB_W = Math.round(120 * BLOB_SCALE); // ~26px
+
 function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; label: string; x: number; showRank: boolean }) {
+  const showBlob = gameType === Game_Type.MONSTER;
   const { rankings, isLoading } = useEloRankings(gameType);
 
   return (
@@ -54,8 +59,13 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
               rx={5}
               fill={color}
             />
+            {showBlob && (
+              <g transform={`translate(${x + RECT_X}, ${y - NAME_RECT_H + 5}) scale(${BLOB_SCALE})`}>
+                <BlobComponent joueur={entry.joueur} animated={false} />
+              </g>
+            )}
             <text
-              x={x + RECT_X + NAME_RECT_W / 2}
+              x={showBlob ? x + RECT_X + BLOB_W + (NAME_RECT_W - BLOB_W) / 2 : x + RECT_X + NAME_RECT_W / 2}
               y={y - NAME_RECT_H / 2 + 5}
               textAnchor="middle"
               dominantBaseline="middle"

@@ -28,7 +28,7 @@ export function useEloRankings(gameType: Game_Type): {
 
   const key = GAME_TYPE_KEY[gameType];
 
-  const rankings: EloRankingEntry[] = (data ?? [])
+  const rankings: EloRankingEntry[] = (Array.isArray(data) ? data : [])
     .map((joueur) => {
       const elo = joueur.elo?.[key] ?? 1000;
       const gamesPlayed = joueur.gamesPlayed?.[key] ?? 0;
