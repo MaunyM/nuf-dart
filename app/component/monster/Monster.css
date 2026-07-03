@@ -61,3 +61,27 @@
     --sparklColor: #fce6c6;
 }
 
+.brown{
+    --strokeColor: #2e2121;
+    --bodyColor: #c8781a;
+    --sparklColor: #f8d088;
+}
+
+.lime{
+    --strokeColor: #2e2121;
+    --bodyColor: #6ab022;
+    --sparklColor: #f8d088;
+}
+
+.blue{
+    --strokeColor: #2e2121;
+    --bodyColor: #4a7aeb;
+    --sparklColor: #f8d088;
+}
+
+.raspberry{
+    --strokeColor: #2e2121;
+    --bodyColor: #e0366e;
+    --sparklColor: #fce6c6;
+}
+

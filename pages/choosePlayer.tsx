@@ -246,6 +246,7 @@ export default function Page(props: GameProps) {
         </svg>
         <div style={{ display: "flex", gap: "12px" }}>
           <button onClick={() => signOut(auth)}>Sign out</button>
+          <button onClick={() => router.push("/manage-players")}>Gérer les joueurs</button>
         </div>
       </div>
     );
