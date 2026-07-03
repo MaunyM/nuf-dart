@@ -12,8 +12,8 @@ const ROW_HEIGHT = 38;
 const HEADER_Y = 36;
 const NAME_RECT_W = 130;
 const NAME_RECT_H = 30;
-const RANK_X = 10;
-const RECT_X = 24;
+const RANK_X = 4;
+const RECT_X = 28;
 
 function hsl(color: { h: number; s: number; l: number }) {
   return `hsl(${color.h}, ${color.s}%, ${color.l}%)`;
@@ -42,8 +42,20 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
         return (
           <g key={entry.joueur.id} opacity={opacity}>
             {showRank && (
-              <text x={x + RANK_X} y={y} textAnchor="middle" fontSize={22} fill="#aaaaaa">
+              <text x={x + RANK_X} y={y} textAnchor="middle" fontSize={16} fill="#aaaaaa">
                 {entry.ranked ? i + 1 : "—"}
+              </text>
+            )}
+            {entry.ranked && entry.eloDelta !== 0 && (
+              <text
+                x={x + (showRank ? 18 : 14)}
+                y={y - NAME_RECT_H / 2 + 5}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize={16}
+                fill={entry.eloDelta > 0 ? "#44cc66" : "#ff4444"}
+              >
+                {entry.eloDelta > 0 ? "▲" : "▼"}
               </text>
             )}
             <rect
@@ -64,18 +76,7 @@ function RankingColumn({ gameType, label, x, showRank }: { gameType: Game_Type; 
             >
               {entry.joueur.nom}
             </text>
-            {entry.ranked && entry.eloDelta !== 0 && (
-              <text
-                x={x + RECT_X + NAME_RECT_W + 8}
-                y={y - NAME_RECT_H / 2 + 5}
-                dominantBaseline="middle"
-                fontSize={18}
-                fill={entry.eloDelta > 0 ? "#44cc66" : "#ff4444"}
-              >
-                {entry.eloDelta > 0 ? "▲" : "▼"}
-              </text>
-            )}
-            <text x={x + COL_WIDTH - 8} y={y} textAnchor="end" fontSize={22} fill="#888888">
+            <text x={x + COL_WIDTH - 8} y={y} textAnchor="end" fontSize={18} fill="#888888">
               {entry.ranked ? Math.round(entry.elo) : "?"}
             </text>
           </g>
