@@ -161,7 +161,7 @@ export default function AbstractGame({ players, addPlayers: addPlayersProps, gam
         restored.players.length === players.length &&
         restored.players.every((p, i) => p.id === players[i]?.id);
       const sameGameType = restored.scores[0]?.type === gameType;
-      if (!samePlayers || !sameGameType) return;
+      if (!samePlayers || !sameGameType || restored.status === Game_State.WON) return;
       dispatch({ type: 'RESTORE', restored });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
