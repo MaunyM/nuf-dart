@@ -173,6 +173,11 @@ export default function AbstractGame({ players, addPlayers: addPlayersProps, gam
     addPlayersProps([...reste, premier]);
   };
 
+  const nextManche = () => {
+    const [premier, ...reste] = game.players;
+    addPlayersProps([...reste, premier]);
+  };
+
   const ready = () => {
     dispatch({ type: 'READY' });
   };
@@ -221,6 +226,7 @@ export default function AbstractGame({ players, addPlayers: addPlayersProps, gam
       undo={undo}
       miss={miss}
       newSeries={newSeries}
+      nextManche={nextManche}
       wins={wins}
       seriesWinner={seriesWinner}
       seriesTarget={seriesTarget}

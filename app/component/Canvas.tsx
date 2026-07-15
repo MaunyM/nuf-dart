@@ -28,6 +28,7 @@ type CanvasProps = {
   undo: () => void;
   miss: () => void;
   newSeries: () => void;
+  nextManche: () => void;
   wins: Record<number, number>;
   seriesWinner?: Joueur;
   seriesTarget: number;
@@ -42,7 +43,8 @@ function formatThrow(dartThrow: DartThrow): string {
 
 export default function GameCanvas(props: CanvasProps) {
   const router = useRouter();
-  const { game, wins, seriesWinner } = props;
+  const { game, wins, seriesWinner, seriesTarget } = props;
+  const showNextManche = game.status === Game_State.WON && seriesTarget > 1 && !seriesWinner;
 
   const currentTurnThrowCount =
     game.status === Game_State.WAITING_NEXT_PLAYER ? 3 : 3 - game.dart_count;
@@ -171,6 +173,11 @@ export default function GameCanvas(props: CanvasProps) {
         <g transform="translate(90,100)" onClick={() => router.push("/")}>
           <GameButtonComponent size={300} text="Retour" />
         </g>
+        {showNextManche && (
+          <g transform="translate(90,0)" onClick={props.nextManche}>
+            <GameButtonComponent size={300} text="Manche suivante" />
+          </g>
+        )}
         {seriesWinner && (
           <g transform="translate(90,0)" onClick={props.newSeries}>
             <GameButtonComponent size={300} text="Nouvelle série" />
