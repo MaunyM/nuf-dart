@@ -20,7 +20,7 @@ import { addPlayers, getValidToken, restoreGame, saveGameState } from "@/app/ser
 import { reportGameEnd } from "@/app/service/eloService";
 import { Game_Type } from "@/app/Type/Game";
 import { useAuth } from "react-oidc-context";
-import _ from "lodash";
+import { abstractGameReducer, initialAbstractGameState } from "@/app/service/abstractGameService";
 
 type GameProps = {
   players: Joueur[];
@@ -41,63 +41,6 @@ const initGame: Game = {
   round:0
 };
 
-type AbstractGameState = {
-  dartThrows: DartThrow[];
-  startingGame: Game;
-  game: Game;
-  wins: Record<number, number>;
-  seriesWinner: Joueur | undefined;
-};
-
-type AbstractGameAction =
-  | { type: 'ADD_THROW'; throw: DartThrow; seriesTarget: number; gameReducer: (g: Game, t: DartThrow) => Game }
-  | { type: 'UNDO'; gameReducer: (g: Game, t: DartThrow) => Game }
-  | { type: 'READY' }
-  | { type: 'RESET_PLAYERS'; startingGame: Game }
-  | { type: 'RESTORE'; restored: Game }
-  | { type: 'NEW_SERIES' };
-
-const initialState: AbstractGameState = {
-  dartThrows: [],
-  startingGame: initGame,
-  game: initGame,
-  wins: {},
-  seriesWinner: undefined,
-};
-
-function abstractGameReducer(state: AbstractGameState, action: AbstractGameAction): AbstractGameState {
-  switch (action.type) {
-    case 'ADD_THROW': {
-      const newThrows = [...state.dartThrows, action.throw];
-      const newGame = newThrows.reduce(action.gameReducer, _.cloneDeep(state.startingGame));
-      let { wins, seriesWinner } = state;
-      if (newGame.status === Game_State.WON && newGame.current_player && action.seriesTarget > 1) {
-        const pid = newGame.current_player.id;
-        const newWins = { ...wins, [pid]: (wins[pid] || 0) + 1 };
-        wins = newWins;
-        if (newWins[pid] >= Math.ceil(action.seriesTarget / 2)) {
-          seriesWinner = newGame.current_player;
-        }
-      }
-      return { ...state, dartThrows: newThrows, game: newGame, wins, seriesWinner };
-    }
-    case 'UNDO': {
-      const newThrows = state.dartThrows.slice(0, -1);
-      const newGame = newThrows.reduce(action.gameReducer, _.cloneDeep(state.startingGame));
-      return { ...state, dartThrows: newThrows, game: newGame };
-    }
-    case 'READY':
-      if (!state.game.current_player) return state;
-      return { ...state, game: { ...state.game, status: Game_State.THROWING } };
-    case 'RESET_PLAYERS':
-      return { ...state, dartThrows: [], startingGame: action.startingGame, game: action.startingGame };
-    case 'RESTORE':
-      return { ...state, dartThrows: action.restored.throws, game: action.restored };
-    case 'NEW_SERIES':
-      return { ...state, wins: {}, seriesWinner: undefined };
-  }
-}
-
 export default function AbstractGame({ players, addPlayers: addPlayersProps, gameReducer, initialScoreFromPlayer, seriesTarget, gameType, teams }: GameProps) {
   const auth = useAuth();
   const [playPlop] = useSound(plopSfx);
@@ -105,7 +48,7 @@ export default function AbstractGame({ players, addPlayers: addPlayersProps, gam
   const [playNextPlayer] = useSound(nextPlayerSfx, { volume: 0.1 });
   const [playDouble] = useSound(doubleSfx, { volume: 0.1 });
   const [playTriple] = useSound(tripleSfx, { volume: 0.1 });
-  const [state, dispatch] = useReducer(abstractGameReducer, initialState);
+  const [state, dispatch] = useReducer(abstractGameReducer, initialAbstractGameState);
   const { game, wins, seriesWinner } = state;
   const lastTapRef = useRef<number>(0);
 
