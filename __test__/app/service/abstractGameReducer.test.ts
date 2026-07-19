@@ -84,15 +84,19 @@ test("RESET_PLAYERS conserve les victoires (passage à la manche suivante)", () 
   expect(next.dartThrows).toEqual([]);
 });
 
-test("NEW_SERIES remet les victoires et le champion à zéro", () => {
+test("NEW_SERIES remet les victoires, le champion et le jeu à zéro dans le même dispatch", () => {
   const stateWithWins: AbstractGameState = {
     ...stateWithGame,
     wins: { [alice.id]: 2 },
     seriesWinner: alice,
   };
-  const next = abstractGameReducer(stateWithWins, { type: 'NEW_SERIES' });
+  const freshGame: Game = { ...startingGame, current_player: bob };
+  const next = abstractGameReducer(stateWithWins, { type: 'NEW_SERIES', startingGame: freshGame });
   expect(next.wins).toEqual({});
   expect(next.seriesWinner).toBeUndefined();
+  expect(next.game).toEqual(freshGame);
+  expect(next.game.status).toBe(Game_State.THROWING);
+  expect(next.dartThrows).toEqual([]);
 });
 
 test("ADD_THROW sans victoire ne modifie pas wins", () => {

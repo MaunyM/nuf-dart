@@ -111,9 +111,20 @@ export default function AbstractGame({ players, addPlayers: addPlayersProps, gam
   }, []);
 
   const newSeries = () => {
-    dispatch({ type: 'NEW_SERIES' });
     const [premier, ...reste] = game.players;
-    addPlayersProps([...reste, premier]);
+    const newPlayers = [...reste, premier];
+    const scores: Score[] = newPlayers.map(initialScoreFromPlayerRef.current);
+    dispatch({
+      type: 'NEW_SERIES',
+      startingGame: addPlayers(newPlayers, {
+        ...initGame,
+        scores,
+        status: Game_State.THROWING,
+        current_player: newPlayers[0],
+        teams: teamsRef.current,
+      }),
+    });
+    addPlayersProps(newPlayers);
   };
 
   const nextManche = () => {

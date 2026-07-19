@@ -15,7 +15,7 @@ export type AbstractGameAction =
   | { type: 'READY' }
   | { type: 'RESET_PLAYERS'; startingGame: Game }
   | { type: 'RESTORE'; restored: Game }
-  | { type: 'NEW_SERIES' };
+  | { type: 'NEW_SERIES'; startingGame: Game };
 
 const emptyGame: Game = {
   status: Game_State.UNSTARTED,
@@ -63,6 +63,13 @@ export function abstractGameReducer(state: AbstractGameState, action: AbstractGa
     case 'RESTORE':
       return { ...state, dartThrows: action.restored.throws, game: action.restored };
     case 'NEW_SERIES':
-      return { ...state, wins: {}, seriesWinner: undefined };
+      return {
+        ...state,
+        dartThrows: [],
+        startingGame: action.startingGame,
+        game: action.startingGame,
+        wins: {},
+        seriesWinner: undefined,
+      };
   }
 }
