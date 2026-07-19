@@ -1,26 +1,27 @@
 .part1, .part2, .part3, .part4{
     /* stroke: #747373; */
-    stroke: rgb(192, 192, 192);
-    stroke-width: 1px;
+    stroke: var(--wire-gradient, url(#wireMetal));
+    stroke-width: 1.4px;
+    filter: url(#wireOutline);
 }
 
 .odd .part1,
 .odd .part3 {
-  fill: rgba(231, 50, 45, 0.9);
+  fill: #c41e3a;
 
 }
 
 .even .part1,
 .even .part3 {
-  fill: rgba(16, 147, 56, 0.9);
+  fill: #146b3a;
 }
 
 .even .part2,
 .even .part4 {
-  fill: rgba(253, 229, 186, 0.9);
+  fill: #ede0be;
 }
 
 .odd .part2,
 .odd .part4 {
-  fill: rgba(18, 18, 18, 0.9);
+  fill: #121212;
 }

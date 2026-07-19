@@ -47,7 +47,11 @@ export default function GameCanvas(props: CanvasProps) {
   const showNextManche = game.status === Game_State.WON && seriesTarget > 1 && !seriesWinner;
 
   const currentTurnThrowCount =
-    game.status === Game_State.WAITING_NEXT_PLAYER ? 3 : 3 - game.dart_count;
+    game.status === Game_State.WON
+      ? 0
+      : game.status === Game_State.WAITING_NEXT_PLAYER
+      ? 3
+      : 3 - game.dart_count;
   const currentTurnThrows =
     currentTurnThrowCount > 0 ? game.throws.slice(-currentTurnThrowCount) : [];
 
@@ -100,7 +104,10 @@ export default function GameCanvas(props: CanvasProps) {
             >
               <NumberComponent value={value}></NumberComponent>
             </g>
-            <g transform={`rotate(${(360 / sectionsOrder.length) * index})`}>
+            <g
+              transform={`rotate(${(360 / sectionsOrder.length) * index})`}
+              style={{ ["--wire-gradient" as string]: `url(#wireMetal-${index})` } as React.CSSProperties}
+            >
               {isCricketSection(value) && (
                 <CricketSectionComponent
                   scores={game.scores as CricketScore[]}
@@ -145,9 +152,10 @@ export default function GameCanvas(props: CanvasProps) {
         {!seriesWinner && <WinComponent game={game} ready={props.ready} />}
 
         {seriesWinner && (
-          <g>
+          <g className="waiting">
             <rect
               fill={`url(#grad-${seriesWinner.nom})`}
+              className="panel"
               x="-200" y="-60" width="400" height="120" rx="15" ry="15"
             />
             <text className="text" dominantBaseline="middle" y="-18" textAnchor="middle">Champion !</text>
@@ -157,29 +165,31 @@ export default function GameCanvas(props: CanvasProps) {
       </g>
       <g transform="translate(1230,450)">
         <PerformanceChartComponent game={game} />
-        <g transform="translate(90,30)">
-          {[0, 1, 2].map((i) => {
-            const t = currentTurnThrows[i];
-            return (
-              <g key={i} transform={`translate(${(i - 1) * 90}, 0)`}>
-                <rect x="-38" y="-20" width="76" height="40" rx="8" ry="8" className="throw-slot-bg" />
-                <text dominantBaseline="middle" textAnchor="middle" className="throw-slot-text">
-                  {t ? formatThrow(t) : "—"}
-                </text>
-              </g>
-            );
-          })}
-        </g>
+        {game.status !== Game_State.WON && (
+          <g transform="translate(90,30)">
+            {[0, 1, 2].map((i) => {
+              const t = currentTurnThrows[i];
+              return (
+                <g key={i} transform={`translate(${(i - 1) * 90}, 0)`}>
+                  <rect x="-38" y="-20" width="76" height="40" rx="8" ry="8" className="throw-slot-bg" />
+                  <text dominantBaseline="middle" textAnchor="middle" className="throw-slot-text">
+                    {t ? formatThrow(t) : "—"}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+        )}
         <g transform="translate(90,100)" onClick={() => router.push("/")}>
           <GameButtonComponent size={300} text="Retour" />
         </g>
         {showNextManche && (
-          <g transform="translate(90,0)" onClick={props.nextManche}>
+          <g transform="translate(90,30)" onClick={props.nextManche}>
             <GameButtonComponent size={300} text="Manche suivante" />
           </g>
         )}
         {seriesWinner && (
-          <g transform="translate(90,0)" onClick={props.newSeries}>
+          <g transform="translate(90,30)" onClick={props.newSeries}>
             <GameButtonComponent size={300} text="Nouvelle série" />
           </g>
         )}

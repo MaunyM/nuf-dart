@@ -1,19 +1,22 @@
 .bull {
-    fill: green;
-    stroke: #747373;
-    stroke-width: 1px;
+    fill: #146b3a;
+    stroke: url(#wireMetal);
+    stroke-width: 1.4px;
+    filter: url(#wireOutline);
 }
 
 .back{
     fill: black;
-    stroke: #747373;
-    stroke-width: 1px;
+    stroke: url(#wireMetal);
+    stroke-width: 2px;
+    filter: url(#wireOutline);
 }
 
 .bulls_eye{
-    fill: rgba(206, 45, 47, 0.9);
-    stroke: #747373;
-    stroke-width: 1px;
+    fill: #c41e3a;
+    stroke: url(#wireMetal);
+    stroke-width: 1.4px;
+    filter: url(#wireOutline);
 }
 
 .throw-slot-bg {
