@@ -29,12 +29,17 @@ export default function DefsComponent(props: DefProps) {
           <feFlood floodColor="#000000" floodOpacity="0.6" result="floodBlack" />
           <feComposite in="floodBlack" in2="dilated" operator="in" result="outline" />
 
-          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blurWide" />
           <feFlood
             floodColor={`hsl(${player.color.h}, ${player.color.s}%, ${player.color.l}%)`}
             floodOpacity="1"
             result="floodColor"
           />
+
+          {/* tint the metal wire (and fill) with the player's hue, keeping the metal's own highlights/shadows */}
+          <feComposite in="floodColor" in2="SourceAlpha" operator="in" result="tintMask" />
+          <feBlend in="tintMask" in2="SourceGraphic" mode="color" result="tintedSource" />
+
+          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blurWide" />
           <feComposite in="floodColor" in2="blurWide" operator="in" result="glowWide" />
 
           <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blurTight" />
@@ -44,7 +49,7 @@ export default function DefsComponent(props: DefProps) {
             <feMergeNode in="glowWide" />
             <feMergeNode in="glowTight" />
             <feMergeNode in="outline" />
-            <feMergeNode in="SourceGraphic" />
+            <feMergeNode in="tintedSource" />
           </feMerge>
         </filter>
       ))}
