@@ -24,6 +24,9 @@ const section_count = 20;
 const sectionAngle = (2 * Math.PI) / section_count;
 
 export default function SectionComponent(props: SectionProps) {
+  const neonStyle: React.CSSProperties | undefined = props.player
+    ? { filter: `url(#neon-${props.player.nom})` }
+    : undefined;
   return (
     <g>
       <g
@@ -31,6 +34,7 @@ export default function SectionComponent(props: SectionProps) {
           props.tapHandler(props.value, Ring.DOUBLE);
         }}
         className="part1"
+        style={neonStyle}
       >
         <PartComponent
           r1={r1}
@@ -46,6 +50,7 @@ export default function SectionComponent(props: SectionProps) {
           props.tapHandler(props.value, Ring.SIMPLE_TOP);
         }}
         className="part2"
+        style={neonStyle}
       >
         <PartComponent
           r1={r2}
@@ -61,6 +66,7 @@ export default function SectionComponent(props: SectionProps) {
           props.tapHandler(props.value, Ring.TRIPLE);
         }}
         className="part3"
+        style={neonStyle}
       >
         <PartComponent
           r1={r3}
@@ -76,6 +82,7 @@ export default function SectionComponent(props: SectionProps) {
           props.tapHandler(props.value, Ring.SIMPLE_BOTTOM);
         }}
         className="part4"
+        style={neonStyle}
       >
         <PartComponent
           r1={r4}

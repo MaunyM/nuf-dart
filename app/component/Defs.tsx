@@ -16,6 +16,38 @@ export default function DefsComponent(props: DefProps) {
           color={player.color}
         />
       ))}
+      {props.players && props.players.map((player, index) => (
+        <filter
+          key={`neon-${player.nom}`}
+          id={`neon-${player.nom}`}
+          x="-150%"
+          y="-150%"
+          width="400%"
+          height="400%"
+        >
+          <feMorphology in="SourceAlpha" operator="dilate" radius="0.5" result="dilated" />
+          <feFlood floodColor="#000000" floodOpacity="0.6" result="floodBlack" />
+          <feComposite in="floodBlack" in2="dilated" operator="in" result="outline" />
+
+          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blurWide" />
+          <feFlood
+            floodColor={`hsl(${player.color.h}, ${player.color.s}%, ${player.color.l}%)`}
+            floodOpacity="1"
+            result="floodColor"
+          />
+          <feComposite in="floodColor" in2="blurWide" operator="in" result="glowWide" />
+
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blurTight" />
+          <feComposite in="floodColor" in2="blurTight" operator="in" result="glowTight" />
+
+          <feMerge>
+            <feMergeNode in="glowWide" />
+            <feMergeNode in="glowTight" />
+            <feMergeNode in="outline" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      ))}
       <radialGradient id="red_black">
         <stop offset="10%" stopColor="black" />
         <stop offset="95%" stopColor="white" />
