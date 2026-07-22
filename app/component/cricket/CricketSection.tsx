@@ -32,7 +32,10 @@ export default function CricketSectionComponent(props: SectionProps) {
                 gameType={Game_Type.CRICKET}
               ></PartComponent>
             </g>
-            <g fill={`url(#grad-${score.joueur.nom})`}>
+            <g
+              fill={`url(#grad-${score.joueur.nom})`}
+              style={{ filter: `url(#neon-${score.joueur.nom})` }}
+            >
               <PartComponent
                 r1={r0}
                 r2={r1}

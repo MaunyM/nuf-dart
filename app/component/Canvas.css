@@ -7,7 +7,7 @@
 
 .back{
     fill: black;
-    stroke: url(#wireMetal);
+    stroke: var(--wire-gradient, url(#wireMetal));
     stroke-width: 2px;
     filter: url(#wireOutline);
 }
