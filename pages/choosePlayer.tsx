@@ -1,10 +1,9 @@
 import DefsComponent from "@/app/component/Defs";
 import DisplayPlayerComponent from "@/app/component/DisplayPlayer";
 import InlineRankings from "@/app/component/elo/InlineRankings";
-import { computeWinProbabilities } from "@/app/service/eloService";
 import { addPlayer, removePlayer, signOut, usePlayers } from "@/app/service/gameService";
 import { interleaveByTeam, validateTeams } from "@/app/service/teamService";
-import { Game_Type, Joueur, Team } from "@/app/Type/Game";
+import { Joueur, Team } from "@/app/Type/Game";
 import { JoueurWithElo } from "@/app/Type/Elo";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -84,16 +83,6 @@ export default function Page(props: GameProps) {
       setTeamMode(true);
       props.setTeams(emptyTeams());
     }
-  };
-
-  const toSegments = (gameType: Game_Type) => {
-    if (selected.length < 2) return [];
-    return computeWinProbabilities(selected, gameType)
-      .filter((r) => r.winProbability != null)
-      .map((r) => {
-        const p = selected.find((s) => s.id === r.joueur.id)!;
-        return { color: `hsl(${p.color.h}, ${p.color.s}%, ${p.color.l}%)`, ratio: r.winProbability! / 100 };
-      });
   };
 
   const monsterEnabled = teamMode
@@ -210,25 +199,25 @@ export default function Page(props: GameProps) {
           <g
             onClick={() => launchIndividual("/cricket")}
           >
-           <GameButtonComponent text="Cricket" disabled={selected.length < 2} segments={toSegments(Game_Type.CRICKET)}/>
+           <GameButtonComponent text="Cricket" disabled={selected.length < 2}/>
           </g>
           <g
             transform="translate(240,00)"
             onClick={() => launchIndividual("/x01/501")}
           >
-            <GameButtonComponent text="501" disabled={selected.length === 0} segments={toSegments(Game_Type.X01)}/>
+            <GameButtonComponent text="501" disabled={selected.length === 0}/>
           </g>
           <g
             transform="translate(240,100)"
             onClick={() => launchIndividual("/x01/301")}
           >
-            <GameButtonComponent text="301" disabled={selected.length === 0} segments={toSegments(Game_Type.X01)}/>
+            <GameButtonComponent text="301" disabled={selected.length === 0}/>
           </g>
           <g
             transform="translate(480,00)"
             onClick={launchMonster}
           >
-            <GameButtonComponent text="Monster" disabled={!monsterEnabled} segments={toSegments(Game_Type.MONSTER)}/>
+            <GameButtonComponent text="Monster" disabled={!monsterEnabled}/>
           </g>
           </g>
           <text transform="translate(10,592)" className="text">Nombre de série :</text>
