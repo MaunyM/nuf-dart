@@ -10,12 +10,15 @@ import { x01Score } from '@/app/Type/x01';
 import ScoreX01Component from '../x01/x01Score';
 import ScoreMonsterComponent from '../monster/MonsterScore';
 import { MonsterScore } from '@/app/Type/Monster';
+import GolfScoreComponent from '../golf/GolfScore';
+import { GolfScore } from '@/app/Type/Golf';
 
 type ScoreBoardProps= {
   score: Score;
   wins: number;
   seriesTarget: number;
   teamColorName?: string;
+  currentHole?: number;
 };
 
  const angle = Math.PI/10
@@ -76,6 +79,7 @@ export default function PlayerScoreComponent(props: ScoreBoardProps){
             {props.score.type === Game_Type.CRICKET && <CricketScoreComponent score={props.score as CricketScore}></CricketScoreComponent>}
             {props.score.type === Game_Type.X01 && <ScoreX01Component score={props.score as x01Score}></ScoreX01Component>}
             {props.score.type === Game_Type.MONSTER && <ScoreMonsterComponent score={props.score as MonsterScore}></ScoreMonsterComponent>}
+            {props.score.type === Game_Type.GOLF && <GolfScoreComponent score={props.score as GolfScore} currentHole={props.currentHole ?? 1}></GolfScoreComponent>}
         </g>
       </g>
     </g>

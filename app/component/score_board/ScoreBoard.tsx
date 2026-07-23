@@ -11,6 +11,7 @@ type ScoreBoardProps = {
   wins: Record<number, number>;
   seriesTarget: number;
   teams?: Team[];
+  currentHole?: number;
 };
 
 
@@ -35,7 +36,7 @@ export default function ScoreBoardComponent(props:ScoreBoardProps){
     <g transform="translate(0,50)">
       {orderedScores.map((score, index) => (
         <g key={index} transform={`translate(${170* getColumn(index)},${387 * getLine(index)})`}>
-          <PlayerScoreComponent key={index} score={score} wins={props.wins[score.joueur.id] || 0} seriesTarget={props.seriesTarget} teamColorName={teamColorName(score)}></PlayerScoreComponent>
+          <PlayerScoreComponent key={index} score={score} wins={props.wins[score.joueur.id] || 0} seriesTarget={props.seriesTarget} teamColorName={teamColorName(score)} currentHole={props.currentHole}></PlayerScoreComponent>
         </g>
       ))}
     </g>

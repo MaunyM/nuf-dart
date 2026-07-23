@@ -6,6 +6,7 @@ export type EloByGameType = {
   cricket: number;
   x01: number;
   monster: number;
+  golf: number;
 };
 
 export type JoueurWithElo = Joueur & {
@@ -31,4 +32,5 @@ export const GAME_TYPE_KEY: Record<Game_Type, keyof EloByGameType> = {
   [Game_Type.CRICKET]: "cricket",
   [Game_Type.X01]: "x01",
   [Game_Type.MONSTER]: "monster",
+  [Game_Type.GOLF]: "golf",
 };

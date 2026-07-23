@@ -10,9 +10,9 @@ function makePlayer(id: number, elo: number, gamesPlayed: number): JoueurWithElo
     id,
     nom: `Player ${id}`,
     color,
-    elo: { cricket: elo, x01: elo, monster: elo },
-    gamesPlayed: { cricket: gamesPlayed, x01: gamesPlayed, monster: gamesPlayed },
-    eloDelta: { cricket: 0, x01: 0, monster: 0 },
+    elo: { cricket: elo, x01: elo, monster: elo, golf: elo },
+    gamesPlayed: { cricket: gamesPlayed, x01: gamesPlayed, monster: gamesPlayed, golf: gamesPlayed },
+    eloDelta: { cricket: 0, x01: 0, monster: 0, golf: 0 },
   };
 }
 

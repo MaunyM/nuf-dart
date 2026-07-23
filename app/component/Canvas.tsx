@@ -19,6 +19,7 @@ import { findJoueurForAttack } from "../service/monsterService";
 import GameButtonComponent from "./GameButton";
 import { useRouter } from "next/router";
 import { MonsterScore } from "../Type/Monster";
+import { currentHoleIndex, holeTarget } from "../service/golfService";
 import PerformanceChartComponent from "./performance/PerformanceChart";
 
 type CanvasProps = {
@@ -27,6 +28,7 @@ type CanvasProps = {
   ready: () => void;
   undo: () => void;
   miss: () => void;
+  stopTurn: () => void;
   newSeries: () => void;
   nextManche: () => void;
   wins: Record<number, number>;
@@ -55,6 +57,11 @@ export default function GameCanvas(props: CanvasProps) {
   const currentTurnThrows =
     currentTurnThrowCount > 0 ? game.throws.slice(-currentTurnThrowCount) : [];
 
+  const isGolf = game.scores[0]?.type === Game_Type.GOLF;
+  const currentGolfTarget = isGolf ? holeTarget(currentHoleIndex(game)) : undefined;
+  const canStopTurn =
+    isGolf && game.status === Game_State.THROWING && game.dart_count < 3;
+
   return (
     <svg
       version="1.1"
@@ -66,7 +73,7 @@ export default function GameCanvas(props: CanvasProps) {
         <DefsComponent players={game.players} />
       </defs>
       <g transform={`translate(900,0)`}>
-        <ScoreBoardComponent scores={game.scores} wins={wins} seriesTarget={props.seriesTarget} teams={game.teams}></ScoreBoardComponent>
+        <ScoreBoardComponent scores={game.scores} wins={wins} seriesTarget={props.seriesTarget} teams={game.teams} currentHole={currentGolfTarget}></ScoreBoardComponent>
       </g>
       <g transform={`translate(710,18)`}>
         {game.current_player && <DartsComponent dart_count={game.dart_count} />}
@@ -92,45 +99,51 @@ export default function GameCanvas(props: CanvasProps) {
           className="under"
           fill="url(#red_black)"
         />
-        {sectionsOrder.map((value: number, index: number) => (
-          <g key={index} className={index % 2 ? "odd" : "even"}>
-            <g
-              suppressHydrationWarning={true}
-              transform={`translate(${
-                +Math.cos((Math.PI / (sectionsOrder.length / 2)) * index) * 195
-              } ${
-                Math.sin((Math.PI / (sectionsOrder.length / 2)) * index) * 195
-              }) `}
-            >
-              <NumberComponent value={value}></NumberComponent>
-            </g>
-            <g
-              transform={`rotate(${(360 / sectionsOrder.length) * index})`}
-              style={{ ["--wire-gradient" as string]: `url(#wireMetal-${index})` } as React.CSSProperties}
-            >
-              {isCricketSection(value) && (
-                <CricketSectionComponent
-                  scores={game.scores as CricketScore[]}
+        {sectionsOrder.map((value: number, index: number) => {
+          const monsterOwner =
+            game.scores[0] && game.scores[0].type === Game_Type.MONSTER
+              ? findJoueurForAttack(game.scores as MonsterScore[], value)?.joueur
+              : undefined;
+          const isTarget = value === currentGolfTarget;
+          const neonFilterId = monsterOwner
+            ? `neon-${monsterOwner.nom}`
+            : isTarget && game.current_player
+            ? `neon-${game.current_player.nom}`
+            : undefined;
+          return (
+            <g key={index} className={index % 2 ? "odd" : "even"}>
+              <g
+                suppressHydrationWarning={true}
+                transform={`translate(${
+                  +Math.cos((Math.PI / (sectionsOrder.length / 2)) * index) * 195
+                } ${
+                  Math.sin((Math.PI / (sectionsOrder.length / 2)) * index) * 195
+                }) `}
+              >
+                <NumberComponent value={value} neonFilterId={neonFilterId}></NumberComponent>
+              </g>
+              <g
+                transform={`rotate(${(360 / sectionsOrder.length) * index})`}
+                style={{ ["--wire-gradient" as string]: `url(#wireMetal-${index})` } as React.CSSProperties}
+              >
+                {isCricketSection(value) && (
+                  <CricketSectionComponent
+                    scores={game.scores as CricketScore[]}
+                    value={value}
+                  ></CricketSectionComponent>
+                )}
+                <SectionComponent
+                  tapHandler={props.tapHandler}
                   value={value}
-                ></CricketSectionComponent>
-              )}
-              <SectionComponent
-                tapHandler={props.tapHandler}
-                value={value}
-                player={
-                  game.scores[0] && game.scores[0].type === Game_Type.MONSTER
-                    ? findJoueurForAttack(
-                        game.scores as MonsterScore[],
-                        value
-                      )?.joueur
-                    : undefined
-                }
-                current_player={game.current_player}
-                gameType={game.scores[0] && game.scores[0].type}
-              ></SectionComponent>
+                  player={monsterOwner}
+                  current_player={game.current_player}
+                  gameType={game.scores[0] && game.scores[0].type}
+                  isTarget={isTarget}
+                ></SectionComponent>
+              </g>
             </g>
-          </g>
-        ))}
+          );
+        })}
         <g>
           <circle cx="0" cy="0" r="7" className="bulls_eye" />
           <use
@@ -163,7 +176,7 @@ export default function GameCanvas(props: CanvasProps) {
           </g>
         )}
       </g>
-      <g transform="translate(1230,450)">
+      <g transform="translate(1230,474)">
         <PerformanceChartComponent game={game} />
         {game.status !== Game_State.WON && (
           <g transform="translate(90,30)">
@@ -183,6 +196,11 @@ export default function GameCanvas(props: CanvasProps) {
         <g transform="translate(90,100)" onClick={() => router.push("/")}>
           <GameButtonComponent size={300} text="Retour" />
         </g>
+        {canStopTurn && (
+          <g transform="translate(70,256)">
+            <TextComponent undo={props.stopTurn} text="Valider"></TextComponent>
+          </g>
+        )}
         {showNextManche && (
           <g transform="translate(90,30)" onClick={props.nextManche}>
             <GameButtonComponent size={300} text="Manche suivante" />

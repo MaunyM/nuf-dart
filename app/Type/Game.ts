@@ -8,7 +8,8 @@ export const sectionsOrder= [
 export enum Game_Type {
   CRICKET,
   X01,
-  MONSTER
+  MONSTER,
+  GOLF
 }
 
 export enum Ring {
@@ -62,6 +63,7 @@ export interface DartThrow {
   ring: Ring;
   date: Date;
   targetZones?: number[];
+  stopTurn?: boolean;
 };
 
 export type Game = {

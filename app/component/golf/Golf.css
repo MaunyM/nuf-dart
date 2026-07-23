@@ -1,0 +1,8 @@
+.golf .text{
+    font-size: 90px;
+}
+
+.golf .text.mini{
+    font-size: 30px;
+    text-anchor: start;
+}

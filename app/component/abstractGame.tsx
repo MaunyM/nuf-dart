@@ -163,6 +163,20 @@ export default function AbstractGame({ players, addPlayers: addPlayersProps, gam
     }
   };
 
+  const stopTurn = () => {
+    const now = Date.now();
+    if (now - lastTapRef.current < 200) return;
+    lastTapRef.current = now;
+    if (game.current_player && game.status === Game_State.THROWING && game.dart_count < 3) {
+      dispatch({
+        type: 'ADD_THROW',
+        throw: { player: game.current_player, value: 0, ring: Ring.SIMPLE_BOTTOM, date: new Date(), stopTurn: true },
+        seriesTarget,
+        gameReducer,
+      });
+    }
+  };
+
   const tapHandler = async (value: number, ring: Ring) => {
     const now = Date.now();
     if (now - lastTapRef.current < 200) return;
@@ -199,6 +213,7 @@ export default function AbstractGame({ players, addPlayers: addPlayersProps, gam
       ready={ready}
       undo={undo}
       miss={miss}
+      stopTurn={stopTurn}
       newSeries={newSeries}
       nextManche={nextManche}
       wins={wins}

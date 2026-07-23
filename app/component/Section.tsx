@@ -12,6 +12,7 @@ type SectionProps = {
   player?: Joueur;
   current_player?: Joueur;
   gameType: Game_Type;
+  isTarget?: boolean;
 };
 
 const thickness = 16;
@@ -26,6 +27,8 @@ const sectionAngle = (2 * Math.PI) / section_count;
 export default function SectionComponent(props: SectionProps) {
   const neonStyle: React.CSSProperties | undefined = props.player
     ? { filter: `url(#neon-${props.player.nom})` }
+    : props.isTarget && props.current_player
+    ? { filter: `url(#neon-${props.current_player.nom})` }
     : undefined;
   return (
     <g>

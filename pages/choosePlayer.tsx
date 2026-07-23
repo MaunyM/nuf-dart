@@ -219,6 +219,12 @@ export default function Page(props: GameProps) {
           >
             <GameButtonComponent text="Monster" disabled={!monsterEnabled}/>
           </g>
+          <g
+            transform="translate(480,100)"
+            onClick={() => launchIndividual("/golf")}
+          >
+            <GameButtonComponent text="Golf" disabled={selected.length === 0}/>
+          </g>
           </g>
           <text transform="translate(10,592)" className="text">Nombre de série :</text>
           <g transform="translate(140,635)">
