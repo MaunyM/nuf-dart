@@ -16,7 +16,12 @@ const tululuSfx = "/Tululu.mp3";
 const nextPlayerSfx = "/nextPlayer.mp3";
 const doubleSfx = "/double.mp3";
 const tripleSfx = "/triple.mp3";
+const healSfx = "/heal.wav";
+const hitSfx = "/hit.wav";
+const deathSfx = "/death.wav";
 import { addPlayers, getValidToken, restoreGame, saveGameState } from "@/app/service/gameService";
+import { findJoueurForAttack } from "@/app/service/monsterService";
+import { MonsterScore } from "@/app/Type/Monster";
 import { reportGameEnd } from "@/app/service/eloService";
 import { Game_Type } from "@/app/Type/Game";
 import { useAuth } from "react-oidc-context";
@@ -48,6 +53,9 @@ export default function AbstractGame({ players, addPlayers: addPlayersProps, gam
   const [playNextPlayer] = useSound(nextPlayerSfx, { volume: 0.1 });
   const [playDouble] = useSound(doubleSfx, { volume: 0.1 });
   const [playTriple] = useSound(tripleSfx, { volume: 0.1 });
+  const [playHeal] = useSound(healSfx, { volume: 0.4 });
+  const [playHit] = useSound(hitSfx, { volume: 0.4 });
+  const [playDeath] = useSound(deathSfx, { volume: 0.4 });
   const [state, dispatch] = useReducer(abstractGameReducer, initialAbstractGameState);
   const { game, wins, seriesWinner } = state;
   const lastTapRef = useRef<number>(0);
@@ -163,6 +171,18 @@ export default function AbstractGame({ players, addPlayers: addPlayersProps, gam
       playPlop();
       if (ring === Ring.DOUBLE) playDouble();
       if (ring === Ring.TRIPLE) playTriple();
+      if (gameType === Game_Type.MONSTER) {
+        const target = findJoueurForAttack(game.scores as MonsterScore[], value);
+        if (target) {
+          if (target.joueur.id === game.current_player.id) {
+            playHeal();
+          } else if (target.score - 1 <= 0) {
+            playDeath();
+          } else {
+            playHit();
+          }
+        }
+      }
       dispatch({
         type: 'ADD_THROW',
         throw: { player: game.current_player, value, ring, date: new Date() },
