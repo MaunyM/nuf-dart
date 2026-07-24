@@ -13,6 +13,8 @@ type SectionProps = {
   current_player?: Joueur;
   gameType: Game_Type;
   isTarget?: boolean;
+  isGolfHole?: boolean;
+  golfBalls?: { joueur: Joueur; stroke: number; angleOffset: number }[];
 };
 
 const thickness = 16;
@@ -24,29 +26,45 @@ const r5 = 32;
 const section_count = 20;
 const sectionAngle = (2 * Math.PI) / section_count;
 
+const ballRadiusForStroke: Record<number, number> = {
+  1: (r1 + r2) / 2,
+  2: (r2 + r3) / 2,
+  3: (r3 + r4) / 2,
+  4: (r4 + r5) / 2,
+};
+
 export default function SectionComponent(props: SectionProps) {
+  const isGolfTarget = props.isTarget && props.gameType === Game_Type.GOLF;
+  const isGolfHole = props.isGolfHole && props.gameType === Game_Type.GOLF;
   const neonStyle: React.CSSProperties | undefined = props.player
     ? { filter: `url(#neon-${props.player.nom})` }
+    : isGolfTarget
+    ? { filter: `url(#neon-golf-target)` }
     : props.isTarget && props.current_player
     ? { filter: `url(#neon-${props.current_player.nom})` }
     : undefined;
+  const golfFill = isGolfHole ? "#3f9142" : undefined;
   return (
     <g>
       <g
         onClick={() => {
           props.tapHandler(props.value, Ring.DOUBLE);
         }}
-        className="part1"
-        style={neonStyle}
       >
-        <PartComponent
-          r1={r1}
-          r2={r2}
-          angle={sectionAngle}
-          shift={0}
-          joueur={props.player}
-          gameType={props.gameType}
-        ></PartComponent>
+        <g className="part1" style={neonStyle}>
+          <PartComponent
+            r1={r1}
+            r2={r2}
+            angle={sectionAngle}
+            shift={0}
+            joueur={props.player}
+            gameType={props.gameType}
+            fillOverride={golfFill}
+          ></PartComponent>
+        </g>
+        {isGolfHole && (
+          <circle cx={(r1 + r2) / 2} cy={0} r={6} fill="#1a1a1a" stroke="#000" strokeWidth={1} />
+        )}
       </g>
       <g
         onClick={() => {
@@ -62,6 +80,7 @@ export default function SectionComponent(props: SectionProps) {
           shift={0}
           joueur={props.player}
           gameType={props.gameType}
+          fillOverride={golfFill}
         ></PartComponent>
       </g>
       <g
@@ -78,6 +97,7 @@ export default function SectionComponent(props: SectionProps) {
           shift={0}
           joueur={props.player}
           gameType={props.gameType}
+          fillOverride={golfFill}
         ></PartComponent>
       </g>
       <g
@@ -94,6 +114,7 @@ export default function SectionComponent(props: SectionProps) {
           shift={0}
           joueur={props.player}
           gameType={props.gameType}
+          fillOverride={golfFill}
         ></PartComponent>
       </g>
       {props.player &&
@@ -120,6 +141,21 @@ export default function SectionComponent(props: SectionProps) {
             <PotionComponent></PotionComponent>
           </g>
         )}
+      {props.golfBalls?.map((ball) => {
+        const radius = ballRadiusForStroke[ball.stroke];
+        const angle = ball.angleOffset;
+        return (
+          <circle
+            key={ball.joueur.id}
+            cx={radius * Math.cos(angle)}
+            cy={radius * Math.sin(angle)}
+            r={4}
+            fill={`url(#grad-${ball.joueur.nom})`}
+            stroke="#fff"
+            strokeWidth={1}
+          />
+        );
+      })}
     </g>
   );
 }

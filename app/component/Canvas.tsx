@@ -20,6 +20,7 @@ import GameButtonComponent from "./GameButton";
 import { useRouter } from "next/router";
 import { MonsterScore } from "../Type/Monster";
 import { currentHoleIndex, holeTarget } from "../service/golfService";
+import { GolfScore } from "../Type/Golf";
 import PerformanceChartComponent from "./performance/PerformanceChart";
 
 type CanvasProps = {
@@ -61,6 +62,33 @@ export default function GameCanvas(props: CanvasProps) {
   const currentGolfTarget = isGolf ? holeTarget(currentHoleIndex(game)) : undefined;
   const canStopTurn =
     isGolf && game.status === Game_State.THROWING && game.dart_count < 3;
+
+  const golfHoleIndex = isGolf ? currentHoleIndex(game) : -1;
+
+  function golfBallsForHole(holeIndex: number, excludeCurrentPlayer: boolean) {
+    const maxOffset = 0.11; // reste bien en-deca de la demi-largeur du secteur (~0.157 rad)
+    const seatCount = game.players.length;
+    const seatCenter = (seatCount - 1) / 2;
+    return (game.scores as GolfScore[])
+      .filter(
+        (score) => !excludeCurrentPlayer || score.joueur.id !== game.current_player?.id
+      )
+      .map((score) => {
+        const seatIndex = game.players.findIndex((p) => p.id === score.joueur.id);
+        const angleOffset =
+          seatCenter > 0 ? ((seatIndex - seatCenter) / seatCenter) * maxOffset : 0;
+        return {
+          joueur: score.joueur,
+          stroke: score.strokes[holeIndex],
+          angleOffset,
+        };
+      })
+      .filter((ball): ball is { joueur: Joueur; stroke: number; angleOffset: number } =>
+        ball.stroke !== undefined && ball.stroke >= 1 && ball.stroke <= 4
+      );
+  }
+
+  const currentHoleBalls = isGolf ? golfBallsForHole(golfHoleIndex, true) : [];
 
   return (
     <svg
@@ -105,11 +133,9 @@ export default function GameCanvas(props: CanvasProps) {
               ? findJoueurForAttack(game.scores as MonsterScore[], value)?.joueur
               : undefined;
           const isTarget = value === currentGolfTarget;
-          const neonFilterId = monsterOwner
-            ? `neon-${monsterOwner.nom}`
-            : isTarget && game.current_player
-            ? `neon-${game.current_player.nom}`
-            : undefined;
+          // trous 1..value deja joues : holeTarget(i) = i+1, donc value <= golfHoleIndex
+          // correspond a un trou strictement avant celui en cours (holeIndex = value-1).
+          const isPastHole = isGolf && value >= 1 && value <= golfHoleIndex;
           return (
             <g key={index} className={index % 2 ? "odd" : "even"}>
               <g
@@ -120,7 +146,7 @@ export default function GameCanvas(props: CanvasProps) {
                   Math.sin((Math.PI / (sectionsOrder.length / 2)) * index) * 195
                 }) `}
               >
-                <NumberComponent value={value} neonFilterId={neonFilterId}></NumberComponent>
+                <NumberComponent value={value}></NumberComponent>
               </g>
               <g
                 transform={`rotate(${(360 / sectionsOrder.length) * index})`}
@@ -139,6 +165,14 @@ export default function GameCanvas(props: CanvasProps) {
                   current_player={game.current_player}
                   gameType={game.scores[0] && game.scores[0].type}
                   isTarget={isTarget}
+                  isGolfHole={isTarget || isPastHole}
+                  golfBalls={
+                    isTarget
+                      ? currentHoleBalls
+                      : isPastHole
+                      ? golfBallsForHole(value - 1, false)
+                      : undefined
+                  }
                 ></SectionComponent>
               </g>
             </g>

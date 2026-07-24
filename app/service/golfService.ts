@@ -67,9 +67,21 @@ function golfThrowReduce(dartThrow: DartThrow, game: Game): Game {
 // Force la fin du tour : même mécanisme que le bust du X01 (dart_count=1
 // juste avant dartCountReduce, qui le fait retomber à 3 quel que soit le
 // nombre de fléchettes réellement lancées ce tour-ci).
+// Déclenché soit par un arrêt anticipé explicite, soit automatiquement dès
+// que la fléchette vient d'obtenir le meilleur score possible (double de la
+// cible, 1 coup) : rejouer ne peut alors plus que faire moins bien.
 function stopTurnReduce(dartThrow: DartThrow, game: Game): Game {
   if (dartThrow.stopTurn) {
     return { ...game, dart_count: 1 };
+  }
+  if (game.current_player) {
+    const current_score = getScoreFromPlayer(
+      game.scores as GolfScore[],
+      game.current_player
+    ) as GolfScore;
+    if (current_score?.strokes[currentHoleIndex(game)] === 1) {
+      return { ...game, dart_count: 1 };
+    }
   }
   return game;
 }

@@ -12,6 +12,7 @@ type PartProps = {
   shift: number;
   joueur?: Joueur;
   gameType: Game_Type;
+  fillOverride?: string;
 };
 
 export default function PartComponent(props: PartProps) {
@@ -39,7 +40,7 @@ export default function PartComponent(props: PartProps) {
     <g>
       <path
         className="part"
-        fill={props.joueur?`url(#grad-${props.joueur?.nom})`:props.gameType===Game_Type.MONSTER?'#8f8468':''}
+        fill={props.fillOverride ?? (props.joueur?`url(#grad-${props.joueur?.nom})`:props.gameType===Game_Type.MONSTER?'#8f8468':'')}
         d={`M ${r1_start.x} ${r1_start.y} A ${props.r1} ${props.r1} 0 0 1 ${r1_end.x} ${r1_end.y} 
         L ${r2_end.x} ${r2_end.y} A ${props.r2} ${props.r2} 0 0 0 ${r2_start.x} ${r2_start.y} L ${r1_start.x} ${r1_start.y} `}
       />

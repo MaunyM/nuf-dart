@@ -53,6 +53,35 @@ export default function DefsComponent(props: DefProps) {
           </feMerge>
         </filter>
       ))}
+      <filter
+        id="neon-golf-target"
+        x="-150%"
+        y="-150%"
+        width="400%"
+        height="400%"
+      >
+        <feMorphology in="SourceAlpha" operator="dilate" radius="0.5" result="dilated" />
+        <feFlood floodColor="#000000" floodOpacity="0.6" result="floodBlack" />
+        <feComposite in="floodBlack" in2="dilated" operator="in" result="outline" />
+
+        <feFlood floodColor="#3fdc5a" floodOpacity="1" result="floodColor" />
+
+        <feComposite in="floodColor" in2="SourceAlpha" operator="in" result="tintMask" />
+        <feBlend in="tintMask" in2="SourceGraphic" mode="color" result="tintedSource" />
+
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blurWide" />
+        <feComposite in="floodColor" in2="blurWide" operator="in" result="glowWide" />
+
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blurTight" />
+        <feComposite in="floodColor" in2="blurTight" operator="in" result="glowTight" />
+
+        <feMerge>
+          <feMergeNode in="glowWide" />
+          <feMergeNode in="glowTight" />
+          <feMergeNode in="outline" />
+          <feMergeNode in="tintedSource" />
+        </feMerge>
+      </filter>
       <radialGradient id="red_black">
         <stop offset="10%" stopColor="black" />
         <stop offset="95%" stopColor="white" />

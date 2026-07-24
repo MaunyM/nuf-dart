@@ -56,8 +56,9 @@ test("golfReduce : seule la dernière fléchette du trou compte pour le score", 
     dart_count: 3,
   };
 
-  // trou 1 (secteur 1) : double (1 coup) puis un raté (5 coups) qui écrase le score
-  game = golfReduce(game, makeThrow(1, Ring.DOUBLE));
+  // trou 1 (secteur 1) : triple (3 coups) puis un raté (5 coups) qui écrase le score
+  // (on évite le double ici : il validerait automatiquement le trou dès la 1ère fléchette)
+  game = golfReduce(game, makeThrow(1, Ring.TRIPLE));
   game = golfReduce(game, makeThrow(0, Ring.SIMPLE_BOTTOM));
 
   const scoreAfterTwoDarts = (game.scores as GolfScore[])[0];
@@ -77,10 +78,8 @@ test("golfReduce : le total cumule les trous joués", () => {
     dart_count: 3,
   };
 
-  // trou 1 (secteur 1) : double -> 1 coup, 3 fléchettes identiques
-  for (let i = 0; i < 3; i++) {
-    game = golfReduce(game, makeThrow(1, Ring.DOUBLE));
-  }
+  // trou 1 (secteur 1) : double -> 1 coup, validé automatiquement dès la 1ère fléchette
+  game = golfReduce(game, makeThrow(1, Ring.DOUBLE));
   // trou 2 (secteur 2) : simple extérieur -> 2 coups
   for (let i = 0; i < 3; i++) {
     game = golfReduce(game, makeThrow(2, Ring.SIMPLE_TOP));
@@ -145,6 +144,29 @@ test("golfReduce : un arrêt anticipé fige le score de la dernière fléchette 
   // Le tour est bien terminé (passage à Célia) sans qu'une fléchette fictive
   // n'apparaisse dans l'historique affiché à l'écran.
   expect(game.current_player?.id).toBe(celia.id);
+  expect(game.throws.length).toBe(1);
+});
+
+test("golfReduce : un double sur la cible valide automatiquement le trou dès la première fléchette", () => {
+  const players = [matthieu, celia];
+  let game: Game = {
+    ...defaultGame,
+    status: Game_State.THROWING,
+    players,
+    scores: [new GolfScore(matthieu), new GolfScore(celia)],
+    current_player: matthieu,
+    round: 0,
+    dart_count: 3,
+  };
+
+  // Matthieu fait le double du secteur cible (1 coup, le meilleur score possible)
+  // dès sa première fléchette : inutile de rejouer, le tour se termine seul.
+  game = golfReduce(game, makeThrow(1, Ring.DOUBLE));
+
+  const matthieuScore = (game.scores as GolfScore[])[0];
+  expect(matthieuScore.strokes[0]).toBe(1);
+  expect(game.current_player?.id).toBe(celia.id);
+  expect(game.dart_count).toBe(3);
   expect(game.throws.length).toBe(1);
 });
 
